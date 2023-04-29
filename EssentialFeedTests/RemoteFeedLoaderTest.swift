@@ -6,27 +6,36 @@
 //
 
 import XCTest
+/// CÓDIGO DE PRODUCCIÓN
 
 /// Creamos el nuesto tipo Remoto para `RemoteFeedLoaderTest`
 class RemoteFeedLoader {
     func load() {
-        HTTPClient.shrared.requestedURL = URL(string: "https://a-url.com")
+        HTTPClient.shrared.get(from: URL(string: "https://a-url.com")!)
     }
 }
 
 class HTTPClient {
-    static let shrared = HTTPClient()
+    static var shrared = HTTPClient()
     
-    private init() {}
-    
+    func get(from url: URL) {}
+}
+
+/// CÓDIGO DE TESTEO
+class HTTPClientSpy: HTTPClient {
     var requestedURL: URL?
+    
+    override func get(from url: URL) {
+        requestedURL = url
+    }
 }
 
 final class RemoteFeedLoaderTest: XCTestCase {
-
+    
     // Hacemos el mínimo test para el inicializador del caso de uso
     func test_init_doesNotRequestDataFromURL() {
-        let client = HTTPClient.shrared
+        let client = HTTPClientSpy()
+        HTTPClient.shrared = client
         _ = RemoteFeedLoader()
         
         XCTAssertNil(client.requestedURL)
@@ -36,7 +45,8 @@ final class RemoteFeedLoaderTest: XCTestCase {
     func test_load_requestDataFromURL() {
         // Ahora sí tenemos un cliente, ya que traemos datos
         /// Arrange: `Given`, dado un cliente y un sut
-        let client = HTTPClient.shrared
+        let client = HTTPClientSpy()
+        HTTPClient.shrared = client
         let sut = RemoteFeedLoader()
         
         /// Act: `When` Cuando invocamos `sut.load()`
