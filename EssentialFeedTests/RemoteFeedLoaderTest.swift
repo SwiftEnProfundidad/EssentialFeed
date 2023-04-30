@@ -6,26 +6,7 @@
 //
 
 import XCTest
-/// CÓDIGO DE PRODUCCIÓN
-
-/// Creamos el nuesto tipo Remoto para `RemoteFeedLoaderTest`
-class RemoteFeedLoader {
-    let client: HTTPClient
-    let url: URL
-    
-    init(url: URL, client: HTTPClient) {
-        self.url = url
-        self.client = client
-    }
-    
-    func load() {
-        client.get(from: url)
-    }
-}
-
-protocol HTTPClient {
-    func get(from url: URL)
-}
+import EssentialFeed
 
 final class RemoteFeedLoaderTest: XCTestCase {
     
@@ -52,7 +33,6 @@ final class RemoteFeedLoaderTest: XCTestCase {
     }
     
     // MARK: - Helpers - CÓDIGO DE TESTEO
-
     
     /// Method factory
     private func makeSUT(url: URL = URL(string: "https://a.given-url.com")!) -> (sut: RemoteFeedLoader, client: HTTPClientSpy) {
