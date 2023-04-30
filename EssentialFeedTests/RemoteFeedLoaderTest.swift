@@ -18,7 +18,7 @@ final class RemoteFeedLoaderTest: XCTestCase {
     }
     
     // Ahora el test para la carga de FeedItems del caso de uso
-    func test_load_requestDataFromURL() {
+    func test_load_requestsDataFromURL() {
         // Ahora sí tenemos un cliente, ya que traemos datos
         /// Arrange: `Given`, dado un cliente y un sut
         let url = URL(string: "https://a.given-url.com")!
