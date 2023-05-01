@@ -65,24 +65,22 @@ final class RemoteFeedLoaderTest: XCTestCase {
     }
     
     private class HTTPClientSpy: HTTPClient {
+        private var message = [(url: URL, completion: (Error) -> Void)]()
+        
         // Colección de urls, puede ser que llamemos a más de una URL,
-        // las almacenamos en un array también.
-        var requestedURLs = [URL]()
-        // En este caso, solo hemos llegado a hacer la peticón y recibir errores
-        // Creamos un closure con un array de errores que podemos recibir ahora.
-        // le pasamos el @escaping/completion de la función `get`, si hay más de un
-        // error se irán añadiendo al array de los `completions` que almacena en un array los errores
-        var completions = [(Error) -> Void]()
+        // las almacenamos en un array que devuelve las url's de `message`
+        var requestedURLs: [URL] {
+            return message.map { $0.url }
+        }
         
         // Implementamos el método get con lo que tenemos ahora para comprobar o testear
         func get(from url: URL, completion: @escaping (Error) -> Void) {
-            completions.append(completion)
-            requestedURLs.append(url)
+            message.append((url, completion))
         }
         
         // Creamos esta función para devolver el primer error del array de errores y testearla
         func complete(with error: Error, at index: Int = 1) {
-            completions[index](error)
+            message[index].completion(error)
         }
     }
 }
