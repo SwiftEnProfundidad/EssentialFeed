@@ -76,6 +76,10 @@ final class RemoteFeedLoaderTest: XCTestCase {
         })
     }
     
+//    func test_load_deliversNoItemsOn200HTTPResponseWithEmptyJSONList() {
+//
+//    }
+    
     // MARK: - Helpers - CÓDIGO DE TESTEO
     
     /// Method factory
@@ -87,12 +91,12 @@ final class RemoteFeedLoaderTest: XCTestCase {
     
     private func expect(_ sut: RemoteFeedLoader, toCompleteWithError error: RemoteFeedLoader.Error, when action: () -> Void,
                         file: StaticString = #filePath, line: UInt = #line) {
-        var captureErrors = [RemoteFeedLoader.Error]()
-        sut.load { captureErrors.append($0) }
+        var captureResult = [RemoteFeedLoader.Result]()
+        sut.load { captureResult.append($0) }
         
         action()
         
-        XCTAssertEqual(captureErrors, [error], file: file, line: line)
+        XCTAssertEqual(captureResult, [.failure(error)], file: file, line: line)
     }
 }
 
