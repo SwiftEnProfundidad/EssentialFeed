@@ -47,13 +47,10 @@ final class RemoteFeedLoaderTest: XCTestCase {
     func test_load_deliversErrorOnClientError() {
         let (sut, client) = makeSUT()
         
-        var captureErrors = [RemoteFeedLoader.Error]()
-        sut.load { captureErrors.append($0) }
-        
-        let clientError = NSError(domain: "Test", code: 0)
-        client.complete(with: clientError)
-        
-        XCTAssertEqual(captureErrors, [.connectivity])
+        expect(sut, toCompleteWithError: .connectivity, when: {
+            let clientError = NSError(domain: "Test", code: 0)
+            client.complete(with: clientError)
+        })
     }
     
     // El caso de uso cuando entrega un error dado que la
@@ -64,26 +61,19 @@ final class RemoteFeedLoaderTest: XCTestCase {
         let samples = [199, 201, 300, 400, 500]
         
         samples.enumerated().forEach { index, code in
-            var captureErrors = [RemoteFeedLoader.Error]()
-            sut.load { captureErrors.append($0) }
-            
-            client.complete(withStatusCode: code, at: index)
-            
-            XCTAssertEqual(captureErrors, [.invalidData])
+            expect(sut, toCompleteWithError: .invalidData, when: {
+                client.complete(withStatusCode: code, at: index)
+            })
         }
     }
     
     func test_load_deliversErrorOn200HTTPResponseWithInvalidJSON() {
         let (sut, client) = makeSUT()
         
-        var captureErrors = [RemoteFeedLoader.Error]()
-        sut.load { captureErrors.append($0)
-            
+        expect(sut, toCompleteWithError: .invalidData, when: {
             let invalidJSON = Data("invalid json".utf8)
             client.complete(withStatusCode: 200, data: invalidJSON)
-            
-            XCTAssertEqual(captureErrors, [.invalidData])
-        }
+        })
     }
     
     // MARK: - Helpers - CÓDIGO DE TESTEO
@@ -95,34 +85,44 @@ final class RemoteFeedLoaderTest: XCTestCase {
         return (sut, client)
     }
     
-    // Clase espía para simular los datos, espiar, de nuestra `HTTPClient`de producción
-    private class HTTPClientSpy: HTTPClient {
-        private var message = [(url: URL, completion: (HTTPCllientResult) -> Void)]()
+    private func expect(_ sut: RemoteFeedLoader, toCompleteWithError error: RemoteFeedLoader.Error, when action: () -> Void,
+                        file: StaticString = #filePath, line: UInt = #line) {
+        var captureErrors = [RemoteFeedLoader.Error]()
+        sut.load { captureErrors.append($0) }
         
-        // Colección de urls, puede ser que llamemos a más de una URL,
-        // las almacenamos en un array que devuelve las url's de `message`
-        var requestedURLs: [URL] {
-            return message.map { $0.url }
-        }
+        action()
         
-        // Implementamos el método get con lo que tenemos ahora para comprobar o testear
-        func get(from url: URL, completion: @escaping (HTTPCllientResult) -> Void) {
-            message.append((url, completion))
-        }
-        
-        // Creamos esta función para devolver el primer error del array de errores y testearla
-        func complete(with error: Error, at index: Int = 0) {
-            message[index].completion(.failure(error))
-        }
-        
-        func complete(withStatusCode code: Int, data: Data = Data(), at index: Int = 0) {
-            let response = HTTPURLResponse(
-                url: requestedURLs[index],
-                statusCode: code,
-                httpVersion: nil,
-                headerFields: nil
-            )!
-            message[index].completion(.success(data, response))
-        }
+        XCTAssertEqual(captureErrors, [error], file: file, line: line)
+    }
+}
+
+// Clase espía para simular los datos, espiar, de nuestra `HTTPClient`de producción
+private class HTTPClientSpy: HTTPClient {
+    private var message = [(url: URL, completion: (HTTPCllientResult) -> Void)]()
+    
+    // Colección de urls, puede ser que llamemos a más de una URL,
+    // las almacenamos en un array que devuelve las url's de `message`
+    var requestedURLs: [URL] {
+        return message.map { $0.url }
+    }
+    
+    // Implementamos el método get con lo que tenemos ahora para comprobar o testear
+    func get(from url: URL, completion: @escaping (HTTPCllientResult) -> Void) {
+        message.append((url, completion))
+    }
+    
+    // Creamos esta función para devolver el primer error del array de errores y testearla
+    func complete(with error: Error, at index: Int = 0) {
+        message[index].completion(.failure(error))
+    }
+    
+    func complete(withStatusCode code: Int, data: Data = Data(), at index: Int = 0) {
+        let response = HTTPURLResponse(
+            url: requestedURLs[index],
+            statusCode: code,
+            httpVersion: nil,
+            headerFields: nil
+        )!
+        message[index].completion(.success(data, response))
     }
 }
