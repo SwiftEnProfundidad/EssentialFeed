@@ -8,7 +8,7 @@
 import XCTest
 import EssentialFeed
 
-final class RemoteFeedLoaderTest: XCTestCase {
+class RemoteFeedLoaderTests: XCTestCase {
     
     // Hacemos el mínimo test para el inicializador del caso de uso
     func test_init_doesNotRequestDataFromURL() {
@@ -19,25 +19,21 @@ final class RemoteFeedLoaderTest: XCTestCase {
     
     // Ahora el caso de uso para la carga de FeedItems
     func test_load_requestsDataFromURL() {
-        /// Arrange: `Given`, dado un cliente y un sut
-        let url = URL(string: "https://a.given-url.com")!
+        let url = URL(string: "https://a-given-url.com")!
         let (sut, client) = makeSUT(url: url)
         
-        /// Act: `When` Cuando invocamos `sut.load()`
-        sut.load() { _ in }
+        sut.load { _ in }
         
-        /// Assert: `Then` entonces afirmamos que una
-        /// request con URL fue iniciada en el `client`
         XCTAssertEqual(client.requestedURLs, [url])
     }
     
     // Hacemos dos llamadas, es decir, a dos url's
     func test_loadTwice_requestsDataFromURLTwice() {
-        let url = URL(string: "https://a.given-url.com")!
+        let url = URL(string: "https://a-given-url.com")!
         let (sut, client) = makeSUT(url: url)
         
-        sut.load() { _ in }
-        sut.load() { _ in }
+        sut.load { _ in }
+        sut.load { _ in }
         
         XCTAssertEqual(client.requestedURLs, [url, url])
     }
@@ -47,7 +43,7 @@ final class RemoteFeedLoaderTest: XCTestCase {
     func test_load_deliversErrorOnClientError() {
         let (sut, client) = makeSUT()
         
-        expect(sut, toCompleteWithResult: .failure(.connectivity), when: {
+        expect(sut, toCompleteWith: .failure(.connectivity), when: {
             let clientError = NSError(domain: "Test", code: 0)
             client.complete(with: clientError)
         })
@@ -61,77 +57,118 @@ final class RemoteFeedLoaderTest: XCTestCase {
         let samples = [199, 201, 300, 400, 500]
         
         samples.enumerated().forEach { index, code in
-            expect(sut, toCompleteWithResult: .failure(.invalidData), when: {
+            expect(sut, toCompleteWith: .failure(.invalidData), when: {
                 client.complete(withStatusCode: code, at: index)
             })
         }
     }
     
+    // El caso de uso cuando tenemos un 200 pero el JSON no es válido
     func test_load_deliversErrorOn200HTTPResponseWithInvalidJSON() {
         let (sut, client) = makeSUT()
         
-        expect(sut, toCompleteWithResult: .failure(.invalidData), when: {
+        expect(sut, toCompleteWith: .failure(.invalidData), when: {
             let invalidJSON = Data("invalid json".utf8)
             client.complete(withStatusCode: 200, data: invalidJSON)
         })
     }
     
+    // El caso de uso cuando tenemos un 200 y el JSON es válido pero viene vacío
     func test_load_deliversNoItemsOn200HTTPResponseWithEmptyJSONList() {
         let (sut, client) = makeSUT()
-        
-        expect(sut, toCompleteWithResult: .success([]), when: {
+
+        expect(sut, toCompleteWith: .success([]), when: {
             let emptyListJSON = Data("{\"items\": []}".utf8)
             client.complete(withStatusCode: 200, data: emptyListJSON)
+        })
+    }
+    
+    // El caso de uso cuando tenemos un 200 y el JSON es válido y viene con datos
+    func test_load_deliversItemsOn200HTTPResponseWithJSONItems() {
+        let (sut, client) = makeSUT()
+        
+        let item1 = FeedItem(
+            id: UUID(),
+            description: nil,
+            location: nil,
+            imageURL: URL(string: "http://a-url.com")!)
+        
+        let item1JSON = [
+            "id": item1.id.uuidString,
+            "image": item1.imageURL.absoluteString
+        ]
+        
+        let item2 = FeedItem(
+            id: UUID(),
+            description: "a description",
+            location: "a location",
+            imageURL: URL(string: "http://another-url.com")!)
+        
+        let item2JSON = [
+            "id": item2.id.uuidString,
+            "description": item2.description,
+            "location": item2.location,
+            "image": item2.imageURL.absoluteString
+        ]
+        
+        let itemsJSON = [
+            "items": [item1JSON, item2JSON]
+        ]
+        
+        expect(sut, toCompleteWith: .success([item1, item2]), when: {
+            let json = try! JSONSerialization.data(withJSONObject: itemsJSON)
+            client.complete(withStatusCode: 200, data: json)
         })
     }
     
     // MARK: - Helpers - CÓDIGO DE TESTEO
     
     /// Method factory
-    private func makeSUT(url: URL = URL(string: "https://a.given-url.com")!) -> (sut: RemoteFeedLoader, client: HTTPClientSpy) {
+    private func makeSUT(url: URL = URL(string: "https://a-url.com")!) -> (sut: RemoteFeedLoader, client: HTTPClientSpy) {
         let client = HTTPClientSpy()
         let sut = RemoteFeedLoader(url: url, client: client)
         return (sut, client)
     }
     
-    private func expect(_ sut: RemoteFeedLoader, toCompleteWithResult result: RemoteFeedLoader.Result, when action: () -> Void,
-                        file: StaticString = #filePath, line: UInt = #line) {
-        var captureResult = [RemoteFeedLoader.Result]()
-        sut.load { captureResult.append($0) }
+    private func expect(_ sut: RemoteFeedLoader, toCompleteWith result: RemoteFeedLoader.Result, when action: () -> Void, file: StaticString = #file, line: UInt = #line) {
+        var capturedResults = [RemoteFeedLoader.Result]()
+        sut.load { capturedResults.append($0) }
         
         action()
         
-        XCTAssertEqual(captureResult, [result], file: file, line: line)
+        XCTAssertEqual(capturedResults, [result], file: file, line: line)
     }
-}
 
-// Clase espía para simular los datos, espiar, de nuestra `HTTPClient`de producción
-private class HTTPClientSpy: HTTPClient {
-    private var message = [(url: URL, completion: (HTTPCllientResult) -> Void)]()
-    
-    // Colección de urls, puede ser que llamemos a más de una URL,
-    // las almacenamos en un array que devuelve las url's de `message`
-    var requestedURLs: [URL] {
-        return message.map { $0.url }
+    /// Clase espía para simular los datos, espiar, de nuestra `HTTPClient`de producción
+    private class HTTPClientSpy: HTTPClient {
+        private var messages = [(url: URL, completion: (HTTPClientResult) -> Void)]()
+        
+        // Colección de urls, puede ser que llamemos a más de una URL,
+        // las almacenamos en un array que devuelve las url's de `message`
+        var requestedURLs: [URL] {
+            return messages.map { $0.url }
+        }
+        
+        // Implementamos el método get con lo que tenemos ahora para comprobar o testear
+        func get(from url: URL, completion: @escaping (HTTPClientResult) -> Void) {
+            messages.append((url, completion))
+        }
+        
+        // Obtener el error del array de `messges` en un índice
+        func complete(with error: Error, at index: Int = 0) {
+            messages[index].completion(.failure(error))
+        }
+        
+        // Obtener los datos y la respuesta del array `messages` en un índice dado
+        func complete(withStatusCode code: Int, data: Data = Data(), at index: Int = 0) {
+            let response = HTTPURLResponse(
+                url: requestedURLs[index],
+                statusCode: code,
+                httpVersion: nil,
+                headerFields: nil
+            )!
+            messages[index].completion(.success(data, response))
+        }
     }
-    
-    // Implementamos el método get con lo que tenemos ahora para comprobar o testear
-    func get(from url: URL, completion: @escaping (HTTPCllientResult) -> Void) {
-        message.append((url, completion))
-    }
-    
-    // Creamos esta función para devolver el primer error del array de errores y testearla
-    func complete(with error: Error, at index: Int = 0) {
-        message[index].completion(.failure(error))
-    }
-    
-    func complete(withStatusCode code: Int, data: Data = Data(), at index: Int = 0) {
-        let response = HTTPURLResponse(
-            url: requestedURLs[index],
-            statusCode: code,
-            httpVersion: nil,
-            headerFields: nil
-        )!
-        message[index].completion(.success(data, response))
-    }
+
 }

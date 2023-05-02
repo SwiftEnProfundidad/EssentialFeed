@@ -17,13 +17,13 @@ import Foundation
 // lo que serían cuatro casos. Con esta enum, solo tenemos
 // dos casos, un `success` o un `failure` y sin opcionales,
 // eliminando así dos estados inválidos.
-public enum HTTPCllientResult {
+public enum HTTPClientResult {
     case success(Data, HTTPURLResponse)
     case failure(Error)
 }
 
 public protocol HTTPClient {
-    func get(from url: URL, completion: @escaping (HTTPCllientResult) -> Void)
+    func get(from url: URL, completion: @escaping (HTTPClientResult) -> Void)
 }
 
 public final class RemoteFeedLoader {
@@ -49,8 +49,8 @@ public final class RemoteFeedLoader {
         client.get(from: url) { result in
             switch result {
                 case let .success(data, _):
-                    if let _ = try? JSONSerialization.jsonObject(with: data) {
-                        completion(.success([]))
+                    if let root = try? JSONDecoder().decode(Root.self, from: data) {
+                        completion(.success(root.items))
                     } else {
                         completion(.failure(.invalidData))
                     }
@@ -59,4 +59,8 @@ public final class RemoteFeedLoader {
             }
         }
     }
+}
+
+private struct Root: Decodable {
+    let items: [FeedItem]
 }
