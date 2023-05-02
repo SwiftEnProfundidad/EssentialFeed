@@ -17,9 +17,8 @@ final class RemoteFeedLoaderTest: XCTestCase {
         XCTAssertTrue(client.requestedURLs.isEmpty)
     }
     
-    // Ahora el test para la carga de FeedItems del caso de uso
+    // Ahora el caso de uso para la carga de FeedItems
     func test_load_requestsDataFromURL() {
-        // Ahora sí tenemos un cliente, ya que traemos datos
         /// Arrange: `Given`, dado un cliente y un sut
         let url = URL(string: "https://a.given-url.com")!
         let (sut, client) = makeSUT(url: url)
@@ -28,7 +27,7 @@ final class RemoteFeedLoaderTest: XCTestCase {
         sut.load() { _ in }
         
         /// Assert: `Then` entonces afirmamos que una
-        /// request URL fue iniciada en el `client`
+        /// request con URL fue iniciada en el `client`
         XCTAssertEqual(client.requestedURLs, [url])
     }
     
@@ -72,7 +71,19 @@ final class RemoteFeedLoaderTest: XCTestCase {
             
             XCTAssertEqual(captureErrors, [.invalidData])
         }
+    }
+    
+    func test_load_deliversErrorOn200HTTPResponseWithInvalidJSON() {
+        let (sut, client) = makeSUT()
         
+        var captureErrors = [RemoteFeedLoader.Error]()
+        sut.load { captureErrors.append($0)
+            
+            let invalidJSON = Data("invalid json".utf8)
+            client.complete(withStatusCode: 200, data: invalidJSON)
+            
+            XCTAssertEqual(captureErrors, [.invalidData])
+        }
     }
     
     // MARK: - Helpers - CÓDIGO DE TESTEO
@@ -104,14 +115,14 @@ final class RemoteFeedLoaderTest: XCTestCase {
             message[index].completion(.failure(error))
         }
         
-        func complete(withStatusCode code: Int, at index: Int = 0) {
+        func complete(withStatusCode code: Int, data: Data = Data(), at index: Int = 0) {
             let response = HTTPURLResponse(
                 url: requestedURLs[index],
                 statusCode: code,
                 httpVersion: nil,
                 headerFields: nil
             )!
-            message[index].completion(.success(response))
+            message[index].completion(.success(data, response))
         }
     }
 }
