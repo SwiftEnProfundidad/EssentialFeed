@@ -123,11 +123,7 @@ class RemoteFeedLoaderTests: XCTestCase {
             "description": description,
             "location": location,
             "image": imageURL.absoluteString
-        ]/*.reduce(into: [String: Any]()) { (acc, e) in
-          if let value = e.value { acc[e.key] = value }*/
-        
-        // Eliminamos los nuevos valores. En Swift tenemos
-        // `compatMapValues` que hace esto, como el `reduce`
+        ]
         let compactJSON: [String: Any] = json.compactMapValues({ $0 })
         
         return (item, compactJSON)
@@ -140,13 +136,14 @@ private func makeItemsJSON(_ items: [[String: Any]]) -> Data {
     return try! JSONSerialization.data(withJSONObject: json)
 }
 
-private func expect(_ sut: RemoteFeedLoader, toCompleteWith result: RemoteFeedLoader.Result, when action: () -> Void, file: StaticString = #file, line: UInt = #line) {
-    var capturedResults = [RemoteFeedLoader.Result]()
+private func expect(_ sut: RemoteFeedLoader, toCompleteWith result: Result<[FeedItem], RemoteFeedLoader.Error>, when action: () -> Void,
+                    file: StaticString = #file, line: UInt = #line) {
+    var capturedResults: [Result<[FeedItem], RemoteFeedLoader.Error>] = []
     sut.load { capturedResults.append($0) }
     
     action()
     
-    XCTAssertEqual(capturedResults, [result], file: file, line: line)
+    XCTAssertEqual(capturedResults.last, result, file: file, line: line)
 }
 
 /// Clase espía para simular los datos, espiar, de nuestra `HTTPClient`de producción
