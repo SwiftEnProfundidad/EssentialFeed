@@ -22,7 +22,12 @@ public final class RemoteFeedLoader {
     }
     
     public func load(completion: @escaping (Result<[FeedItem], Error>) -> Void) {
-        client.get(from: url) { result in
+        client.get(from: url) { [weak self] result in
+            // Grantizamos que se entregará un resultado, succes o failure,
+            // si la instancia está asignada, es decir, self no es nil, de
+            // lo contrario volvemos para no tener ciclos de retención de memoria.
+            guard self != nil else { return }
+            
             switch result {
                 case let .success(data, response):
                     completion(FeedItemsMapper.map(data, from: response))
