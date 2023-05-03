@@ -76,7 +76,7 @@ class RemoteFeedLoaderTests: XCTestCase {
     // El caso de uso cuando tenemos un 200 y el JSON es válido pero viene vacío
     func test_load_deliversNoItemsOn200HTTPResponseWithEmptyJSONList() {
         let (sut, client) = makeSUT()
-
+        
         expect(sut, toCompleteWith: .success([]), when: {
             let emptyListJSON = Data("{\"items\": []}".utf8)
             client.complete(withStatusCode: 200, data: emptyListJSON)
@@ -87,88 +87,95 @@ class RemoteFeedLoaderTests: XCTestCase {
     func test_load_deliversItemsOn200HTTPResponseWithJSONItems() {
         let (sut, client) = makeSUT()
         
-        let item1 = FeedItem(
+        let item1 = makeItem(
             id: UUID(),
-            description: nil,
-            location: nil,
             imageURL: URL(string: "http://a-url.com")!)
         
-        let item1JSON = [
-            "id": item1.id.uuidString,
-            "image": item1.imageURL.absoluteString
-        ]
-        
-        let item2 = FeedItem(
+        let item2 = makeItem(
             id: UUID(),
             description: "a description",
             location: "a location",
             imageURL: URL(string: "http://another-url.com")!)
         
-        let item2JSON = [
-            "id": item2.id.uuidString,
-            "description": item2.description,
-            "location": item2.location,
-            "image": item2.imageURL.absoluteString
-        ]
+        let items = [item1.model, item2.model]
         
-        let itemsJSON = [
-            "items": [item1JSON, item2JSON]
-        ]
-        
-        expect(sut, toCompleteWith: .success([item1, item2]), when: {
-            let json = try! JSONSerialization.data(withJSONObject: itemsJSON)
+        expect(sut, toCompleteWith: .success(items), when: {
+            let json = makeItemsJSON([item1.json, item2.json])
             client.complete(withStatusCode: 200, data: json)
         })
     }
     
     // MARK: - Helpers - CÓDIGO DE TESTEO
     
-    /// Method factory
+    /// Method Factory
     private func makeSUT(url: URL = URL(string: "https://a-url.com")!) -> (sut: RemoteFeedLoader, client: HTTPClientSpy) {
         let client = HTTPClientSpy()
         let sut = RemoteFeedLoader(url: url, client: client)
         return (sut, client)
     }
     
-    private func expect(_ sut: RemoteFeedLoader, toCompleteWith result: RemoteFeedLoader.Result, when action: () -> Void, file: StaticString = #file, line: UInt = #line) {
-        var capturedResults = [RemoteFeedLoader.Result]()
-        sut.load { capturedResults.append($0) }
+    /// Method Factory for items
+    private func makeItem(id: UUID, description: String? = nil, location: String? = nil, imageURL: URL) -> (model: FeedItem, json: [String: Any]) {
+        let item = FeedItem(id: id, description: description, location: location, imageURL: imageURL)
+        let json = [
+            "id": id.uuidString,
+            "description": description,
+            "location": location,
+            "image": imageURL.absoluteString
+        ]/*.reduce(into: [String: Any]()) { (acc, e) in
+          if let value = e.value { acc[e.key] = value }*/
         
-        action()
+        // Eliminamos los nuevos valores. En Swift tenemos
+        // `compatMapValues` que hace esto, como el `reduce`
+        let compactJSON: [String: Any] = json.compactMapValues({ $0 })
         
-        XCTAssertEqual(capturedResults, [result], file: file, line: line)
+        return (item, compactJSON)
     }
+}
 
-    /// Clase espía para simular los datos, espiar, de nuestra `HTTPClient`de producción
-    private class HTTPClientSpy: HTTPClient {
-        private var messages = [(url: URL, completion: (HTTPClientResult) -> Void)]()
-        
-        // Colección de urls, puede ser que llamemos a más de una URL,
-        // las almacenamos en un array que devuelve las url's de `message`
-        var requestedURLs: [URL] {
-            return messages.map { $0.url }
-        }
-        
-        // Implementamos el método get con lo que tenemos ahora para comprobar o testear
-        func get(from url: URL, completion: @escaping (HTTPClientResult) -> Void) {
-            messages.append((url, completion))
-        }
-        
-        // Obtener el error del array de `messges` en un índice
-        func complete(with error: Error, at index: Int = 0) {
-            messages[index].completion(.failure(error))
-        }
-        
-        // Obtener los datos y la respuesta del array `messages` en un índice dado
-        func complete(withStatusCode code: Int, data: Data = Data(), at index: Int = 0) {
-            let response = HTTPURLResponse(
-                url: requestedURLs[index],
-                statusCode: code,
-                httpVersion: nil,
-                headerFields: nil
-            )!
-            messages[index].completion(.success(data, response))
-        }
+/// Method Factory for items json
+private func makeItemsJSON(_ items: [[String: Any]]) -> Data {
+    let json = ["items": items]
+    return try! JSONSerialization.data(withJSONObject: json)
+}
+
+private func expect(_ sut: RemoteFeedLoader, toCompleteWith result: RemoteFeedLoader.Result, when action: () -> Void, file: StaticString = #file, line: UInt = #line) {
+    var capturedResults = [RemoteFeedLoader.Result]()
+    sut.load { capturedResults.append($0) }
+    
+    action()
+    
+    XCTAssertEqual(capturedResults, [result], file: file, line: line)
+}
+
+/// Clase espía para simular los datos, espiar, de nuestra `HTTPClient`de producción
+private class HTTPClientSpy: HTTPClient {
+    private var messages = [(url: URL, completion: (HTTPClientResult) -> Void)]()
+    
+    // Colección de urls, puede ser que llamemos a más de una URL,
+    // las almacenamos en un array que devuelve las url's de `message`
+    var requestedURLs: [URL] {
+        return messages.map { $0.url }
     }
-
+    
+    // Implementamos el método get con lo que tenemos ahora para comprobar o testear
+    func get(from url: URL, completion: @escaping (HTTPClientResult) -> Void) {
+        messages.append((url, completion))
+    }
+    
+    // Obtener el error del array de `messges` en un índice
+    func complete(with error: Error, at index: Int = 0) {
+        messages[index].completion(.failure(error))
+    }
+    
+    // Obtener los datos y la respuesta del array `messages` en un índice dado
+    func complete(withStatusCode code: Int, data: Data = Data(), at index: Int = 0) {
+        let response = HTTPURLResponse(
+            url: requestedURLs[index],
+            statusCode: code,
+            httpVersion: nil,
+            headerFields: nil
+        )!
+        messages[index].completion(.success(data, response))
+    }
 }

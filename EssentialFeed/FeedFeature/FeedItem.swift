@@ -27,6 +27,8 @@ extension FeedItem: Decodable {
         case id
         case description
         case location
+        // una cadena aparentemente inofensiva en el módulo equivocado
+        // puede terminar rompiendo nuestras abstracciones `"image"`
         case imageURL = "image"
     }
 }
