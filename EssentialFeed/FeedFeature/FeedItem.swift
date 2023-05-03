@@ -20,15 +20,3 @@ public struct FeedItem: Equatable {
         self.imageURL = imageURL
     }
 }
-
-
-extension FeedItem: Decodable {
-    private enum CodingKeys: String, CodingKey {
-        case id
-        case description
-        case location
-        // una cadena aparentemente inofensiva en el módulo equivocado
-        // puede terminar rompiendo nuestras abstracciones `"image"`
-        case imageURL = "image"
-    }
-}
