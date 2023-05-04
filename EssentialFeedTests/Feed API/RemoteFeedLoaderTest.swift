@@ -158,24 +158,42 @@ class RemoteFeedLoaderTests: XCTestCase {
         
         return (item, compactJSON)
     }
-}
-
-/// Method Factory for items json
-private func makeItemsJSON(_ items: [[String: Any]]) -> Data {
-    let json = ["items": items]
-    return try! JSONSerialization.data(withJSONObject: json)
-}
-
-private func expect(_ sut: RemoteFeedLoader, toCompleteWith result: Result<[FeedItem], RemoteFeedLoader.Error>, when action: () -> Void,
-                    file: StaticString = #file, line: UInt = #line) {
-    var capturedResults: [Result<[FeedItem], RemoteFeedLoader.Error>] = []
-    sut.load { capturedResults.append($0) }
     
-    action()
     
-    XCTAssertEqual(capturedResults.last, result, file: file, line: line)
+    /// Method Factory for items json
+    private func makeItemsJSON(_ items: [[String: Any]]) -> Data {
+        let json = ["items": items]
+        return try! JSONSerialization.data(withJSONObject: json)
+    }
+    
+    private func expect(_ sut: RemoteFeedLoader, toCompleteWith expectedResult: Result<[FeedItem], RemoteFeedLoader.Error>,
+                        when action: () -> Void, file: StaticString = #file, line: UInt = #line) {
+        
+        // Necesitamos expectativas dado que el código es asíncrono y de que solo se ejecute una vez
+        // Sabemos que se cumple la expectación `fullfill`, dado que si no, tendríamos un fallo en `wait`.
+        let exp = expectation(description: "Wait for load completion")
+        
+        sut.load { receiveResult in
+            // Utilizamos la coincidencia de patrones de Swift
+            switch (receiveResult, expectedResult) {
+                    // Podemo comparar los items, dado que `FeedItem`se ajusta a `Equatable`
+                    // de lo contrario, el test fallará al no poder comparar los `items`
+                case let (.success(receiveItems), .success(expectedItems)):
+                    XCTAssertEqual(receiveItems, expectedItems, file: file, line: line)
+                    
+                case let (.failure(receiveError), .failure(expectedError)):
+                    XCTAssertEqual(receiveError, expectedError, file: file, line: line)
+                default:
+                    XCTFail("Expected result \(expectedResult) got \(receiveResult) instead", file: file, line: line)
+            }
+            exp.fulfill()
+        }
+        action()
+        
+        wait(for: [exp], timeout: 1.0)
+        
+    }
 }
-
 /// Clase espía para simular los datos, espiar, de nuestra `HTTPClient`de producción
 private class HTTPClientSpy: HTTPClient {
     private var messages = [(url: URL, completion: (HTTPClientResult) -> Void)]()
