@@ -7,6 +7,6 @@
 
 import Foundation
 
-protocol FeedLoader {
+public protocol FeedLoader {
     func load(completion: @escaping (Result<[FeedItem], RemoteFeedLoader.Error>) -> Void)
 }
