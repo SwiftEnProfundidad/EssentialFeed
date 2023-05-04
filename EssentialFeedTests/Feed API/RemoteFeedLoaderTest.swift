@@ -43,7 +43,7 @@ class RemoteFeedLoaderTests: XCTestCase {
     func test_load_deliversErrorOnClientError() {
         let (sut, client) = makeSUT()
         
-        expect(sut, toCompleteWith: .failure(RemoteFeedLoader.Error.connectivity), when: {
+        expect(sut, toCompleteWith: failure(.connectivity), when: {
             let clientError = NSError(domain: "Test", code: 0)
             client.complete(with: clientError)
         })
@@ -58,7 +58,7 @@ class RemoteFeedLoaderTests: XCTestCase {
         let json = makeItemsJSON([])
         
         samples.enumerated().forEach { index, code in
-            expect(sut, toCompleteWith: .failure(RemoteFeedLoader.Error.invalidData), when: {
+            expect(sut, toCompleteWith: failure(.invalidData), when: {
                 client.complete(withStatusCode: code, data: json, at: index)
             })
         }
@@ -68,7 +68,7 @@ class RemoteFeedLoaderTests: XCTestCase {
     func test_load_deliversErrorOn200HTTPResponseWithInvalidJSON() {
         let (sut, client) = makeSUT()
         
-        expect(sut, toCompleteWith: .failure(RemoteFeedLoader.Error.invalidData), when: {
+        expect(sut, toCompleteWith: failure(.invalidData), when: {
             let invalidJSON = Data("invalid json".utf8)
             client.complete(withStatusCode: 200, data: invalidJSON)
         })
@@ -133,6 +133,12 @@ class RemoteFeedLoaderTests: XCTestCase {
         return (sut, client)
     }
     
+    /// Al usar `Method Factory` en el alcance de la prueba, también evitamos que nuestros métodos de
+    /// prueba se rompan en el futuro si alguna vez decidimos cambiar los tipos de producción nuevamente
+    private func failure(_ error: RemoteFeedLoader.Error) -> (Result<[FeedItem], RemoteFeedLoader.Error>) {
+        return .failure(error)
+    }
+    
     private func trackForMemoryLeaks(_ instance: AnyObject, file: StaticString = #file, line: UInt = #line) {
         // Comprobamos que `instance` es nil, después de haber hecho capturas
         // con `self` en el código, que puede llevar a perdidas de memoria.
@@ -168,6 +174,7 @@ class RemoteFeedLoaderTests: XCTestCase {
     
     private func expect(_ sut: RemoteFeedLoader, toCompleteWith expectedResult: Result<[FeedItem], RemoteFeedLoader.Error>,
                         when action: () -> Void, file: StaticString = #file, line: UInt = #line) {
+        
         // Necesitamos expectativas dado que el código es asíncrono y de que solo se ejecute una vez
         // Sabemos que se cumple la expectación `fullfill`, dado que si no, tendríamos un fallo en `wait`.
         let exp = expectation(description: "Wait for load completion")
