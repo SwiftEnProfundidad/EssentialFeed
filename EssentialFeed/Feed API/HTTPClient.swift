@@ -12,12 +12,12 @@ import Foundation
 // y `Error` de tipo opcional, ya que de ser así, tendríamos cuatro casos, `HTTPURLResponse`
 // que podría traer `nil` o un valor y `Error` también `nil` o valor, con lo que serían cuatro casos.
 // Con esta enum, solo tenemos dos casos, un `success` o un `failure` y sin opcionales, eliminando así dos estados inválidos.
-public enum HTTPClientResult {
-    // en caso de `success` tendremos los datos y la respuesta (200...)
-    case success(Data, HTTPURLResponse)
-    case failure(Error)
-}
+//public enum HTTPClientResult {
+//    // en caso de `success` tendremos los datos y la respuesta (200...)
+//    case success(Data, HTTPURLResponse)
+//    case failure(Error)
+//}
 
 public protocol HTTPClient {
-    func get(from url: URL, completion: @escaping (HTTPClientResult) -> Void)
+    func get(from url: URL, completion: @escaping (Result<(Data, HTTPURLResponse), Error>) -> Void)
 }

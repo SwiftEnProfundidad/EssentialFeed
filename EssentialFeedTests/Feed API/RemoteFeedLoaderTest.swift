@@ -202,7 +202,7 @@ class RemoteFeedLoaderTests: XCTestCase {
 }
 /// Clase espía para simular los datos, espiar, de nuestra `HTTPClient`de producción
 private class HTTPClientSpy: HTTPClient {
-    private var messages = [(url: URL, completion: (HTTPClientResult) -> Void)]()
+    private var messages = [(url: URL, completion: (Result<(Data, HTTPURLResponse), Error>) -> Void)]()
     
     // Colección de urls, puede ser que llamemos a más de una URL,
     // las almacenamos en un array que devuelve las url's de `message`
@@ -211,7 +211,7 @@ private class HTTPClientSpy: HTTPClient {
     }
     
     // Implementamos el método get con lo que tenemos ahora para comprobar o testear
-    func get(from url: URL, completion: @escaping (HTTPClientResult) -> Void) {
+    func get(from url: URL, completion: @escaping (Result<(Data, HTTPURLResponse), Error>) -> Void) {
         messages.append((url, completion))
     }
     
@@ -228,6 +228,6 @@ private class HTTPClientSpy: HTTPClient {
             httpVersion: nil,
             headerFields: nil
         )!
-        messages[index].completion(.success(data, response))
+        messages[index].completion(.success((data, response)))
     }
 }
