@@ -51,8 +51,8 @@ final class URLSessionHTTPClientTest: XCTestCase {
         // Necesitamos registrear `URLProtocolStub`
         URLProtocolStub.startInterceptingRequest()
         let url = URL(string: "http://any-url.com")!
-        let requestError = NSError(domain: "any eror", code: 1)
-        URLProtocolStub.stub(url: url, error: requestError)
+        let error = NSError(domain: "any eror", code: 1)
+        URLProtocolStub.stub(url: url, data: nil, response: nil, error: error)
         
         let sut = URLSessionHTTPClient()
         
@@ -62,11 +62,11 @@ final class URLSessionHTTPClientTest: XCTestCase {
         sut.get(from: url) { result in
             switch result {
                 case let .failure(receivedError as NSError):
-                    XCTAssertEqual(receivedError.domain, requestError.domain)
-                    XCTAssertEqual(receivedError.code, requestError.code)
+                    XCTAssertEqual(receivedError.domain, error.domain)
+                    XCTAssertEqual(receivedError.code, error.code)
                     XCTAssertNotNil(receivedError)
                 default:
-                    XCTFail("Expecte d failure with error \(requestError), got \(result) instead")
+                    XCTFail("Expecte d failure with error \(error), got \(result) instead")
             }
             // Después de afirmar los valores podemos esperar la expectativa
             exp.fulfill()
@@ -87,12 +87,14 @@ final class URLSessionHTTPClientTest: XCTestCase {
         private static var stubs = [URL: Stub]()
         
         private struct Stub {
+            let data: Data?
+            let response: URLResponse?
             let error: Error?
         }
         
-        static func stub(url: URL, error: Error? = nil) {
+        static func stub(url: URL, data: Data?, response: URLResponse?, error: Error?) {
             // El stub en una url dada, va a tener una task
-            stubs[url] = Stub(error: error)
+            stubs[url] = Stub(data: data, response: response, error: error)
         }
         
         static func startInterceptingRequest() {
@@ -124,6 +126,16 @@ final class URLSessionHTTPClientTest: XCTestCase {
         override func startLoading() {
             // Si no hay un stub en la url dada, volvemos, no podemos hacer otra cosa.
             guard let url = request.url, let stub = URLProtocolStub.stubs[url] else { return }
+            
+            // Comprobar si hay datos
+            if let data = stub.data {
+                client?.urlProtocol(self, didLoad: data)
+            }
+            
+            // Comprobamos si hay respuesta
+            if let response = stub.response {
+                client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
+            }
             
             // Comprobamos si hay un error
             if let error = stub.error {
