@@ -8,28 +8,30 @@
 import XCTest
 import EssentialFeed
 
-// Creamos protocolos basados en mocking para burlarnos de la api de `URLSession`
-//  y `URLSessionDataTask`. Esta la es la tercera forma para pruebas de network.
-
-// Lo que hacemos es hacer un protocolo que simule `URLSession` y para eso lo llamamos `HTTPSession`
-// Cambiamos `URL` --> `HTTP` y copiamos tal cual el método nativo de `URLSession`. El que implemente
-// este protocolo, ya no tendrá que sobreescribri (override) este método, solo tendrá que implementarlo,
-// ocultando así, todos los detalles internos sobre `URLSession`. Solo son abstracción para el testing.
-protocol HTTPSession {
-    func dataTask(with url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> HTTPSessionTask
-}
-
-// Hacemos lo mismo con `URLSessionDataTask` y la llamamos `HTTPSessionTask` y tiene el mismo
-// efecto que lo explicado en el protocolo anterior, pero solo copiamos el método `resume()`.
-// Sustituimos todas las `URLSession` por `HTTPSession` y todas las `URLSessionDataTask` por `HTTPSessionTask`
-protocol HTTPSessionTask {
-    func resume()
-}
+//// Creamos protocolos basados en mocking para burlarnos de la api de `URLSession`
+////  y `URLSessionDataTask`. Esta la es la tercera forma para pruebas de network.
+//
+//// Lo que hacemos es hacer un protocolo que simule `URLSession` y para eso lo llamamos `HTTPSession`
+//// Cambiamos `URL` --> `HTTP` y copiamos tal cual el método nativo de `URLSession`. El que implemente
+//// este protocolo, ya no tendrá que sobreescribri (override) este método, solo tendrá que implementarlo,
+//// ocultando así, todos los detalles internos sobre `URLSession`. Solo son abstracción para el testing.
+//protocol HTTPSession {
+//    func dataTask(with url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> HTTPSessionTask
+//}
+//
+//// Hacemos lo mismo con `URLSessionDataTask` y la llamamos `HTTPSessionTask` y tiene el mismo
+//// efecto que lo explicado en el protocolo anterior, pero solo copiamos el método `resume()`.
+//// Sustituimos todas las `URLSession` por `HTTPSession` y todas las `URLSessionDataTask` por `HTTPSessionTask`
+//protocol HTTPSessionTask {
+//    func resume()
+// }
 
 class URLSessionHTTPClient {
-    private let session: HTTPSession
+    private let session: URLSession
     
-    init(session: HTTPSession) {
+    // Como no vamos a mockear `URLSession` le damos un valor por defecto
+    // No necesitamos mockear una `session`.
+    init(session: URLSession = .shared) {
         self.session = session
     }
     
@@ -44,42 +46,27 @@ class URLSessionHTTPClient {
 
 final class URLSessionHTTPClientTest: XCTestCase {
     
-    // Caso de uso para que una `dataTask comience a llamar a `resume`.
-    func test_getFromURL_resumeDataTaskWhitURL() {
-        let url = URL(string: "http://any-url.com")!
-        let session = URLSessionSpy()
-        let task = URLSessionDataTaskSpy()
-        // Le decimos a la `session` que devuelva nuestra `task` para una URL dada.
-        // Para ello creamos un mecanismo de `stubing` para que dtubing la URL con una `task`
-        session.stub(url: url, task: task)
-        
-        let sut = URLSessionHTTPClient(session: session)
-        
-        // Aquí ignoramos la respuesta
-        sut.get(from: url) { _ in }
-        
-        // Afirmamos que `resume`de `dataTask` se llama una vez, de lo contrario habrá un error.
-        XCTAssertEqual(task.resumeCallCount, 1)
-    }
-    
     // Caso de uso en el que la URL falla en las solicitudes
     func test_getFromURL_failsOnRequestError() {
+        // Necesitamos registrear `URLProtocolStub`
+        URLProtocolStub.startInterceptingRequest()
         let url = URL(string: "http://any-url.com")!
-        let error = NSError(domain: "any eror", code: 1)
-        let session = URLSessionSpy()
-        session.stub(url: url, error: error)
+        let requestError = NSError(domain: "any eror", code: 1)
+        URLProtocolStub.stub(url: url, error: requestError)
         
-        let sut = URLSessionHTTPClient(session: session)
+        let sut = URLSessionHTTPClient()
         
         let exp = expectation(description: "Wait for complition")
         
         // Aquí queremos la respuesta con un error
         sut.get(from: url) { result in
             switch result {
-                case let .failure(receiveError as NSError):
-                    XCTAssertEqual(receiveError, error)
+                case let .failure(receivedError as NSError):
+                    XCTAssertEqual(receivedError.domain, requestError.domain)
+                    XCTAssertEqual(receivedError.code, requestError.code)
+                    XCTAssertNotNil(receivedError)
                 default:
-                    XCTFail("Expecte d failure with error \(error), got \(result) instead")
+                    XCTFail("Expecte d failure with error \(requestError), got \(result) instead")
             }
             // Después de afirmar los valores podemos esperar la expectativa
             exp.fulfill()
@@ -87,52 +74,70 @@ final class URLSessionHTTPClientTest: XCTestCase {
         
         // con un tiempo de espera
         wait(for: [exp], timeout: 1.0)
+        // Una vez terminada la prueba tenemos que desregistrarla,
+        // para no bloquear otras solicitudes de Test.
+        URLProtocolStub.stopInterceptingRequest()
     }
     
     // MARK: - Helpers
     
-    private class URLSessionSpy: HTTPSession {
+    private class URLProtocolStub: URLProtocol {
         // Necesitamos tener una colección de stubs
         // con una url que va a tener una tarea específica
-        private var stubs = [URL: Stub]()
+        private static var stubs = [URL: Stub]()
         
         private struct Stub {
-            let task: HTTPSessionTask
             let error: Error?
         }
         
-        func stub(url: URL, task: HTTPSessionTask = FakeURLSessionDataTask(), error: Error? = nil) {
+        static func stub(url: URL, error: Error? = nil) {
             // El stub en una url dada, va a tener una task
-            stubs[url] = Stub(task: task, error: error)
+            stubs[url] = Stub(error: error)
         }
         
-        // Sobreescribimos esta función que se llamará en el método `get` ya que la clase que lo contien hereda de `HTTPSession`
-        // y la clase `URLSessionHTTPClient` inyecta un `URLSessión` el cual recibe una `session` que es una instancia
-        // de `URLSessionSpy` la cual también hereda de `URLSessión`, con lo que llamará a este método sobreescrito que devuelve
-        // una `HTTPSessionTask` mockeada con la clase `FakeURLSessionDataTask` la cual evita las solicitudes a una `Network`
-        func dataTask(with url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> HTTPSessionTask {
-            // El metodo devueve un `HTTPSessionTask` pero no queremos tener una solicitud de Network en
-            // los test, por lo que tenemos que crear algún tipo de implementación mock para `HTTPSessionTask`
-            // Cuando el código de producción solicita una `task`, devolvemos del `stub`, con una url dada, una
-            // `task`, y si no la tiene, devolvemos una instancia de `FakeURLSessionDataTask`
-            guard let stub = stubs[url] else {
-                fatalError("Couldn't find stub for \(url)")
+        static func startInterceptingRequest() {
+            URLProtocol.registerClass(URLProtocolStub.self)
+        }
+        
+        static func stopInterceptingRequest() {
+            URLProtocol.unregisterClass(URLProtocolStub.self)
+        }
+        
+        // Podemos ver `canInit` se llama como método de clase,
+        // por lo que todavía no tenemos una instancia. La `URL
+        // LOADING SYSTEM` instanciará nuestro `URLProtocolStub`
+        // solo si podemos manejar la solicitud
+        override class func canInit(with request: URLRequest) -> Bool {
+            // En este punto aún no tenemos una instancia de `URLProtocolStub`
+            guard let url = request.url else { return false }
+            
+            return URLProtocolStub.stubs[url] != nil
+        }
+        
+        // En este método comienza a cargar la request. El framework comienza a manejar la solicitud.
+        override class func canonicalRequest(for request: URLRequest) -> URLRequest {
+             return request
+        }
+        
+        // Invocamos este método para decir que ahora
+        // es el momento de que empice a cargar la URL
+        override func startLoading() {
+            // Si no hay un stub en la url dada, volvemos, no podemos hacer otra cosa.
+            guard let url = request.url, let stub = URLProtocolStub.stubs[url] else { return }
+            
+            // Comprobamos si hay un error
+            if let error = stub.error {
+                // `client`: El objeto que utiliza el protocolo para comunicarse con URL loading system.
+                client?.urlProtocol(self, didFailWithError: error)
             }
-            completionHandler(nil, nil, stub.error)
-            return stub.task
+            
+            // Tenemos que llamar al cliente y decirle que hemos terminado de cargar.
+            client?.urlProtocolDidFinishLoading(self)
         }
-    }
-    // Mock para evitar devolver un `HTTPSessionTask`
-    private class FakeURLSessionDataTask: HTTPSessionTask {
-        func resume() {}
         
-    }
-    private class URLSessionDataTaskSpy: HTTPSessionTask {
-        var resumeCallCount = 0
-        
-        func resume() {
-            resumeCallCount += 1
-        }
+        // Aquí no hacemos nada, pero si no lo implementamos,
+        // obtendremos un bloqueo en tiempo de ejecución.
+        override func stopLoading() { }
     }
 }
 
