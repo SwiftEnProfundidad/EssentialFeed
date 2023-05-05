@@ -51,8 +51,8 @@ final class URLSessionHTTPClientTest: XCTestCase {
         // Necesitamos registrear `URLProtocolStub`
         URLProtocolStub.startInterceptingRequest()
         let url = URL(string: "http://any-url.com")!
-        let error = NSError(domain: "any eror", code: 1)
-        URLProtocolStub.stub(url: url, data: nil, response: nil, error: error)
+        let error = NSError(domain: "any error", code: 1)
+        URLProtocolStub.stub(data: nil, response: nil, error: error)
         
         let sut = URLSessionHTTPClient()
         
@@ -82,9 +82,7 @@ final class URLSessionHTTPClientTest: XCTestCase {
     // MARK: - Helpers
     
     private class URLProtocolStub: URLProtocol {
-        // Necesitamos tener una colección de stubs
-        // con una url que va a tener una tarea específica
-        private static var stubs = [URL: Stub]()
+        private static var stub: Stub?
         
         private struct Stub {
             let data: Data?
@@ -92,9 +90,8 @@ final class URLSessionHTTPClientTest: XCTestCase {
             let error: Error?
         }
         
-        static func stub(url: URL, data: Data?, response: URLResponse?, error: Error?) {
-            // El stub en una url dada, va a tener una task
-            stubs[url] = Stub(data: data, response: response, error: error)
+        static func stub(data: Data?, response: URLResponse?, error: Error?) {
+            stub = Stub(data: data, response: response, error: error)
         }
         
         static func startInterceptingRequest() {
@@ -103,17 +100,17 @@ final class URLSessionHTTPClientTest: XCTestCase {
         
         static func stopInterceptingRequest() {
             URLProtocol.unregisterClass(URLProtocolStub.self)
+            // Removemos el stub interceptado al terminar
+            stub = nil
         }
         
         // Podemos ver `canInit` se llama como método de clase,
         // por lo que todavía no tenemos una instancia. La `URL
         // LOADING SYSTEM` instanciará nuestro `URLProtocolStub`
-        // solo si podemos manejar la solicitud
+        // solo si podemos manejar la solicitud.
         override class func canInit(with request: URLRequest) -> Bool {
-            // En este punto aún no tenemos una instancia de `URLProtocolStub`
-            guard let url = request.url else { return false }
-            
-            return URLProtocolStub.stubs[url] != nil
+            // Interceptamos todas las solicitudes
+            return true
         }
         
         // En este método comienza a cargar la request. El framework comienza a manejar la solicitud.
@@ -124,26 +121,25 @@ final class URLSessionHTTPClientTest: XCTestCase {
         // Invocamos este método para decir que ahora
         // es el momento de que empice a cargar la URL
         override func startLoading() {
-            // Si no hay un stub en la url dada, volvemos, no podemos hacer otra cosa.
-            guard let url = request.url, let stub = URLProtocolStub.stubs[url] else { return }
-            
-            // Comprobar si hay datos
-            if let data = stub.data {
+            // Comprobar si hay datos y si hay, se
+            // los pasamos al `URL LOADING SYSTEM`
+            if let data = URLProtocolStub.stub?.data {
                 client?.urlProtocol(self, didLoad: data)
             }
             
             // Comprobamos si hay respuesta
-            if let response = stub.response {
+            if let response = URLProtocolStub.stub?.response {
                 client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
             }
             
             // Comprobamos si hay un error
-            if let error = stub.error {
+            if let error = URLProtocolStub.stub?.error {
                 // `client`: El objeto que utiliza el protocolo para comunicarse con URL loading system.
                 client?.urlProtocol(self, didFailWithError: error)
             }
             
-            // Tenemos que llamar al cliente y decirle que hemos terminado de cargar.
+            // Tenemos que llamar al cliente y decirle que hemos
+            // terminado de cargar y, completamos sin valores
             client?.urlProtocolDidFinishLoading(self)
         }
         
