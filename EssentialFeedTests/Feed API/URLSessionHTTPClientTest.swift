@@ -8,10 +8,28 @@
 import XCTest
 import EssentialFeed
 
+// Creamos protocolos basados en mocking para burlarnos de la api de `URLSession`
+//  y `URLSessionDataTask`. Esta la es la tercera forma para pruebas de network.
+
+// Lo que hacemos es hacer un protocolo que simule `URLSession` y para eso lo llamamos `HTTPSession`
+// Cambiamos `URL` --> `HTTP` y copiamos tal cual el método nativo de `URLSession`. El que implemente
+// este protocolo, ya no tendrá que sobreescribri (override) este método, solo tendrá que implementarlo,
+// ocultando así, todos los detalles internos sobre `URLSession`. Solo son abstracción para el testing.
+protocol HTTPSession {
+    func dataTask(with url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> HTTPSessionTask
+}
+
+// Hacemos lo mismo con `URLSessionDataTask` y la llamamos `HTTPSessionTask` y tiene el mismo
+// efecto que lo explicado en el protocolo anterior, pero solo copiamos el método `resume()`.
+// Sustituimos todas las `URLSession` por `HTTPSession` y todas las `URLSessionDataTask` por `HTTPSessionTask`
+protocol HTTPSessionTask {
+    func resume()
+}
+
 class URLSessionHTTPClient {
-    private let session: URLSession
+    private let session: HTTPSession
     
-    init(session: URLSession) {
+    init(session: HTTPSession) {
         self.session = session
     }
     
@@ -73,28 +91,28 @@ final class URLSessionHTTPClientTest: XCTestCase {
     
     // MARK: - Helpers
     
-    private class URLSessionSpy: URLSession {
+    private class URLSessionSpy: HTTPSession {
         // Necesitamos tener una colección de stubs
         // con una url que va a tener una tarea específica
         private var stubs = [URL: Stub]()
         
         private struct Stub {
-            let task: URLSessionDataTask
+            let task: HTTPSessionTask
             let error: Error?
         }
         
-        func stub(url: URL, task: URLSessionDataTask = FakeURLSessionDataTask(), error: Error? = nil) {
+        func stub(url: URL, task: HTTPSessionTask = FakeURLSessionDataTask(), error: Error? = nil) {
             // El stub en una url dada, va a tener una task
             stubs[url] = Stub(task: task, error: error)
         }
         
-        // Sobreescribimos esta función que se llamará en el método `get` ya que la clase que lo contien hereda de `URLSession`
+        // Sobreescribimos esta función que se llamará en el método `get` ya que la clase que lo contien hereda de `HTTPSession`
         // y la clase `URLSessionHTTPClient` inyecta un `URLSessión` el cual recibe una `session` que es una instancia
         // de `URLSessionSpy` la cual también hereda de `URLSessión`, con lo que llamará a este método sobreescrito que devuelve
-        // una `URLSessionDataTask` mockeada con la clase `FakeURLSessionDataTask` la cual evita las solicitudes a una `Network`
-        override func dataTask(with url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
-            // El metodo devueve un `URLSessionDataTask` pero no queremos tener una solicitud de Network en
-            // los test, por lo que tenemos que crear algún tipo de implementación mock para `URLSessionDataTask`
+        // una `HTTPSessionTask` mockeada con la clase `FakeURLSessionDataTask` la cual evita las solicitudes a una `Network`
+        func dataTask(with url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> HTTPSessionTask {
+            // El metodo devueve un `HTTPSessionTask` pero no queremos tener una solicitud de Network en
+            // los test, por lo que tenemos que crear algún tipo de implementación mock para `HTTPSessionTask`
             // Cuando el código de producción solicita una `task`, devolvemos del `stub`, con una url dada, una
             // `task`, y si no la tiene, devolvemos una instancia de `FakeURLSessionDataTask`
             guard let stub = stubs[url] else {
@@ -104,15 +122,15 @@ final class URLSessionHTTPClientTest: XCTestCase {
             return stub.task
         }
     }
-    // Mock para evitar devolver un `URLSessionDataTask`
-    private class FakeURLSessionDataTask: URLSessionDataTask {
-        override func resume() {}
+    // Mock para evitar devolver un `HTTPSessionTask`
+    private class FakeURLSessionDataTask: HTTPSessionTask {
+        func resume() {}
         
     }
-    private class URLSessionDataTaskSpy: URLSessionDataTask {
+    private class URLSessionDataTaskSpy: HTTPSessionTask {
         var resumeCallCount = 0
         
-        override func resume() {
+        func resume() {
             resumeCallCount += 1
         }
     }
