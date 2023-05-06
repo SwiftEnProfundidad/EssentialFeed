@@ -46,9 +46,21 @@ class URLSessionHTTPClient {
 
 final class URLSessionHTTPClientTest: XCTestCase {
     
+    override class func setUp() {
+        // Necesitamos registrear `URLProtocolStub`
+        URLProtocolStub.startInterceptingRequest()
+    }
+    
+    override class func tearDown() {
+        super.tearDown()
+        
+        // Una vez terminada la prueba tenemos que desregistrarla,
+        // para no bloquear otras solicitudes de Test.
+        URLProtocolStub.stopInterceptingRequest()
+    }
+    
     // Caso de uso de obtener la URL y realizar una solicitud GET con la URL.
     func test_getFromURL_performGETRequestWithURL() {
-        URLProtocolStub.startInterceptingRequest()
         let url = URL(string: "http://any-url.com")!
         let exp = expectation(description: "Wait for request")
         // Creamos un método para observar las request y
@@ -65,13 +77,10 @@ final class URLSessionHTTPClientTest: XCTestCase {
         URLSessionHTTPClient().get(from: url) { _ in }
          
         wait(for: [exp], timeout: 1.0)
-        URLProtocolStub.stopInterceptingRequest()
     }
     
     // Caso de uso en el que la URL falla en las solicitudes
     func test_getFromURL_failsOnRequestError() {
-        // Necesitamos registrear `URLProtocolStub`
-        URLProtocolStub.startInterceptingRequest()
         let url = URL(string: "http://any-url.com")!
         let error = NSError(domain: "any error", code: 1)
         URLProtocolStub.stub(data: nil, response: nil, error: error)
@@ -96,9 +105,6 @@ final class URLSessionHTTPClientTest: XCTestCase {
         
         // con un tiempo de espera
         wait(for: [exp], timeout: 1.0)
-        // Una vez terminada la prueba tenemos que desregistrarla,
-        // para no bloquear otras solicitudes de Test.
-        URLProtocolStub.stopInterceptingRequest()
     }
     
     // MARK: - Helpers
