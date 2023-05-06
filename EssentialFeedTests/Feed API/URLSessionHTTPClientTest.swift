@@ -26,7 +26,7 @@ import EssentialFeed
 //    func resume()
 //}
 
-class URLSessionHTTPClient {
+class URLSessionHTTPClient: HTTPClient {
     private let session: URLSession
     
     // Como no vamos a mockear `URLSession` le damos un valor por defecto
@@ -143,7 +143,7 @@ class URLSessionHTTPClientTests: XCTestCase {
     // Factory method: Movemos la creación de `URLSessionHTTPClient`
     // (el sistema bajo prueba, o SUT) a un método `Factory` para
     // proteger nuestra prueba de cambios importantes.
-    private func makeSUT(file: StaticString = #file, line: UInt = #line) -> URLSessionHTTPClient {
+    private func makeSUT(file: StaticString = #file, line: UInt = #line) -> HTTPClient {
         let sut = URLSessionHTTPClient()
         trackForMemoryLeaks(sut, file: file, line: line)
         return sut
@@ -175,7 +175,7 @@ class URLSessionHTTPClientTests: XCTestCase {
         }
     }
     
-    private func resultFor(data: Data?, response: URLResponse?, error: Error?, file: StaticString = #file, line: UInt = #line) -> (HTTPClientResult) {
+    private func resultFor(data: Data?, response: URLResponse?, error: Error?, file: StaticString = #file, line: UInt = #line) -> HTTPClientResult {
         URLProtocolStub.stub(data: data, response: response, error: error)
         let sut = makeSUT(file: file, line: line)
         let exp = expectation(description: "Wait for completion")
