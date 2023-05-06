@@ -35,10 +35,15 @@ class URLSessionHTTPClient {
         self.session = session
     }
     
+    struct UnexpectedValuesRepresentation: Error {}
+    
     func get(from url: URL, completion: @escaping (Result<(Data, HTTPURLResponse), Error>) -> Void) {
         session.dataTask(with: url) { _, _, error in
             if let error = error {
                 completion(.failure(error))
+            } else {
+                // En este caso no verificamos el error, dado que los tres valores son nil.
+                completion(.failure(UnexpectedValuesRepresentation()))
             }
         }.resume()
     }
@@ -94,7 +99,30 @@ final class URLSessionHTTPClientTest: XCTestCase {
                     XCTAssertEqual(receivedError.code, error.code)
                     XCTAssertNotNil(receivedError)
                 default:
-                    XCTFail("Expecte d failure with error \(error), got \(result) instead")
+                    XCTFail("Expecte failure with error \(error), got \(result) instead")
+            }
+            // Después de afirmar los valores podemos esperar la expectativa
+            exp.fulfill()
+        }
+        
+        // con un tiempo de espera
+        wait(for: [exp], timeout: 1.0)
+    }
+    
+    // Caso de uso en el que falla en todos los valores: data, urlResponse, Error (todos nil)
+    func test_getFromURL_failsOnAllNilValues() {
+        URLProtocolStub.stub(data: nil, response: nil, error: nil)
+        
+        let exp = expectation(description: "Wait for complition")
+        
+        // Aquí queremos la respuesta con un error
+        makeSUT().get(from: anyURL()) { result in
+            switch result {
+                case .failure:
+                    break
+                    // Todos son nil, no hay manera de manejar o recuperarse de este error
+                default:
+                    XCTFail("Expecte failure, got \(result) instead")
             }
             // Después de afirmar los valores podemos esperar la expectativa
             exp.fulfill()
