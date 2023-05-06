@@ -18,6 +18,8 @@ import Foundation
 //    case failure(Error)
 //}
 
+public typealias HTTPClientResutl = ((Result<(Data, HTTPURLResponse), Error>) -> Void)
+
 public protocol HTTPClient {
-    func get(from url: URL, completion: @escaping (Result<(Data, HTTPURLResponse), Error>) -> Void)
+    func get(from url: URL, completion: @escaping HTTPClientResutl)
 }
