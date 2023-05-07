@@ -8,7 +8,7 @@
 import XCTest
 import EssentialFeed
 
-// NOTA: es bueno tener este TestCase esté aislado porque no queremos tener que
+// NOTA: es bueno que este TestCase esté aislado porque no queremos tener que
 // ejecutarlo todo el tiempo con nuestra unidad de Test, tardar alrededor de 5 seg.
 final class EssentialFeedAPIEndToEndTests: XCTestCase {
     
@@ -36,11 +36,13 @@ final class EssentialFeedAPIEndToEndTests: XCTestCase {
     
     // MARK: - Helpers
     
-    private func getFeedResult() -> LoadFeedResult? {
+    private func getFeedResult(file: StaticString = #file, line: UInt = #line) -> LoadFeedResult? {
         // En este caso, la URL va a ser la que nos proporcionó backend
         let testServerURL = URL(string: "https://essentialdeveloper.com/feed-case-study/test-api/feed")!
         let client = URLSessionHTTPClient()
         let loader = RemoteFeedLoader(url: testServerURL, client: client)
+        trackForMemoryLeaks(client, file: file, line: line)
+        trackForMemoryLeaks(loader, file: file, line: line)
         
         // Ahora necesitamos cargar nuestro Feed y obtener el Result
         let exp = expectation(description: "Wait for load completion")
