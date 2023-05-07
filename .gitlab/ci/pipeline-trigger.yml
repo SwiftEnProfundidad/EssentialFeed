@@ -1,0 +1,6 @@
+include:
+  - local: '/Users/juan.merlos/Desktop/EssentialDevloper_MASTER/EssentialFeed/.gitlab-ci.yml'
+
+build:
+  extends: .build_template
+

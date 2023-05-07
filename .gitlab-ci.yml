@@ -17,3 +17,18 @@ test_project:
     - xcode_14-2
     - macos_13-3-1
 
+trigger_pipeline:
+  stage: test
+  trigger:
+    include: .gitlab/ci/pipeline-trigger.yml
+  only:
+    - main
+
+trigger_job:
+  stage: test
+  trigger:
+    project: /Users/juan.merlos/Desktop/EssentialDevloper_MASTER/EssentialFeed/EssentialFeed.xcodeproj
+    strategy: depend
+    branch: main
+
+
