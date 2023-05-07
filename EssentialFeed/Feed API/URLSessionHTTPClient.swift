@@ -7,15 +7,17 @@
 
 import Foundation
 
+// Somos el cliente y necesitamos una URLSession
 public class URLSessionHTTPClient: HTTPClient {
     private let session: URLSession
     
-    // Como no vamos a mockear `URLSession` le damos un valor por defecto
-    // No necesitamos mockear una `session`.
+    // Como no vamos a mockear `URLSession` le damos un valor
+    // por defecto. No necesitamos mockear una `session`.
     public init(session: URLSession = .shared) {
         self.session = session
     }
     
+    // Error inesperado, no sabemos qué pasó
     private struct UnexpectedValuesRepresentation: Error {}
     
     public func get(from url: URL, completion: @escaping (HTTPClientResult) -> Void) {
