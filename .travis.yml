@@ -1,16 +1,10 @@
 os: osx
-osx: xcode14.2
-language: swift
-script: xcodebuild clean build test -project EssentialFeed.xcodeproj -scheme "CI" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
-
-
-os: osx
 osx_image: xcode14.2
 language: swift
 xcode_project: EssentialFeed.xcodeproj
 xcode_scheme: CI
 env:
-
-SWIFT_VERSION=5.0
+  global:
+    - SWIFT_VERSION=5.0
 script:
-xcodebuild clean build test -project EssentialFeed.xcodeproj -scheme "CI" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
+  - xcodebuild clean build test -project EssentialFeed.xcodeproj -scheme "CI" -destination "platform=macOS" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
