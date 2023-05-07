@@ -1,5 +1,5 @@
 os: osx
 osx_image: xcode14.2
 language: swift
-osx_deployment_target: 10.13.1
+osx_deployment_target: 10.14.6
 script: xcodebuild clean build test -project EssentialFeed.xcodeproj -scheme "CI" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
