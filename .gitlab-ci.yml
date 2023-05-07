@@ -1,45 +1,20 @@
-# You can override the included template(s) by including variable overrides
-# SAST customization: https://docs.gitlab.com/ee/user/application_security/sast/#customizing-the-sast-settings
-# Secret Detection customization: https://docs.gitlab.com/ee/user/application_security/secret_detection/#customizing-settings
-# Dependency Scanning customization: https://docs.gitlab.com/ee/user/application_security/dependency_scanning/#customizing-the-dependency-scanning-settings
-# Container Scanning customization: https://docs.gitlab.com/ee/user/application_security/container_scanning/#customizing-the-container-scanning-settings
-# Note that environment variables can be set in several places
-# See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
-stages:
-- test
-sast:
-  stage: test
-include:
-- template: Security/SAST.gitlab-ci.yml
-
-os: osx
-osx_image: xcode14.2
-language: swift
-script: xcodebuild clean build test -project /Users/juan.merlos/Desktop/EssentialDevloper_MASTER/EssentialFeed/EssentialFeed.xcodeproj -scheme "CI" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
-
-
-# You can copy and paste this template into a new `.gitlab-ci.yml` file.
-# You should not add this template to an existing `.gitlab-ci.yml` file by using the `include:` keyword.
-#
-# To contribute improvements to CI/CD templates, please follow the Development guide at:
-# https://docs.gitlab.com/ee/development/cicd/templates.html
-# This specific template is located at:
-# https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Swift.gitlab-ci.yml
-# Lifted from: https://about.gitlab.com/2016/03/10/setting-up-gitlab-ci-for-ios-projects/
-# This file assumes an own GitLab CI runner, setup on a macOS system.
 stages:
   - build
   - test
   - archive
   - deploy
+
 build_project:
   stage: build
-  script:
-    - xcodebuild clean build test -project /Users/juan.merlos/Desktop/EssentialDevloper_MASTER/EssentialFeed/EssentialFeed.xcodeproj -scheme "CI" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
   tags:
     - ios_16-4
     - xcode_14-2
     - macos_13-3-1
+  script:
+    - xcodebuild clean build test -project /Users/juan.merlos/Desktop/EssentialDevloper_MASTER/EssentialFeed/EssentialFeed.xcodeproj -scheme "CI" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
+  os: osx
+  osx_image: xcode14.2
+
 archive_project:
   stage: archive
   script:
@@ -54,8 +29,8 @@ archive_project:
     - ios_11-3
     - xcode_9-3
     - macos_10-13
+
 deploy:
   stage: deploy
   script: echo "Define your deployment script!"
   environment: production
-
