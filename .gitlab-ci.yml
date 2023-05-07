@@ -7,12 +7,13 @@
 # See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
 stages:
 - test
-sast:
-  stage: test
-include:
-- template: Security/SAST.gitlab-ci.yml
 
-os: osx
-osx_image: xcode14.2
-language: swift
-script: xcodebuild clean build test -project /Users/juan.merlos/Desktop/EssentialDevloper_MASTER/EssentialFeed/EssentialFeed.xcodeproj -scheme "CI" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
+test_project:
+  stage: test
+  script:
+    - xcodebuild clean build test -project /Users/juan.merlos/Desktop/EssentialDevloper_MASTER/EssentialFeed/EssentialFeed.xcodeproj -scheme "CI" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
+  tags:
+    - ios_16-4
+    - xcode_14-2
+    - macos_13-3-1
+
