@@ -1,15 +1,4 @@
-language: node_js
-node_js:
-  - "stable"
-cache:
-  directories:
-  - node_modules
-script:
-  - npm run build
-deploy:
-  provider: pages
-  skip_cleanup: true
-  github_token: $github_token
-  local_dir: build
-  on:
-    branch: master
+os: osx
+osx: xcode14.2
+language: swift
+script: xcodebuild clean build test -project /Users/juan.merlos/Desktop/EssentialDevloper_MASTER/EssentialFeed/EssentialFeed.xcodeproj -scheme "CI" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
