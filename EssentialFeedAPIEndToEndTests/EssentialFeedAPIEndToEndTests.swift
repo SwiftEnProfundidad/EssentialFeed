@@ -18,11 +18,9 @@ final class EssentialFeedAPIEndToEndTests: XCTestCase {
         switch getFeedResult() {
             case let .success(items):
                 XCTAssertEqual(items.count, 8, "Expected 8 items in the test accoount feedd")
-                
                 items.enumerated().forEach { (index, item) in
                     XCTAssertEqual(items[index], item)
                 }
-                
             case let .failure(error):
                 XCTFail("Expected succesful feed resutl, got \(error) instead")
             default:
@@ -49,7 +47,7 @@ final class EssentialFeedAPIEndToEndTests: XCTestCase {
             receivedResult = result
             exp.fulfill()
         }
-        wait(for: [exp], timeout: 5.0)
+        wait(for: [exp], timeout: 20.0)
         return receivedResult
     }
     
