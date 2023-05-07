@@ -11,3 +11,8 @@ sast:
   stage: test
 include:
 - template: Security/SAST.gitlab-ci.yml
+
+os: osx
+osx_image: xcode14.2
+language: swift
+script: xcodebuild clean build test -project /Users/juan.merlos/Desktop/EssentialDevloper_MASTER/EssentialFeed/EssentialFeed.xcodeproj -scheme "CI" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
