@@ -12,7 +12,6 @@
 		EF405A622A02CF1A0073FB92 /* FeedItemsMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF405A612A02CF1A0073FB92 /* FeedItemsMapper.swift */; };
 		EF47249C2A07981600F67423 /* XCTestCase+MemoryLeakTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF36318C2A065CB6009F52F5 /* XCTestCase+MemoryLeakTracking.swift */; };
 		EF7153452A04128900630EDE /* URLSessionHTTPClientTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF7153442A04128900630EDE /* URLSessionHTTPClientTest.swift */; };
-		EFC9105F29FDAD040094A9BC /* EssentialFeed.docc in Sources */ = {isa = PBXBuildFile; fileRef = EFC9105E29FDAD040094A9BC /* EssentialFeed.docc */; };
 		EFC9106529FDAD050094A9BC /* EssentialFeed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EFC9105A29FDAD040094A9BC /* EssentialFeed.framework */; };
 		EFC9106B29FDAD050094A9BC /* EssentialFeed.h in Headers */ = {isa = PBXBuildFile; fileRef = EFC9105D29FDAD040094A9BC /* EssentialFeed.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EFC9107529FDAD900094A9BC /* FeedItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFC9107429FDAD900094A9BC /* FeedItem.swift */; };
@@ -46,9 +45,9 @@
 		EF405A5F2A02CB7D0073FB92 /* HTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
 		EF405A612A02CF1A0073FB92 /* FeedItemsMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemsMapper.swift; sourceTree = "<group>"; };
 		EF7153442A04128900630EDE /* URLSessionHTTPClientTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionHTTPClientTest.swift; sourceTree = "<group>"; };
+		EFBA441F2A081F2800880534 /* EssentialFeed.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = EssentialFeed.md; sourceTree = "<group>"; };
 		EFC9105A29FDAD040094A9BC /* EssentialFeed.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = EssentialFeed.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EFC9105D29FDAD040094A9BC /* EssentialFeed.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EssentialFeed.h; sourceTree = "<group>"; };
-		EFC9105E29FDAD040094A9BC /* EssentialFeed.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = EssentialFeed.docc; sourceTree = "<group>"; };
 		EFC9106429FDAD050094A9BC /* EssentialFeedTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EssentialFeedTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EFC9107429FDAD900094A9BC /* FeedItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItem.swift; sourceTree = "<group>"; };
 		EFC9107629FDAF730094A9BC /* FeedLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedLoader.swift; sourceTree = "<group>"; };
@@ -127,7 +126,7 @@
 		EFC9105C29FDAD040094A9BC /* EssentialFeed */ = {
 			isa = PBXGroup;
 			children = (
-				EFC9105E29FDAD040094A9BC /* EssentialFeed.docc */,
+				EFBA441F2A081F2800880534 /* EssentialFeed.md */,
 				EFC9105D29FDAD040094A9BC /* EssentialFeed.h */,
 				EFC9107D29FE4F900094A9BC /* Feed API */,
 				EFC9107829FDB2E20094A9BC /* FeedFeature */,
@@ -315,7 +314,6 @@
 				EFC9107729FDAF730094A9BC /* FeedLoader.swift in Sources */,
 				EF405A622A02CF1A0073FB92 /* FeedItemsMapper.swift in Sources */,
 				EFC9107529FDAD900094A9BC /* FeedItem.swift in Sources */,
-				EFC9105F29FDAD040094A9BC /* EssentialFeed.docc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -493,7 +491,7 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
 				MARKETING_VERSION = 1.0;
 				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu11 gnu++20";
@@ -525,7 +523,7 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
 				MARKETING_VERSION = 1.0;
 				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu11 gnu++20";
