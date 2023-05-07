@@ -1,16 +1,4 @@
 os: osx
-osx_image: xcode14.2
+osx_image: xcode14.3
 language: swift
-xcode_project: EssentialFeed.xcodeproj
-xcode_scheme: CI
-env:
-  global:
-    - SDKROOT=$(xcrun --show-sdk-path)
-    - FRAMEWORKS_FOLDER_PATH="${BUILD_DIR}/Release"
-    - FRAMEWORK_NAME="EssentialFeed"
-    - ARTIFACTS_DIR="${PWD}/build"
-  matrix:
-    - DESTINATION="arch=x86_64"
-    - DESTINATION="arch=arm64"
-script:
-  - xcodebuild clean build test -project EssentialFeed.xcodeproj -scheme CI -destination "$DESTINATION" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO SWIFT_VERSION=5.0
+script: xcodebuild clean build test -project EssentialFeed.xcodeproj -scheme CI -destination "$DESTINATION" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
