@@ -11,7 +11,7 @@ import EssentialFeed
 // NOTA: es bueno que este TestCase esté aislado porque no queremos tener que
 // ejecutarlo todo el tiempo con nuestra unidad de Test, tardar alrededor de 5 seg.
 final class EssentialFeedAPIEndToEndTests: XCTestCase {
-    
+
     // Caso de uso para: probar servidor de prueba de extremo a extremo
     // Obtener FeedResutlt coincide con datos de cuenta de prueba fijos
     func test_endToEndTestServerGETFeedResutlt_matchesFixedTestAccountData() {
@@ -43,8 +43,10 @@ final class EssentialFeedAPIEndToEndTests: XCTestCase {
     private func getFeedResult(file: StaticString = #file, line: UInt = #line) -> LoadFeedResult? {
         // En este caso, la URL va a ser la que nos proporcionó backend
         let testServerURL = URL(string: "https://essentialdeveloper.com/feed-case-study/test-api/feed")!
+        // Utilizar la configuración ephemeral de URLSession para evitar comUse partir
+        // el estado entre ejecuciones de prueba en artefactos de Cache de disco
         let client = URLSessionHTTPClient(session: URLSession(configuration: .ephemeral))
-        let loader = RemoteFeedLoader(url: testServerURL, client: client)
+        let loader = RemoteFeedLoader(url: testServerURL, client: client )
         trackForMemoryLeaks(client, file: file, line: line)
         trackForMemoryLeaks(loader, file: file, line: line)
         
