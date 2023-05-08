@@ -1,16 +1,5 @@
-# ``EssentialFeed``
+# ``Essential Feed App``
 
-<!--@START_MENU_TOKEN@-->Summary<!--@END_MENU_TOKEN@-->
+[![Build Status](https://app.travis-ci.com/SwiftEnProfundidad/EssentialFeed.svg?branch=main)](https://app.travis-ci.com/SwiftEnProfundidad/EssentialFeed)
 
-## Overview
-
-<!--@START_MENU_TOKEN@-->Text<!--@END_MENU_TOKEN@-->
-
-## Topics
-
-### <!--@START_MENU_TOKEN@-->Group<!--@END_MENU_TOKEN@-->
-
-- Command to run Travis CI setup
-
-xcodebuild clean build test -project /Users/juan.merlos/Desktop/EssentialDevloper_MASTER/EssentialFeed/EssentialFeed.xcodeproj -scheme "CI" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
 
