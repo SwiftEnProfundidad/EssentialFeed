@@ -219,7 +219,6 @@ class URLSessionHTTPClientTests: XCTestCase {
         // LOADING SYSTEM` instanciará nuestro `URLProtocolStub`
         // solo si podemos manejar la solicitud.
         override class func canInit(with request: URLRequest) -> Bool {
-            requestObserver?(request)
             // Interceptamos todas las solicitudes
             return true
         }
@@ -232,6 +231,15 @@ class URLSessionHTTPClientTests: XCTestCase {
         // Invocamos este método para decir que ahora
         // es el momento de que empice a cargar la URL
         override func startLoading() {
+            // Con este método y esta implementación estamos seguros de que cada solicitud
+            // finaliza antes de que regrese el método de prueba que usa `URLProtocolStub`.
+            // Con lo que no tendremos ninguan solicitud de fondo, al mismo tiempo que otros
+            // métodos de prueba.
+            if let requestObserver = URLProtocolStub.requestObserver {
+                client?.urlProtocolDidFinishLoading(self)
+                return requestObserver(request)
+            }
+            
             // Comprobar si hay datos y si hay, se
             // los pasamos al `URL LOADING SYSTEM`
             if let data = URLProtocolStub.stub?.data {
