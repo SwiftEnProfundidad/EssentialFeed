@@ -8,7 +8,7 @@
 import XCTest
 import EssentialFeed
 
-class RemoteFeedLoaderTests: XCTestCase {
+class LoadFeedFromRemoteUseCasseTests: XCTestCase {
     
     // Hacemos el mínimo test para el inicializador del caso de uso
     func test_init_doesNotRequestDataFromURL() {
