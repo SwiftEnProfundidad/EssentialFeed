@@ -22,13 +22,14 @@ class LocalFeedLoader {
             // Comprobamos que la instancia no haya sido desasignada
             // Si ha sido desasignada, retornamos.
             guard let self = self else { return }
-            if error == nil {
+            
+            if let catchDeletionerror = error {
+                completion(catchDeletionerror)
+            } else {
                 self.store.insert(items, timestamp: self.currentDate()) { [weak self] error in
                     guard self != nil else { return }
                     completion(error)
                 }
-            } else {
-                completion(error)
             }
         }
     }
