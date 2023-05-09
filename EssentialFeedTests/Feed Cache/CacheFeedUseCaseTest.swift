@@ -26,11 +26,15 @@ class LocalFeedLoader {
             if let catchDeletionerror = error {
                 completion(catchDeletionerror)
             } else {
-                self.store.insert(items, timestamp: self.currentDate()) { [weak self] error in
-                    guard self != nil else { return }
-                    completion(error)
-                }
+                self.cache(items, with: completion)
             }
+        }
+    }
+    
+    private func cache(_ items: [FeedItem], with completion: @escaping (Error?) -> Void) {
+        store.insert(items, timestamp: currentDate()) { [weak self] error in
+            guard self != nil else { return }
+            completion(error)
         }
     }
 }
@@ -38,10 +42,10 @@ class LocalFeedLoader {
 protocol FeedStore {
     typealias DeletionCompletion = (Error?) -> Void
     typealias InsertionCompletion = (Error?) -> Void
-
+    
     func deleteCachedFeed(completion: @escaping DeletionCompletion)
     func insert(_ items: [FeedItem], timestamp: Date, completion: @escaping InsertionCompletion)
-
+    
 }
 
 final class CacheFeedUseCaseTest: XCTestCase {
@@ -176,7 +180,7 @@ final class CacheFeedUseCaseTest: XCTestCase {
         let sut = LocalFeedLoader(store: store, currentDate: currentDate)
         trackForMemoryLeaks(store, file: file, line: line)
         trackForMemoryLeaks(sut, file: file, line: line)
-         
+        
         return (sut, store)
     }
     
@@ -245,7 +249,7 @@ final class CacheFeedUseCaseTest: XCTestCase {
         
         func completeInsertionSuccessfully(at index: Int = 0) {
             insertionCompletions[index](nil)
-
+            
         }
     }
     
