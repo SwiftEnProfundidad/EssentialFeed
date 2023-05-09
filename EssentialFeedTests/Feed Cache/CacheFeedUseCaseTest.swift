@@ -16,20 +16,41 @@ class LocalFeedLoader {
     }
     
     func save(_ items: [FeedItem]) {
-        store.deleteCachedFeed()
+        store.deleteCachedFeed() { [unowned self] error in
+            if error == nil {
+                self.store.insert(items)
+            }
+        }
     }
 }
 
 class FeedStore {
+    typealias DeletionCompletion = (Error?) -> Void
+    
     var deleteCachedFeedCallCount = 0
     var insertCallCount = 0
     
-    func deleteCachedFeed() {
+    private var deletionCompletions = [(Error?) -> Void]()
+    
+    func deleteCachedFeed(completion: @escaping DeletionCompletion) {
         deleteCachedFeedCallCount += 1
+        // Capturamos el `completion`
+        deletionCompletions.append(completion)
     }
     
     func completeDeletion(with error: Error, at index: Int = 0) {
-        
+        // Obtenemos el `DeleteCompletion` en el índicenque nos pasan y
+        // completamos con un `error. Es un closure que recibe un array
+        deletionCompletions[index](error)
+    }
+    
+    func completeDeletionSuccessfully(at index: Int = 0) {
+        // Completamos sin ningún error, ya que fue exitoso el borrado
+        deletionCompletions[index](nil)
+    }
+    
+    func insert(_ items: [FeedItem]) {
+        insertCallCount += 1
     }
 }
 
@@ -63,6 +84,19 @@ final class CacheFeedUseCaseTest: XCTestCase {
         
         XCTAssertEqual(store.insertCallCount, 0)
     }
+    
+    // Caso de uso en el que solicitamos un nuevo guardado
+    // en caché de los items con una eliminación exitosa
+    func test_save_requestsNewCacheInsertionOnSuccessfulDeletion() {
+        let items = [uniqueItems(), uniqueItems()]
+        let (sut, store) = makeSUT()
+        
+        sut.save(items)
+        store.completeDeletionSuccessfully()
+        
+        XCTAssertEqual(store.insertCallCount, 1)
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: LocalFeedLoader, store: FeedStore) {
