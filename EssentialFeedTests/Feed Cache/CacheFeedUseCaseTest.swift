@@ -18,7 +18,10 @@ class LocalFeedLoader {
     }
     
     func save(_ items: [FeedItem], completion: @escaping (Error?) -> Void) {
-        store.deleteCachedFeed() { [unowned self] error in
+        store.deleteCachedFeed() { [weak self] error in
+            // Comprobamos que la instancia no haya sido desasignada
+            // Si ha sido desasignada, retornamos.
+            guard let self = self else { return }
             if error == nil {
                 self.store.insert(items, timestamp: self.currentDate(), completion: completion)
             } else {
@@ -118,6 +121,28 @@ final class CacheFeedUseCaseTest: XCTestCase {
             store.completeDeletionSuccessfully()
             store.completeInsertionSuccessfully()
         })
+    }
+    
+    // Caso de uso en el que estamos en el proceso de guardar y la instancia se desasigna
+    // y no queremos que se invoque el bloque `completion` por lo que no entregamos el
+    // error de eliminación de la caché, que es uno de los caminos que pued invocar `completion`
+    // Es decir, no entrega un error de de eliminación después de que se haya desasignado la instacia 'SUT'
+    /// NOTA: con este test verificamos el uso de `unowned` y vemos que necesitamos debilitar `self` con `weak`
+    func test_save_doesNotDeliverDeletionErrorAfterSUTInstanceHasBeenDeallocated() {
+        // En este caso estos son los SPY's
+        let store = FeedStoreSpy()
+        var sut: LocalFeedLoader? = LocalFeedLoader(store: store, currentDate: Date.init)
+        
+        var receivedResults = [Error?]()
+        sut?.save([uniqueItems()]) { receivedResults.append($0) }
+        
+        // Eliminamos la fuerte referencia a SUT para garantizar que se desasigne.
+        sut = nil
+        // Completamos la eliminación de caché con un error después de que se
+        // haya desasignado el SUT y no queremos recibir ningún resultado de vuelta
+        store.completeDeletion(with: anyNSError())
+        
+        XCTAssertTrue(receivedResults.isEmpty)
     }
     
     // MARK: - Helpers
