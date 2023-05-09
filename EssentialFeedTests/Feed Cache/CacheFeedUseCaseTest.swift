@@ -101,7 +101,7 @@ final class CacheFeedUseCaseTest: XCTestCase {
         let store = FeedStoreSpy()
         var sut: LocalFeedLoader? = LocalFeedLoader(store: store, currentDate: Date.init)
         
-        var receivedResults = [Error?]()
+        var receivedResults = [LocalFeedLoader.SaveResult]()
         sut?.save([uniqueItems()]) { receivedResults.append($0) }
         
         // Eliminamos la fuerte referencia a SUT para garantizar que se desasigne.
@@ -120,7 +120,7 @@ final class CacheFeedUseCaseTest: XCTestCase {
         let store = FeedStoreSpy()
         var sut: LocalFeedLoader? = LocalFeedLoader(store: store, currentDate: Date.init)
         
-        var receivedResults = [Error?]()
+        var receivedResults = [LocalFeedLoader.SaveResult]()
         sut?.save([uniqueItems()]) { receivedResults.append($0) }
         
         store.completeDeletionSuccessfully()
