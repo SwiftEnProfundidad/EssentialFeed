@@ -23,7 +23,10 @@ class LocalFeedLoader {
             // Si ha sido desasignada, retornamos.
             guard let self = self else { return }
             if error == nil {
-                self.store.insert(items, timestamp: self.currentDate(), completion: completion)
+                self.store.insert(items, timestamp: self.currentDate()) { [weak self] error in
+                    guard self != nil else { return }
+                    completion(error)
+                }
             } else {
                 completion(error)
             }
@@ -142,6 +145,24 @@ final class CacheFeedUseCaseTest: XCTestCase {
         // haya desasignado el SUT y no queremos recibir ningún resultado de vuelta
         store.completeDeletion(with: anyNSError())
         
+        XCTAssertTrue(receivedResults.isEmpty)
+    }
+    
+    // Caso de uso en el que necestimos eliminar de la caché con éxito. Luego
+    // desasignamos la instancia y completamos la inserción en caché con un error.
+    func test_save_doesNotDeliverInsertionErrorAfterSUTInstanceHasBeenDeallocated() {
+        // En este caso estos son los SPY's
+        let store = FeedStoreSpy()
+        var sut: LocalFeedLoader? = LocalFeedLoader(store: store, currentDate: Date.init)
+        
+        var receivedResults = [Error?]()
+        sut?.save([uniqueItems()]) { receivedResults.append($0) }
+        
+        store.completeDeletionSuccessfully()
+        // Eliminamos la fuerte referencia a SUT para garantizar que se desasigne.
+        sut = nil
+        // y completamos la instanca con un error.
+        store.completeInsertion(with: anyNSError())
         XCTAssertTrue(receivedResults.isEmpty)
     }
     
