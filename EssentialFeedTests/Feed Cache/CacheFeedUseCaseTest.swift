@@ -45,6 +45,11 @@ final class CacheFeedUseCaseTest: XCTestCase {
     func test_save_requestsNewCacheInsertionWithTimestampOnSuccessfulDeletion() {
         let timestamp = Date()
         let items = [uniqueItems(), uniqueItems()]
+        let localItems = items.map { LocalFeedItem(
+            id: $0.id,
+            description: $0.description,
+            location: $0.location,
+            imageURL: $0.imageURL) }
         // La fecha/hora actual no es una función pura (cada vez que crea una instancia de fecha,
         // tiene valores diferentes: la fecha/hora actual)
         
@@ -57,7 +62,7 @@ final class CacheFeedUseCaseTest: XCTestCase {
         sut.save(items) { _ in }
         store.completeDeletionSuccessfully()
         
-        XCTAssertEqual(store.receivedMessages, [.deleteCachedFedd, .insert(items, timestamp)])
+        XCTAssertEqual(store.receivedMessages, [.deleteCachedFedd, .insert(localItems, timestamp)])
     }
     
     // Caso de uso en el que un error en la elimanación, el sistema entrega un error
@@ -167,7 +172,7 @@ final class CacheFeedUseCaseTest: XCTestCase {
         
         enum ReceivedMessage: Equatable {
             case deleteCachedFedd
-            case insert([FeedItem], Date)
+            case insert([LocalFeedItem], Date)
         }
         
         private (set) var receivedMessages = [ReceivedMessage]()
@@ -175,7 +180,7 @@ final class CacheFeedUseCaseTest: XCTestCase {
         private var deletionCompletions = [DeletionCompletion]()
         private var insertionCompletions = [InsertionCompletion]()
         
-        func deleteCachedFeed(completion: @escaping DeletionCompletion) {
+        func deleteCachedFeed(completion: @escaping  DeletionCompletion) {
             // Capturamos el `completion`
             deletionCompletions.append(completion)
             receivedMessages.append(.deleteCachedFedd)
@@ -192,7 +197,7 @@ final class CacheFeedUseCaseTest: XCTestCase {
             deletionCompletions[index](nil)
         }
         
-        func insert(_ items: [FeedItem], timestamp: Date, completion: @escaping InsertionCompletion) {
+        func insert(_ items: [LocalFeedItem], timestamp: Date, completion: @escaping InsertionCompletion) {
             // Cada vez que se invoca a este método, insertamos el bloque
             // `completion` a nuestro array de `insertCompletions` capturados
             insertionCompletions.append(completion)
