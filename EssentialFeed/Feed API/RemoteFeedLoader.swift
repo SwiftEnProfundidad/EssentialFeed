@@ -21,7 +21,7 @@ public final class RemoteFeedLoader: FeedLoader {
         self.client = client
     }
     
-    public func load(completion: @escaping (Result<[FeedItem], Error>) -> Void) {
+    public func load(completion: @escaping (LoadFeedResult) -> Void) {
         client.get(from: url) { [weak self] result in
             // Grantizamos que se entregará un resultado, succes o failure,
             // si la instancia está asignada, es decir, self no es nil, de
@@ -29,13 +29,27 @@ public final class RemoteFeedLoader: FeedLoader {
             guard self != nil else { return }
             
             switch result {
-                case let .success((data, response)):
-                    completion(FeedItemsMapper.map(data, from: response))
-                case .failure:
-                    completion(.failure(Error.connectivity))
+            case let .success((data, response)):
+                completion(RemoteFeedLoader.map(data, from: response))
+                
+            case .failure:
+                completion(.failure(Error.connectivity))
             }
         }
     }
+    
+    private static func map(_ data: Data, from response: HTTPURLResponse) -> LoadFeedResult {
+        do {
+            let items = try FeedItemsMapper.map(data, from: response)
+            return .success(items.toModels())
+        } catch  {
+            return .failure(.invalidData)
+        }
+    }
 }
- 
 
+private extension Array where Element == RemoteFeedItem {
+    func toModels() -> [FeedItem] {
+        return map { FeedItem(id: $0.id, description: $0.description, location: $0.location, imageURL: $0.image) }
+    }
+}
