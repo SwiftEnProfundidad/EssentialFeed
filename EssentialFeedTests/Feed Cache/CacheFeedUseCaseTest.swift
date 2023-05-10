@@ -19,10 +19,9 @@ final class CacheFeedUseCaseTest: XCTestCase {
     
     // Caso de uso en el que al guardar borramos la cache con éxito
     func test_save_requestsCacheDeletion() {
-        let items = [uniqueItem(), uniqueItem()]
         let (sut, store) = makeSUT()
         
-        sut.save(items) { _ in }
+        sut.save(uniqueItems().models) { _ in }
         
         XCTAssertEqual(store.receivedMessages, [.deleteCachedFedd])
     }
@@ -30,11 +29,10 @@ final class CacheFeedUseCaseTest: XCTestCase {
     // Caso de uso en el que el guardado `save` solicita la
     // inserción en caché y se complete con un error de eliminación.
     func test_save_doesNotRequestCacheInsertionOnDeletionError() {
-        let items = [uniqueItem(), uniqueItem()]
         let (sut, store) = makeSUT()
         let deletionError = anyNSError()
         
-        sut.save(items) { _ in }
+        sut.save(uniqueItems().models) { _ in }
         store.completeDeletion(with: deletionError)
         
         XCTAssertEqual(store.receivedMessages, [.deleteCachedFedd])
@@ -44,12 +42,7 @@ final class CacheFeedUseCaseTest: XCTestCase {
     // en caché con timestamp con una eliminación exitosa.
     func test_save_requestsNewCacheInsertionWithTimestampOnSuccessfulDeletion() {
         let timestamp = Date()
-        let items = [uniqueItem(), uniqueItem()]
-        let localItems = items.map { LocalFeedItem(
-            id: $0.id,
-            description: $0.description,
-            location: $0.location,
-            imageURL: $0.imageURL) }
+        let items = uniqueItems()
         // La fecha/hora actual no es una función pura (cada vez que crea una instancia de fecha,
         // tiene valores diferentes: la fecha/hora actual)
         
@@ -59,10 +52,10 @@ final class CacheFeedUseCaseTest: XCTestCase {
         // fácilmente la fecha/hora actual durante la prueba.
         let (sut, store) = makeSUT(currentDate: { timestamp })
         
-        sut.save(items) { _ in }
+        sut.save(items.models) { _ in }
         store.completeDeletionSuccessfully()
         
-        XCTAssertEqual(store.receivedMessages, [.deleteCachedFedd, .insert(localItems, timestamp)])
+        XCTAssertEqual(store.receivedMessages, [.deleteCachedFedd, .insert(items.local, timestamp)])
     }
     
     // Caso de uso en el que un error en la elimanación, el sistema entrega un error
@@ -107,7 +100,7 @@ final class CacheFeedUseCaseTest: XCTestCase {
         var sut: LocalFeedLoader? = LocalFeedLoader(store: store, currentDate: Date.init)
         
         var receivedResults = [LocalFeedLoader.SaveResult]()
-        sut?.save([uniqueItem()]) { receivedResults.append($0) }
+        sut?.save(uniqueItems().models) { receivedResults.append($0) }
         
         // Eliminamos la fuerte referencia a SUT para garantizar que se desasigne.
         sut = nil
@@ -126,7 +119,7 @@ final class CacheFeedUseCaseTest: XCTestCase {
         var sut: LocalFeedLoader? = LocalFeedLoader(store: store, currentDate: Date.init)
         
         var receivedResults = [LocalFeedLoader.SaveResult]()
-        sut?.save([uniqueItem()]) { receivedResults.append($0) }
+        sut?.save(uniqueItems().models) { receivedResults.append($0) }
         
         store.completeDeletionSuccessfully()
         // Eliminamos la fuerte referencia a SUT para garantizar que se desasigne.
@@ -157,7 +150,7 @@ final class CacheFeedUseCaseTest: XCTestCase {
         let exp = expectation(description: "Wait for save completion")
         
         var receivedError: Error?
-        sut.save([uniqueItem()]) { error in
+        sut.save(uniqueItems().models) { error in
             receivedError = error
             exp.fulfill()
         }
@@ -222,8 +215,16 @@ final class CacheFeedUseCaseTest: XCTestCase {
         return FeedItem(id: UUID(), description: "any", location: "any", imageURL: anyURL())
     }
     
-    private func uniqueItems() {
+    // Factory
+    private func uniqueItems() -> (models: [FeedItem], local: [LocalFeedItem]) {
+        let models = [uniqueItem(), uniqueItem()]
+        let local = models.map { LocalFeedItem(
+            id: $0.id,
+            description: $0.description,
+            location: $0.location,
+            imageURL: $0.imageURL) }
         
+        return (models, local)
     }
     
     private func anyURL() -> URL {
