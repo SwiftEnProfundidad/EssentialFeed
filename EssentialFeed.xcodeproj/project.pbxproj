@@ -117,6 +117,7 @@
 			children = (
 				EF807E952A0AF97100FEF7F4 /* LocalFeedLoader.swift */,
 				EF807E972A0AFA6400FEF7F4 /* FeedStore.swift */,
+				EF874C282A0C2F260021C798 /* LocalFeedItem.swift */,
 			);
 			path = "Feed Cache";
 			sourceTree = "<group>";
@@ -132,7 +133,6 @@
 		EFC9105029FDAD040094A9BC = {
 			isa = PBXGroup;
 			children = (
-				EF874C282A0C2F260021C798 /* LocalFeedItem.swift */,
 				EFC9105C29FDAD040094A9BC /* EssentialFeed */,
 				EFC9106829FDAD050094A9BC /* EssentialFeedTests */,
 				EFEFF6C52A0788EA001CE6D0 /* EssentialFeedAPIEndToEndTests */,
@@ -155,6 +155,7 @@
 			children = (
 				EFBA441F2A081F2800880534 /* EssentialFeed.md */,
 				EFC9105D29FDAD040094A9BC /* EssentialFeed.h */,
+				EF807E942A0AF95900FEF7F4 /* Feed Cache */,
 				EFC9107D29FE4F900094A9BC /* Feed API */,
 				EFC9107829FDB2E20094A9BC /* FeedFeature */,
 			);
@@ -183,7 +184,6 @@
 		EFC9107D29FE4F900094A9BC /* Feed API */ = {
 			isa = PBXGroup;
 			children = (
-				EF807E942A0AF95900FEF7F4 /* Feed Cache */,
 				EFC9107E29FE50080094A9BC /* RemoteFeedLoader.swift */,
 				EF405A5F2A02CB7D0073FB92 /* HTTPClient.swift */,
 				EF405A612A02CF1A0073FB92 /* FeedItemsMapper.swift */,
