@@ -19,7 +19,7 @@ final class CacheFeedUseCaseTest: XCTestCase {
     
     // Caso de uso en el que al guardar borramos la cache con éxito
     func test_save_requestsCacheDeletion() {
-        let items = [uniqueItems(), uniqueItems()]
+        let items = [uniqueItem(), uniqueItem()]
         let (sut, store) = makeSUT()
         
         sut.save(items) { _ in }
@@ -30,7 +30,7 @@ final class CacheFeedUseCaseTest: XCTestCase {
     // Caso de uso en el que el guardado `save` solicita la
     // inserción en caché y se complete con un error de eliminación.
     func test_save_doesNotRequestCacheInsertionOnDeletionError() {
-        let items = [uniqueItems(), uniqueItems()]
+        let items = [uniqueItem(), uniqueItem()]
         let (sut, store) = makeSUT()
         let deletionError = anyNSError()
         
@@ -44,7 +44,7 @@ final class CacheFeedUseCaseTest: XCTestCase {
     // en caché con timestamp con una eliminación exitosa.
     func test_save_requestsNewCacheInsertionWithTimestampOnSuccessfulDeletion() {
         let timestamp = Date()
-        let items = [uniqueItems(), uniqueItems()]
+        let items = [uniqueItem(), uniqueItem()]
         let localItems = items.map { LocalFeedItem(
             id: $0.id,
             description: $0.description,
@@ -107,7 +107,7 @@ final class CacheFeedUseCaseTest: XCTestCase {
         var sut: LocalFeedLoader? = LocalFeedLoader(store: store, currentDate: Date.init)
         
         var receivedResults = [LocalFeedLoader.SaveResult]()
-        sut?.save([uniqueItems()]) { receivedResults.append($0) }
+        sut?.save([uniqueItem()]) { receivedResults.append($0) }
         
         // Eliminamos la fuerte referencia a SUT para garantizar que se desasigne.
         sut = nil
@@ -126,7 +126,7 @@ final class CacheFeedUseCaseTest: XCTestCase {
         var sut: LocalFeedLoader? = LocalFeedLoader(store: store, currentDate: Date.init)
         
         var receivedResults = [LocalFeedLoader.SaveResult]()
-        sut?.save([uniqueItems()]) { receivedResults.append($0) }
+        sut?.save([uniqueItem()]) { receivedResults.append($0) }
         
         store.completeDeletionSuccessfully()
         // Eliminamos la fuerte referencia a SUT para garantizar que se desasigne.
@@ -157,7 +157,7 @@ final class CacheFeedUseCaseTest: XCTestCase {
         let exp = expectation(description: "Wait for save completion")
         
         var receivedError: Error?
-        sut.save([uniqueItems()]) { error in
+        sut.save([uniqueItem()]) { error in
             receivedError = error
             exp.fulfill()
         }
@@ -218,8 +218,12 @@ final class CacheFeedUseCaseTest: XCTestCase {
         }
     }
     
-    private func uniqueItems() -> FeedItem {
+    private func uniqueItem() -> FeedItem {
         return FeedItem(id: UUID(), description: "any", location: "any", imageURL: anyURL())
+    }
+    
+    private func uniqueItems() {
+        
     }
     
     private func anyURL() -> URL {
