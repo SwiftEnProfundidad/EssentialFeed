@@ -17,7 +17,7 @@ class LoadFeedFromRemoteUseCasseTests: XCTestCase {
         XCTAssertTrue(client.requestedURLs.isEmpty)
     }
     
-    // Ahora el caso de uso para la carga de FeedItems
+    // Ahora el caso de uso para la carga de FeedImages
     func test_load_requestsDataFromURL() {
         let url = URL(string: "https://a-given-url.com")!
         let (sut, client) = makeSUT(url: url)
@@ -135,13 +135,13 @@ class LoadFeedFromRemoteUseCasseTests: XCTestCase {
     
     /// Al usar `Method Factory` en el alcance de la prueba, también evitamos que nuestros métodos de
     /// prueba se rompan en el futuro si alguna vez decidimos cambiar los tipos de producción nuevamente
-    private func failure(_ error: RemoteFeedLoader.Error) -> (Result<[FeedItem], RemoteFeedLoader.Error>) {
+    private func failure(_ error: RemoteFeedLoader.Error) -> (Result<[FeedImage], RemoteFeedLoader.Error>) {
         return .failure(error)
     }
     
     /// Method Factory for items
-    private func makeItem(id: UUID, description: String? = nil, location: String? = nil, imageURL: URL) -> (model: FeedItem, json: [String: Any]) {
-        let item = FeedItem(id: id, description: description, location: location, imageURL: imageURL)
+    private func makeItem(id: UUID, description: String? = nil, location: String? = nil, imageURL: URL) -> (model: FeedImage, json: [String: Any]) {
+        let item = FeedImage(id: id, description: description, location: location, url: imageURL)
         let json = [
             "id": id.uuidString,
             "description": description,
@@ -160,7 +160,7 @@ class LoadFeedFromRemoteUseCasseTests: XCTestCase {
         return try! JSONSerialization.data(withJSONObject: json)
     }
     
-    private func expect(_ sut: RemoteFeedLoader, toCompleteWith expectedResult: Result<[FeedItem], RemoteFeedLoader.Error>,
+    private func expect(_ sut: RemoteFeedLoader, toCompleteWith expectedResult: Result<[FeedImage], RemoteFeedLoader.Error>,
                         when action: () -> Void, file: StaticString = #file, line: UInt = #line) {
         
         // Necesitamos expectativas dado que el código es asíncrono y de que solo se ejecute una vez
@@ -170,7 +170,7 @@ class LoadFeedFromRemoteUseCasseTests: XCTestCase {
         sut.load { receiveResult in
             // Utilizamos la coincidencia de patrones de Swift
             switch (receiveResult, expectedResult) {
-                    // Podemo comparar los items, dado que `FeedItem`se ajusta a `Equatable`
+                    // Podemo comparar los items, dado que `FeedImage`se ajusta a `Equatable`
                     // de lo contrario, el test fallará al no poder comparar los `items`
                 case let (.success(receiveItems), .success(expectedItems)):
                     XCTAssertEqual(receiveItems, expectedItems, file: file, line: line)

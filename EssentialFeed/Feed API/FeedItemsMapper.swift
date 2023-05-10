@@ -11,7 +11,6 @@ internal final class FeedItemsMapper {
     private struct Root: Decodable {
         let items: [RemoteFeedItem]
     }
-    
     private static var OK_200: Int { return 200 }
     
     // La hacemos `static` ya que no necesitamos una instancia o llamar a `self` para acceder a
