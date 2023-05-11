@@ -10,7 +10,9 @@ import EssentialFeed
 
 final class LoadFeedFromCacheUseCaseTest: XCTestCase {
     
-    // Caso de uso en el que no se elimina la memoria cache al crearla
+    // Caso de uso en el que no se elimina la memoria caché al crearla
+    // LocalFeedLoader no almacena mensajes en el momento de la creación
+    // (antes de cargar el feed desde el almacenamiento en caché)
     func test_init_doesNotMessageStoreUponCreation() {
         let (_ , store) = makeSUT()
         
@@ -28,55 +30,5 @@ final class LoadFeedFromCacheUseCaseTest: XCTestCase {
         trackForMemoryLeaks(sut, file: file, line: line)
         
         return (sut, store)
-    }
-    
-    private class FeedStoreSpy: FeedStore {
-        
-        enum ReceivedMessage: Equatable {
-            case deleteCachedFedd
-            case insert([LocalFeedImage], Date)
-        }
-        
-        private (set) var receivedMessages = [ReceivedMessage]()
-        
-        private var deletionCompletions = [DeletionCompletion]()
-        private var insertionCompletions = [InsertionCompletion]()
-        
-        func deleteCachedFeed(completion: @escaping  DeletionCompletion) {
-            // Capturamos el `completion`
-            deletionCompletions.append(completion)
-            receivedMessages.append(.deleteCachedFedd)
-        }
-        
-        func completeDeletion(with error: Error, at index: Int = 0) {
-            // Obtenemos el `DeleteCompletion` en el índicenque nos pasan y
-            // completamos con un `error. Es un closure que recibe un array
-            deletionCompletions[index](error)
-        }
-        
-        func completeDeletionSuccessfully(at index: Int = 0) {
-            // Completamos sin ningún error, ya que fue exitoso el borrado
-            deletionCompletions[index](nil)
-        }
-        
-        func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping InsertionCompletion) {
-            // Cada vez que se invoca a este método, insertamos el bloque
-            // `completion` a nuestro array de `insertCompletions` capturados
-            insertionCompletions.append(completion)
-            // Cada vez que se invoca este método
-            // insertamos los items y la timestamp
-            receivedMessages.append(.insert(feed, timestamp))
-        }
-        
-        func completeInsertion(with error: Error, at index: Int = 0) {
-            // Obtenemos el `DeleteCompletion` en el índicenque nos pasan y
-            // completamos con un `error. Es un closure que recibe un array
-            insertionCompletions[index](error)
-        }
-        
-        func completeInsertionSuccessfully(at index: Int = 0) {
-            insertionCompletions[index](nil)
-            
-        }
     }
 }
