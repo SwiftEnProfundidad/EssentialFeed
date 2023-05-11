@@ -19,6 +19,16 @@ final class LoadFeedFromCacheUseCaseTest: XCTestCase {
         XCTAssertEqual(store.receivedMessages, [])
     }
     
+    // Caso de uso en el que queremos probar el comando de carga (`load`). Cuando
+    // cargamos, queremos solicitar una recuperación de de la caché desde el store
+    func test_load_requestsCacheRetrieval() {
+        let (sut , store) = makeSUT()
+        
+        sut.load()
+        
+        XCTAssertEqual(store.receivedMessages, [.retrieve])
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(currentDate: @escaping () -> Date = Date.init,

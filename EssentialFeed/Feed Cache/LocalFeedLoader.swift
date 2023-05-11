@@ -38,6 +38,10 @@ public final class LocalFeedLoader {
             completion(error)
         }
     }
+    
+    public func load() {
+        store.retrieve()
+    }
 }
 
 // Mapeo FeedItem a LocalFeedItem
