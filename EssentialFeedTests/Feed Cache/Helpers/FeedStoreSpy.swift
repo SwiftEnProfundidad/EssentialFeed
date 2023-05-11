@@ -69,5 +69,11 @@ class FeedStoreSpy: FeedStore {
         // completamos con un `error. Es un closure que recibe un array
         retrievalCompletions[index](error)
     }
+    
+    func completeRetrievalWithEmptyCache(at index: Int = 0) {
+        // Obtenemos el `DeleteCompletion` en el índicenque nos pasan y
+        // completamos con un `error. Es un closure que recibe un array
+        retrievalCompletions[index](nil)
+    }
 }
 

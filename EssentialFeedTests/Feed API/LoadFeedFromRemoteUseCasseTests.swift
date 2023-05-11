@@ -135,7 +135,7 @@ class LoadFeedFromRemoteUseCasseTests: XCTestCase {
     
     /// Al usar `Method Factory` en el alcance de la prueba, también evitamos que nuestros métodos de
     /// prueba se rompan en el futuro si alguna vez decidimos cambiar los tipos de producción nuevamente
-    private func failure(_ error: RemoteFeedLoader.Error) -> (Result<[FeedImage], RemoteFeedLoader.Error>) {
+    private func failure(_ error: RemoteFeedLoader.Error) -> RemoteFeedLoader.Result {
         return .failure(error)
     }
     
@@ -160,9 +160,8 @@ class LoadFeedFromRemoteUseCasseTests: XCTestCase {
         return try! JSONSerialization.data(withJSONObject: json)
     }
     
-    private func expect(_ sut: RemoteFeedLoader, toCompleteWith expectedResult: Result<[FeedImage], RemoteFeedLoader.Error>,
+    private func expect(_ sut: RemoteFeedLoader, toCompleteWith expectedResult: RemoteFeedLoader.Result,
                         when action: () -> Void, file: StaticString = #file, line: UInt = #line) {
-        
         // Necesitamos expectativas dado que el código es asíncrono y de que solo se ejecute una vez
         // Sabemos que se cumple la expectación `fullfill`, dado que si no, tendríamos un fallo en `wait`.
         let exp = expectation(description: "Wait for load completion")
@@ -175,7 +174,7 @@ class LoadFeedFromRemoteUseCasseTests: XCTestCase {
                 case let (.success(receiveItems), .success(expectedItems)):
                     XCTAssertEqual(receiveItems, expectedItems, file: file, line: line)
                     
-                case let (.failure(receiveError), .failure(expectedError)):
+                case let (.failure(receiveError as RemoteFeedLoader.Error), .failure(expectedError as RemoteFeedLoader.Error)):
                     XCTAssertEqual(receiveError, expectedError, file: file, line: line)
                 default:
                     XCTFail("Expected result \(expectedResult) got \(receiveResult) instead", file: file, line: line)
@@ -190,7 +189,7 @@ class LoadFeedFromRemoteUseCasseTests: XCTestCase {
 }
 /// Clase espía para simular los datos, espiar, de nuestra `HTTPClient`de producción
 private class HTTPClientSpy: HTTPClient {
-    private var messages = [(url: URL, completion: (Result<(Data, HTTPURLResponse), Error>) -> Void)]()
+    private var messages = [(url: URL, completion: (HTTPClientResult) -> Void)]()
     
     // Colección de urls, puede ser que llamemos a más de una URL,
     // las almacenamos en un array que devuelve las url's de `message`
@@ -199,7 +198,7 @@ private class HTTPClientSpy: HTTPClient {
     }
     
     // Implementamos el método get con lo que tenemos ahora para comprobar o testear
-    func get(from url: URL, completion: @escaping (Result<(Data, HTTPURLResponse), Error>) -> Void) {
+    func get(from url: URL, completion: @escaping (EssentialFeed.HTTPClientResult) -> Void) {
         messages.append((url, completion))
     }
     
@@ -216,6 +215,6 @@ private class HTTPClientSpy: HTTPClient {
             httpVersion: nil,
             headerFields: nil
         )!
-        messages[index].completion(.success((data, response)))
+        messages[index].completion(.success(data, response))
     }
 }
