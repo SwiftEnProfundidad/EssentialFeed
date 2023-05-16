@@ -121,7 +121,20 @@ final class LoadFeedFromCacheUseCaseTest: XCTestCase {
     }
     
     // Caso de uso en el que eliminamos la caché al ser la caché de siete días
-    func test_load_deleteCacheOnSevenDaysOldCache() {
+    func test_load_deletesCacheOnSevenDaysOldCache() {
+        let feed = uniqueImageFeed()
+        let fixCurrentDate = Date()
+        let moreThanSevenDaysOldTimestamp = fixCurrentDate.adding(days: -7).adding(seconds: -1)
+        let (sut, store) = makeSUT { fixCurrentDate }
+        
+        sut.load { _ in }
+        store.completeRetrieval(with: feed.local, timestamp: moreThanSevenDaysOldTimestamp)
+        
+        XCTAssertEqual(store.receivedMessages, [.retrieve, .deleteCachedFeed])
+    }
+    
+    // Caso de uso en el que eliminamos la caché al ser la caché mayor de siete días
+    func test_load_deletesCacheOnMoreThanSevenDaysOldCache() {
         let feed = uniqueImageFeed()
         let fixCurrentDate = Date()
         let sevenDaysOldTimestamp = fixCurrentDate.adding(days: -7)
