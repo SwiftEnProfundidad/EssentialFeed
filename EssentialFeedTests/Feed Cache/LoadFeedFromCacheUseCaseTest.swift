@@ -87,6 +87,16 @@ final class LoadFeedFromCacheUseCaseTest: XCTestCase {
         })
     }
     
+    // Caso de uso en el que eliminamos la caché al recivir un error
+    func test_load_deletesCacheOnRetrievalError() {
+        let (sut, store) = makeSUT()
+        
+        sut.load { _ in }
+        store.completeRetrieval(with: anyNSError())
+        
+        XCTAssertEqual(store.receivedMessages, [.retrieve, .deleteCachedFeed])
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(currentDate: @escaping () -> Date = Date.init,
@@ -150,8 +160,8 @@ final class LoadFeedFromCacheUseCaseTest: XCTestCase {
     }
 }
 
+// Creamos nuestro DSL (Domain Specific Language) para las fechas
 private extension Date {
-    // Creamos nuestro DSL para las fechas
     func adding(days: Int) -> Date {
         return Calendar(identifier: .gregorian).date(byAdding: .day, value: days, to: self)!
     }

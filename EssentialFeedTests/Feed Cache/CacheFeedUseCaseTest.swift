@@ -23,7 +23,7 @@ final class CacheFeedUseCaseTest: XCTestCase {
         
         sut.save(uniqueImageFeed().models) { _ in }
         
-        XCTAssertEqual(store.receivedMessages, [.deleteCachedFedd])
+        XCTAssertEqual(store.receivedMessages, [.deleteCachedFeed])
     }
     
     // Caso de uso en el que el guardado `save` solicita la
@@ -35,7 +35,7 @@ final class CacheFeedUseCaseTest: XCTestCase {
         sut.save(uniqueImageFeed().models) { _ in }
         store.completeDeletion(with: deletionError)
         
-        XCTAssertEqual(store.receivedMessages, [.deleteCachedFedd])
+        XCTAssertEqual(store.receivedMessages, [.deleteCachedFeed])
     }
     
     // Caso de uso en el que se solicita una nueva inserción
@@ -55,7 +55,7 @@ final class CacheFeedUseCaseTest: XCTestCase {
         sut.save(feed.models) { _ in }
         store.completeDeletionSuccessfully()
         
-        XCTAssertEqual(store.receivedMessages, [.deleteCachedFedd, .insert(feed.local, timestamp)])
+        XCTAssertEqual(store.receivedMessages, [.deleteCachedFeed, .insert(feed.local, timestamp)])
     }
     
     // Caso de uso en el que un error en la elimanación, el sistema entrega un error
