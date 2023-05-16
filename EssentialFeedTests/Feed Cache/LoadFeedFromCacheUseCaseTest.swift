@@ -14,7 +14,7 @@ final class LoadFeedFromCacheUseCaseTest: XCTestCase {
     // LocalFeedLoader no almacena mensajes en el momento de la creación
     // (antes de cargar el feed desde el almacenamiento en caché)
     func test_init_doesNotMessageStoreUponCreation() {
-        let (_ , store) = makeSUT()
+        let (_, store) = makeSUT()
         
         XCTAssertEqual(store.receivedMessages, [])
     }
@@ -22,7 +22,7 @@ final class LoadFeedFromCacheUseCaseTest: XCTestCase {
     // Caso de uso en el que queremos probar el comando de carga (`load`). Cuando
     // cargamos, queremos solicitar una recuperación de de la caché desde el store
     func test_load_requestsCacheRetrieval() {
-        let (sut , store) = makeSUT()
+        let (sut, store) = makeSUT()
         
         sut.load { _ in }
         
@@ -31,7 +31,7 @@ final class LoadFeedFromCacheUseCaseTest: XCTestCase {
     
     // Caso de uso en el que recibimos un error al solicitar una recuperación de caché
     func test_load_failsOnRetrievalError() {
-        let (sut , store) = makeSUT()
+        let (sut, store) = makeSUT()
         let retrievalError = anyNSError()
         
         expect(sut, toCompletionWith: .failure(retrievalError), when: {
@@ -45,6 +45,19 @@ final class LoadFeedFromCacheUseCaseTest: XCTestCase {
         
         expect(sut, toCompletionWith: .success([]), when: {
             store.completeRetrievalWithEmptyCache()
+        })
+    }
+    
+    // Caso de uso en el que verificamos la validación de caché
+    func test_load_deliversCachedImageOnLessThanSevenDaysOldCache() {
+        let feed = uniqueImageFeed()
+        let fixCurrentDate = Date()
+        // Con esto cada vez que el código de producción solicite una fecha, devoleverá la fecha actual fija.
+        let lessThanSevenDaysOldTimestamp = fixCurrentDate.adding(days: -7).adding(seconds: 1)
+        let (sut, store) = makeSUT { fixCurrentDate }
+        
+        expect(sut, toCompletionWith: .success(feed.models), when: {
+            store.completeRetrieval(with: feed.local, timestamp: lessThanSevenDaysOldTimestamp)
         })
     }
     
@@ -86,8 +99,38 @@ final class LoadFeedFromCacheUseCaseTest: XCTestCase {
         wait(for: [exp], timeout: 1.0)
     }
     
+    private func uniqueImage() -> FeedImage {
+        return FeedImage(id: UUID(), description: "any", location: "any", url: anyURL())
+    }
+    
+    // Factory
+    private func uniqueImageFeed() -> (models: [FeedImage], local: [LocalFeedImage]) {
+        let models = [uniqueImage(), uniqueImage()]
+        let local = models.map { LocalFeedImage(
+            id: $0.id,
+            description: $0.description,
+            location: $0.location,
+            url: $0.url) }
+        
+        return (models, local)
+    }
+    
+    private func anyURL() -> URL {
+        return URL(string: "http://any-url.com")!
+    }
+    
     private func anyNSError() -> NSError {
         return NSError(domain: "any error", code: 0)
     }
 }
 
+private extension Date {
+    // Creamos nuestro DSL para las fechas
+    func adding(days: Int) -> Date {
+        return Calendar(identifier: .gregorian).date(byAdding: .day, value: days, to: self)!
+    }
+    
+    func adding(seconds: TimeInterval) -> Date {
+        return self + seconds
+    }
+}
