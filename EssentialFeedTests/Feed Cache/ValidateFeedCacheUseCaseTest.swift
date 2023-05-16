@@ -10,10 +10,22 @@ import EssentialFeed
 
 final class ValidateFeedCacheUseCaseTest: XCTestCase {
 
+    // Caso de uso en el que `LocalFeedLoader` no almacena mensajes en el
+    // momento de la creación (antes de validar el feed almacenado en caché)
     func test_init_doesNotMessageStoreUponCreation() {
         let (_, store) = makeSUT()
         
         XCTAssertEqual(store.receivedMessages, [])
+    }
+    
+    // Caso de uso en el que eliminamos la caché al recivir un error
+    func test_validateCache_deletesCacheOnRetrievalError() {
+        let (sut, store) = makeSUT()
+        
+        sut.validateCache()
+        store.completeRetrieval(with: anyNSError())
+        
+        XCTAssertEqual(store.receivedMessages, [.retrieve, .deleteCachedFeed])
     }
     
     // MARK: - Helpers
@@ -28,5 +40,9 @@ final class ValidateFeedCacheUseCaseTest: XCTestCase {
         trackForMemoryLeaks(sut, file: file, line: line)
         
         return (sut, store)
+    }
+    
+    private func anyNSError() -> NSError {
+        return NSError(domain: "any error", code: 0)
     }
 }

@@ -88,13 +88,13 @@ final class LoadFeedFromCacheUseCaseTest: XCTestCase {
     }
     
     // Caso de uso en el que eliminamos la caché al recivir un error
-    func test_load_deletesCacheOnRetrievalError() {
+    func test_load_hasNoSideEffectsOnRetrievalError() {
         let (sut, store) = makeSUT()
         
         sut.load { _ in }
         store.completeRetrieval(with: anyNSError())
         
-        XCTAssertEqual(store.receivedMessages, [.retrieve, .deleteCachedFeed])
+        XCTAssertEqual(store.receivedMessages, [.retrieve])
     }
     
     // Caso de uso en el que `no` eliminamos la caché al recivir una caché vacía
