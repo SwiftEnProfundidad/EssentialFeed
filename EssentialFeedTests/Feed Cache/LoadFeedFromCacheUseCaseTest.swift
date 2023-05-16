@@ -61,6 +61,19 @@ final class LoadFeedFromCacheUseCaseTest: XCTestCase {
         })
     }
     
+    // Caso de uso en el que verificamos que la caché ha caducado
+    func test_load_deliversNoImagesOnSevenDaysOldCache() {
+        let feed = uniqueImageFeed()
+        let fixCurrentDate = Date()
+        // Con esto cada vez que el código de producción solicite una fecha, devoleverá la fecha actual fija.
+        let sevenDaysOldTimestamp = fixCurrentDate.adding(days: -7)
+        let (sut, store) = makeSUT { fixCurrentDate }
+        
+        expect(sut, toCompletionWith: .success([]), when: {
+            store.completeRetrieval(with: feed.local, timestamp: sevenDaysOldTimestamp)
+        })
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(currentDate: @escaping () -> Date = Date.init,
