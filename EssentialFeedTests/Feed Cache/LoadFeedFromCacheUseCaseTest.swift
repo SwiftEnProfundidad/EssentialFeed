@@ -98,7 +98,7 @@ final class LoadFeedFromCacheUseCaseTest: XCTestCase {
     }
     
     // Caso de uso en el que `no` eliminamos la caché al recivir una caché vacía
-    func test_load_doesNotDeleteCacheOnEmptyCache() {
+    func test_load_hasNoSideEffectsOnEmptyCache() {
         let (sut, store) = makeSUT()
         
         sut.load { _ in }
@@ -108,7 +108,7 @@ final class LoadFeedFromCacheUseCaseTest: XCTestCase {
     }
     
     // Caso de uso en el que `no` eliminamos la caché al ser la caché menor de siete días
-    func test_load_doesNotDeleteCacheOnLessThanSevenDaysOldCache() {
+    func test_load_hasNoSideEffectsOnLessThanSevenDaysOldCache() {
         let feed = uniqueImageFeed()
         let fixCurrentDate = Date()
         let lessThanSevenDaysOldTimestamp = fixCurrentDate.adding(days: -7).adding(seconds: 1)
