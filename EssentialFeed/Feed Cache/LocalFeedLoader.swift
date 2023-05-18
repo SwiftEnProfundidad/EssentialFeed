@@ -8,13 +8,21 @@
 import Foundation
 
 private final class FeedCachePolicy {
-    private let calendar = Calendar(identifier: .gregorian)
+    // Hacemos este `init` private para que nadie puede hacer una
+    // instacia de ésta, ya que no necesita una identidad y no tiene estado.
+    private init() {}
     
-    private var maxCacheAgeInDays: Int {
+    private static let calendar = Calendar(identifier: .gregorian)
+    
+    private static var maxCacheAgeInDays: Int {
         return 7
     }
     
-    func validate(_ timestamp: Date, against date: Date) -> Bool {
+    // Hacemos la función `static` ya que no tiene identidad y no necestiamos una instancia de `FeedCachePolicy`
+    // Esta `policy` es detereminista, no tiene `side effets` y no tiene estado, es solo una regla.
+    // Los objetos de valor son `Models` sin identidad. En este caso la `policy` no tiene identidad.
+    // Encapsula una regla que se puede reutilizar, lo que significa que no necesitamos una instancia de ésta.
+    static func validate(_ timestamp: Date, against date: Date) -> Bool {
         guard let maxCacheAge = calendar.date(byAdding: .day, value: 7, to: timestamp) else {
             return false
         }
@@ -25,7 +33,6 @@ private final class FeedCachePolicy {
 public final class LocalFeedLoader {
     private let store: FeedStore
     private let currentDate: () -> Date
-    private let cachePolicy = FeedCachePolicy()
         
     public init(store: FeedStore, currentDate: @escaping () -> Date) {
         self.store = store
@@ -70,7 +77,7 @@ extension LocalFeedLoader: FeedLoader {
             switch result {
                 case let .failure(error):
                     completion(.failure(error))
-                case let .found(feed, timestamp) where self.cachePolicy.validate(timestamp, against: self.currentDate()):
+                case let .found(feed, timestamp) where FeedCachePolicy.validate(timestamp, against: self.currentDate()):
                     completion(.success(feed.toModels()))
                 case .found, .empty:
                     completion(.success([]))
@@ -88,7 +95,7 @@ extension LocalFeedLoader {
             switch result {
                 case .failure:
                     self.store.deleteCachedFeed { _ in }
-                case let .found(_, tiemestamp) where !self.cachePolicy.validate(tiemestamp, against: self.currentDate()):
+                case let .found(_, tiemestamp) where !FeedCachePolicy.validate(tiemestamp, against: self.currentDate()):
                     self.store.deleteCachedFeed { _ in }
                 default: break
             }
