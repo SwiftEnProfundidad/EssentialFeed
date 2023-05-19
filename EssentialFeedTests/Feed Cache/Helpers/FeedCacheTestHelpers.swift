@@ -24,7 +24,7 @@ func uniqueImage() -> FeedImage {
     return (models, local)
 }
 
-// Creamos nuestro DSL (Domain Specific Language) para las fechas
+// Creamos nuestro DSL (Domain Specific Language) para cache-policy
 extension Date {
     func minusFeedCacheMaxAge() -> Date {
         return adding(days: -feedCacheMaxAgeInDays)
@@ -34,12 +34,14 @@ extension Date {
         return 7
     }
     
-    func adding(days: Int) -> Date {
+    private func adding(days: Int) -> Date {
         return Calendar(identifier: .gregorian).date(byAdding: .day, value: days, to: self)!
     }
-    
+}
+
+// Reusable DSL helper
+extension Date {
     func adding(seconds: TimeInterval) -> Date {
         return self + seconds
     }
 }
-

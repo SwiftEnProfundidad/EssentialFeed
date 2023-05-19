@@ -163,7 +163,7 @@ final class LoadFeedFromCacheUseCaseTest: XCTestCase {
     func test_validateCache_deletesSevenDaysOldCache() {
         let feed = uniqueImageFeed()
         let fixCurrentDate = Date()
-        let moreThanSevenDaysOldTimestamp = fixCurrentDate.adding(days: -7).adding(seconds: -1)
+        let moreThanSevenDaysOldTimestamp = fixCurrentDate.minusFeedCacheMaxAge().adding(seconds: -1)
         let (sut, store) = makeSUT { fixCurrentDate }
         
         sut.validateCache()
@@ -176,7 +176,7 @@ final class LoadFeedFromCacheUseCaseTest: XCTestCase {
     func test_validateCache_deletesMoreThanSevenDaysOldCache() {
         let feed = uniqueImageFeed()
         let fixCurrentDate = Date()
-        let sevenDaysOldTimestamp = fixCurrentDate.adding(days: -7)
+        let sevenDaysOldTimestamp = fixCurrentDate.minusFeedCacheMaxAge()
         let (sut, store) = makeSUT { fixCurrentDate }
         
         sut.validateCache()
