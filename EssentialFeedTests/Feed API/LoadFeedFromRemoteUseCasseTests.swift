@@ -169,7 +169,7 @@ class LoadFeedFromRemoteUseCasseTests: XCTestCase {
         sut.load { receiveResult in
             // Utilizamos la coincidencia de patrones de Swift
             switch (receiveResult, expectedResult) {
-                    // Podemo comparar los items, dado que `FeedImage`se ajusta a `Equatable`
+                    // Podemo comparar los items, dado que `FeedImage` se ajusta a `Equatable`
                     // de lo contrario, el test fallará al no poder comparar los `items`
                 case let (.success(receiveItems), .success(expectedItems)):
                     XCTAssertEqual(receiveItems, expectedItems, file: file, line: line)
@@ -182,9 +182,7 @@ class LoadFeedFromRemoteUseCasseTests: XCTestCase {
             exp.fulfill()
         }
         action()
-        
         wait(for: [exp], timeout: 1.0)
-        
     }
 }
 /// Clase espía para simular los datos, espiar, de nuestra `HTTPClient`de producción
