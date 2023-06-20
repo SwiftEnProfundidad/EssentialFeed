@@ -36,7 +36,11 @@ class CodableFeedStore {
         }
     }
     
-    private let storeURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("image-feed.store")
+    private let storeURL: URL
+    
+    init(storeURL: URL) {
+        self.storeURL = storeURL
+    }
     
     func retrieve(completion: @escaping FeedStore.RetrievalCompletion) {
         guard let data = try? Data(contentsOf: storeURL) else {
@@ -83,7 +87,7 @@ final class CodableFeedStoreTest: XCTestCase {
                 case .empty:
                     break
                 default:
-                    XCTFail("Expected empty result, got \(String(describing: result)) instead")
+                    XCTFail("Expected empty result, got \(result ?? .empty) instead")
             }
             
             exp.fulfill()
@@ -103,7 +107,7 @@ final class CodableFeedStoreTest: XCTestCase {
                     case (.empty, .empty):
                         break
                     default:
-                        XCTFail("Expected retrieving twice from empty cache to deliver same empty result, got \(String(describing: firstResult)) and \(String(describing: secondResult)) instead")
+                        XCTFail("Expected retrieving twice from empty cache to deliver same empty result, got \(String(describing: firstResult)) and \(secondResult ?? .empty) instead")
                 }
                 
                 exp.fulfill()
@@ -141,7 +145,8 @@ final class CodableFeedStoreTest: XCTestCase {
     
     // MARK: - Helpers
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> CodableFeedStore {
-        let sut = CodableFeedStore()
+        let storeURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("image-feed.store")
+        let sut = CodableFeedStore(storeURL: storeURL)
         trackForMemoryLeaks(sut, file: file, line: line)
         return sut
     }
