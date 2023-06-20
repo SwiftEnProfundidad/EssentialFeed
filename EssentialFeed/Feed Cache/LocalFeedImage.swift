@@ -11,7 +11,7 @@ import Foundation
 // Con ello conseguimos que `FeedStroe` no tenga un acoplamiento con el type `FeedImage`
 // Conseguimos una descentralización entre módulos, con lo que podemos desarrollar diferentes
 // módulos en paralelo sin afectarse entre ellos. Esta técnica de denomina DTO's.
-public struct LocalFeedImage: Equatable, Codable {
+public struct LocalFeedImage: Equatable {
     public let id: UUID
     public let description: String?
     public let location: String?
