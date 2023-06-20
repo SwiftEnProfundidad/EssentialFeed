@@ -66,13 +66,13 @@ final class CodableFeedStoreTest: XCTestCase {
     override class func setUp() {
         super.setUp()
         
-        try? FileManager.default.removeItem(at: storeURL())
+        try? FileManager.default.removeItem(at: testSpecificStoreURL())
     }
     
     override class func tearDown() {
         super.tearDown()
 
-        try? FileManager.default.removeItem(at: storeURL())
+        try? FileManager.default.removeItem(at: testSpecificStoreURL())
     }
     
     // Caso de uso cuando la cache está vacía y queremos recuperar datos
@@ -105,7 +105,7 @@ final class CodableFeedStoreTest: XCTestCase {
                     case (.empty, .empty):
                         break
                     default:
-                        XCTFail("Expected retrieving twice from empty cache to deliver same empty result, got \(String(describing: firstResult)) and \(secondResult ?? .empty) instead")
+                        XCTFail("Expected retrieving twice from empty cache to deliver same empty result, got \(firstResult ?? .empty) and \(secondResult ?? .empty) instead")
                 }
                 
                 exp.fulfill()
@@ -143,12 +143,12 @@ final class CodableFeedStoreTest: XCTestCase {
     
     // MARK: - Helpers
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> CodableFeedStore {
-        let sut = CodableFeedStore(storeURL: CodableFeedStoreTest.storeURL())
+        let sut = CodableFeedStore(storeURL: CodableFeedStoreTest.testSpecificStoreURL())
         trackForMemoryLeaks(sut, file: file, line: line)
         return sut
     }
     
-    private static func storeURL() -> URL {
-        return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("image-feed.store")
+    private static func testSpecificStoreURL() -> URL {
+        return FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!.appendingPathComponent("\(type(of: self)).store")
     }
 }
