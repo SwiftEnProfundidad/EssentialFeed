@@ -82,7 +82,7 @@ class FeedStoreSpy: FeedStore {
     func completeRetrieval(with feed: [LocalFeedImage], timestamp: Date, at index: Int = 0) {
         // Obtenemos el `DeleteCompletion` en el índicenque nos pasan y
         // completamos con un `error. Es un closure que recibe un array
-        retrievalCompletions[index](.found(feed: feed, tiemestamp: timestamp))
+        retrievalCompletions[index](.found(feed: feed, timestamp: timestamp))
     }
 }
 

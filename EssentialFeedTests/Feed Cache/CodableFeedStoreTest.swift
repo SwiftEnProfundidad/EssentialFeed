@@ -49,7 +49,7 @@ class CodableFeedStore {
         
         let decoder = JSONDecoder()
         let cache = try! decoder.decode(Cache.self, from: data)
-        completion(.found(feed: cache.localFeed, tiemestamp: cache.timestamp))
+        completion(.found(feed: cache.localFeed, timestamp: cache.timestamp))
     }
     
     func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping FeedStore.InsertionCompletion) {
@@ -141,6 +141,40 @@ class CodableFeedStoreTest: XCTestCase {
         wait(for: [exp], timeout: 1.0)
     }
     
+    // Caso de uso cuando recuperamos los valores insertados dos veces para
+    // comprobar que no hay efectos secundarios (se leen los mismos datos).
+    func test_retrieve_hasNoSideEffectsOnNOnEmptyCache() {
+        let sut = makeSUT()
+        let feed = uniqueImageFeed().local
+        let timestamp = Date()
+        let exp = expectation(description: "Wait for cache retrieval")
+        
+        sut.insert(feed, timestamp: timestamp) { insertionError in
+            XCTAssertNil(insertionError, "Expected feed to be inserted successfully")
+            
+            sut.retrieve { firstResult in
+                sut.retrieve { secondResult in
+                    if case let .found(firstFoundFeed, firstFoundTimestamp) = firstResult,
+                       case let .found(secondFoundFeed, secondFoundTimestamp) = secondResult {
+                        XCTAssertEqual(firstFoundFeed, feed)
+                        XCTAssertEqual(firstFoundTimestamp, timestamp)
+                        
+                        XCTAssertEqual(secondFoundFeed, feed)
+                        XCTAssertEqual(secondFoundTimestamp, timestamp)
+                    } else {
+                        XCTFail("Expected found result with feed \(feed) and timestamp \(timestamp), got \(self.optionalString(for: firstResult)) and \(self.optionalString(for: secondResult)) instead")
+
+                    }
+                    
+                    exp.fulfill()
+                }
+            }
+        }
+        
+        wait(for: [exp], timeout: 1.0)
+    }
+
+    
     // MARK: - Helpers
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> CodableFeedStore {
         let sut = CodableFeedStore(storeURL: testSpecificStoreURL())
@@ -158,10 +192,18 @@ class CodableFeedStoreTest: XCTestCase {
     
     private func deleteStoreArtifacts() {
         try? FileManager.default.removeItem(at: testSpecificStoreURL())
-
     }
     
     private func testSpecificStoreURL() -> URL {
         return FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!.appendingPathComponent("\(type(of: self)).store")
+    }
+    
+    // Función auxiliar para obtener una representación en cadena de un valor opcional
+    private func optionalString<T>(for value: T?) -> String {
+        if let value = value {
+            return "\(value)"
+        } else {
+            return "nil"
+        }
     }
 }
