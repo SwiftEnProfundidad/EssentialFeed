@@ -90,7 +90,7 @@ class CodableFeedStoreTest: XCTestCase {
     }
     
     // Caso de uso cuando recuperamos los valores insertados después vaciar caché
-    func test_retrieveAfterInsertingToEmptyCache_deliversInsertedValues() {
+    func test_retrieve_deliversFoundValuesOnNonEmptyCache() {
         let sut = makeSUT()
         let feed = uniqueImageFeed().local
         let timestamp = Date()
