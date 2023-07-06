@@ -21,5 +21,7 @@ public enum HTTPClientResult {
 //public typealias HTTPClientResult = (Result<(Data, HTTPURLResponse), Error>)
 
 public protocol HTTPClient {
+    /// The completion handler can be invoked in any trhead.
+    /// Clients are responsible to dispatch to appropriate trheads, if needed.
     func get(from url: URL, completion: @escaping (HTTPClientResult) -> Void)
 }
