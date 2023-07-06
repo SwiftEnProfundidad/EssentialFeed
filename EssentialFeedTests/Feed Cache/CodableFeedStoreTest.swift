@@ -94,7 +94,7 @@ class CodableFeedStoreTest: XCTestCase {
         expect(sut, toRetrieveTwice: .found(feed: latestFeed, timestamp: latestTiemestamp))
     }
     
-    // Caso de uso enel que una inserción falla en system file como mecanismo de persistencia
+    // Caso de uso en el que una inserción falla en system file como mecanismo de persistencia
     func test_insert_deliversErrorOnInsertionError () {
         let invalidStoreURL = URL(string: "invalid://store-url")!
         let sut = makeSUT(storeURL: invalidStoreURL)
@@ -106,7 +106,8 @@ class CodableFeedStoreTest: XCTestCase {
         XCTAssertNotNil(insertionError, "Expected cache insertion to fail with an error")
     }
     
-    func test_delete_hasNOSideEffecsOnEmptyCache() {
+    // Caso en el que no hay efectos secundarios cuando borramos la cache que está vacía
+    func test_delete_hasNoSideEffecsOnEmptyCache() {
         let sut = makeSUT()
         
         let deletionError = deleteCache(from: sut)
@@ -115,6 +116,7 @@ class CodableFeedStoreTest: XCTestCase {
         expect(sut, toRetrieve: .empty)
     }
     
+    // Caso en el que no hay efectos secundarios cuando borramos la caché que no está vacía
     func test_delete_emptiesPreviouslyInsertedCache() {
         let sut = makeSUT()
         insert((uniqueImageFeed().local, Date()), to: sut)
@@ -125,6 +127,7 @@ class CodableFeedStoreTest: XCTestCase {
         expect(sut, toRetrieve: .empty)
     }
     
+    // Caso en el que no tenemos permisos para borrar la caché y recibimos un error.
     func test_delete_deliversErrorOnDeletionError() {
         let noDeletePermissionURL = cachesDirectory()
         let sut = makeSUT(storeURL: noDeletePermissionURL)
@@ -135,7 +138,33 @@ class CodableFeedStoreTest: XCTestCase {
         expect(sut, toRetrieve: .empty)
     }
     
-//    func test_sotroe
+    // Caso de uso en le que no hay efectos secundarios cuando se ejecuta en serie el FeedStore.
+    func test_storeSideEffects_runSerially() {
+        let sut = makeSUT()
+        var completedOperationInOrder = [XCTestExpectation]()
+        
+        let op1 = expectation(description: "Operation 1")
+        sut.insert(uniqueImageFeed().local, timestamp: Date()) { _ in
+            completedOperationInOrder.append(op1)
+            op1.fulfill()
+        }
+        
+        let op2 = expectation(description: "Operation 2")
+        sut.deleteCachedFeed { _ in
+            completedOperationInOrder.append(op2)
+            op2.fulfill()
+        }
+        
+        let op3 = expectation(description: "Operation 3")
+        sut.insert(uniqueImageFeed().local, timestamp: Date()) { _ in
+            completedOperationInOrder.append(op3)
+            op3.fulfill()
+        }
+        
+        waitForExpectations(timeout: 5.0)
+        
+        XCTAssertEqual(completedOperationInOrder, [op1, op2, op3], "Expected side-effects to run serially but operation finished in the wrong order")
+    }
     
     // MARK: - Helpers
     private func makeSUT(storeURL: URL? = nil, file: StaticString = #file, line: UInt = #line) -> FeedStore {
