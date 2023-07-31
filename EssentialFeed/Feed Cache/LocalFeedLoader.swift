@@ -18,18 +18,18 @@ public final class LocalFeedLoader {
 }
 
 extension LocalFeedLoader {
-    public typealias SaveResult = Error?
+    public typealias SaveResult = Result<Void, Error>
     
     public func save(_ feed: [FeedImage], completion: @escaping (SaveResult) -> Void) {
-        store.deleteCachedFeed() { [weak self] error in
-            // Comprobamos que la instancia no haya sido
-            // desasignada. Si ha sido desasignada, retornamos.
+        store.deleteCachedFeed() { [weak self] deletionResult in
             guard let self = self else { return }
             
-            if let catchDeletionerror = error {
-                completion(catchDeletionerror)
-            } else {
-                self.cache(feed, with: completion)
+            switch deletionResult {
+                case .success:
+                    self.cache(feed, with: completion)
+                    
+                case let .failure(error):
+                    completion(.failure(error))
             }
         }
     }
@@ -58,9 +58,6 @@ extension LocalFeedLoader: FeedLoader {
                     
                 case .success:
                     completion(.success([]))
-                    
-                case .none:
-                    break
             }
         }
     }
@@ -78,7 +75,7 @@ extension LocalFeedLoader {
                 case let .success(.some(cache)) where !FeedCachePolicy.validate(cache.timestamp, against: self.currentDate()):
                     self.store.deleteCachedFeed { _ in }
                     
-                case .success, .none: break
+                case .success: break
             }
         }
     }

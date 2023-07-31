@@ -10,11 +10,14 @@ import Foundation
 public typealias CachedFeed = (feed: [LocalFeedImage], timestamp: Date)
 
 public protocol FeedStore {
-    typealias DeletionCompletion = (Error?) -> Void
-    typealias InsertionCompletion = (Error?) -> Void
+    typealias DeletionResult = Result<Void, Error>
+    typealias DeletionCompletion = (DeletionResult) -> Void
+    
+    typealias InsertionResult = Result<Void, Error>
+    typealias InsertionCompletion = (InsertionResult) -> Void
     
     typealias RetrievalResult = Result<CachedFeed?, Error>
-    typealias RetrievalCompletion = (RetrievalResult?) -> Void
+    typealias RetrievalCompletion = (RetrievalResult) -> Void
     
     /// The completion handler can be invoked in any trhead.
     /// Clients are responsible to dispatch to appropriate trheads, if needed.
