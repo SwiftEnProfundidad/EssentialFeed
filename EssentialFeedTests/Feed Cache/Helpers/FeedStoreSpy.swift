@@ -32,12 +32,12 @@ class FeedStoreSpy: FeedStore {
     func completeDeletion(with error: Error, at index: Int = 0) {
         // Obtenemos el `DeleteCompletion` en el índicenque nos pasan y
         // completamos con un `error. Es un closure que recibe un array
-        deletionCompletions[index](error)
+        deletionCompletions[index](.failure(error))
     }
     
     func completeDeletionSuccessfully(at index: Int = 0) {
         // Completamos sin ningún error, ya que fue exitoso el borrado
-        deletionCompletions[index](nil)
+        deletionCompletions[index](.success(()))
     }
     
     func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping InsertionCompletion) {
@@ -52,11 +52,11 @@ class FeedStoreSpy: FeedStore {
     func completeInsertion(with error: Error, at index: Int = 0) {
         // Obtenemos el `DeleteCompletion` en el índicenque nos pasan y
         // completamos con un `error. Es un closure que recibe un array
-        insertionCompletions[index](error)
+        insertionCompletions[index](.failure(error))
     }
     
     func completeInsertionSuccessfully(at index: Int = 0) {
-        insertionCompletions[index](nil)
+        insertionCompletions[index](.success(()))
     }
     
     func retrieve(completion: @escaping RetrievalCompletion) {

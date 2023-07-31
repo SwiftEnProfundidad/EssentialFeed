@@ -63,7 +63,6 @@ class EssentialFeedCacheIntegrationTests: XCTestCase {
         // lo que vemos como podemos sustiuir un sistema de persistencia por otro fácilmente.
         // Esto es posible gracias al poderoso principio de `Dependency Injection`, el principio
         // `Liskov`, el principio de `Segregacíon de Interfaces` y el resto de principios en la app.
-//        let store = CodableFeedStore(storeURL: storeURL)
         let store = try! CoreDataFeedStore(storeURL: storeURL, bundle: storeBundle)
         let sut = LocalFeedLoader(store: store, currentDate: Date.init)
         trackForMemoryLeaks(store, file: file, line: line)
@@ -73,8 +72,10 @@ class EssentialFeedCacheIntegrationTests: XCTestCase {
     
     private func save(_ feed: [FeedImage], with loader: LocalFeedLoader, file: StaticString = #file, line: UInt = #line) {
         let saveExp = expectation(description: "Wait for save completion")
-        loader.save(feed) { saveError in
-            XCTAssertNil(saveError, "Expected to save feed successfully", file: file, line: line)
+        loader.save(feed) { result in
+            if case let Result.failure(error) = result {
+                XCTAssertNil(error, "Expected to save feed successfully", file: file, line: line)
+            }
             saveExp.fulfill()
         }
         wait(for: [saveExp], timeout: 1.0)
