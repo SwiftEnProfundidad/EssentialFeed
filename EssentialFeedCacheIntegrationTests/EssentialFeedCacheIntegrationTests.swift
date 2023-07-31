@@ -59,6 +59,11 @@ class EssentialFeedCacheIntegrationTests: XCTestCase {
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> LocalFeedLoader {
         let storeBundle = Bundle(for: CoreDataFeedStore.self)
         let storeURL = testSpecificStoreURL()
+        // Aquí podemos reemplazar `CoreDataFeedStore` por `CodableFeedStore` y viceversa, con
+        // lo que vemos como podemos sustiuir un sistema de persistencia por otro fácilmente.
+        // Esto es posible gracias al poderoso principio de `Dependency Injection`, el principio
+        // `Liskov`, el principio de `Segregacíon de Interfaces` y el resto de principios en la app.
+//        let store = CodableFeedStore(storeURL: storeURL)
         let store = try! CoreDataFeedStore(storeURL: storeURL, bundle: storeBundle)
         let sut = LocalFeedLoader(store: store, currentDate: Date.init)
         trackForMemoryLeaks(store, file: file, line: line)
