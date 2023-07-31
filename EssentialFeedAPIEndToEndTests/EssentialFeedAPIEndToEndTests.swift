@@ -40,7 +40,7 @@ final class EssentialFeedAPIEndToEndTests: XCTestCase {
     
     // MARK: - Helpers
     
-    private func getFeedResult(file: StaticString = #file, line: UInt = #line) -> LoadFeedResult? {
+    private func getFeedResult(file: StaticString = #file, line: UInt = #line) -> FeedLoader.Result? {
         // En este caso, la URL va a ser la que nos proporcionó backend
         let testServerURL = URL(string: "https://essentialdeveloper.com/feed-case-study/test-api/feed")!
         // Utilizar la configuración ephemeral de URLSession para evitar comUse partir
@@ -54,7 +54,7 @@ final class EssentialFeedAPIEndToEndTests: XCTestCase {
         let exp = expectation(description: "Wait for load completion")
         
         // Capturamos el resultado
-        var receivedResult: LoadFeedResult?
+        var receivedResult: FeedLoader.Result?
         loader.load { result in
             receivedResult = result
             exp.fulfill()
