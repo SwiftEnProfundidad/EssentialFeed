@@ -75,14 +75,14 @@ class FeedStoreSpy: FeedStore {
     func completeRetrievalWithEmptyCache(at index: Int = 0) {
         // Obtenemos el `DeleteCompletion` en el índicenque nos pasan y
         // completamos con un `error. Es un closure que recibe un array
-        retrievalCompletions[index](.empty)
+        retrievalCompletions[index](.success(.empty))
     }
     
     // Completa la recuperación de cache con datos
     func completeRetrieval(with feed: [LocalFeedImage], timestamp: Date, at index: Int = 0) {
         // Obtenemos el `DeleteCompletion` en el índicenque nos pasan y
         // completamos con un `error. Es un closure que recibe un array
-        retrievalCompletions[index](.found(feed: feed, timestamp: timestamp))
+        retrievalCompletions[index](.success(.found(feed: feed, timestamp: timestamp)))
     }
 }
 
