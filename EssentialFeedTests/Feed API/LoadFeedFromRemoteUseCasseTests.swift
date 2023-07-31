@@ -147,10 +147,9 @@ class LoadFeedFromRemoteUseCasseTests: XCTestCase {
             "description": description,
             "location": location,
             "image": imageURL.absoluteString
-        ]
-        let compactJSON: [String: Any] = json.compactMapValues({ $0 })
+        ].compactMapValues { $0 }
         
-        return (item, compactJSON)
+        return (item, json)
     }
     
     
