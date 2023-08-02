@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		EF37A9CE2A7B0BAE00E6A2E1 /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF37A9CD2A7B0BAE00E6A2E1 /* FeedViewController.swift */; };
 		EF37A9D02A7B0F5700E6A2E1 /* FeedImageViewModel+PrototypeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF37A9CF2A7B0F5700E6A2E1 /* FeedImageViewModel+PrototypeData.swift */; };
+		EF37A9D22A7B10FF00E6A2E1 /* FeedImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF37A9D12A7B10FF00E6A2E1 /* FeedImageCell.swift */; };
 		EFACEE962A7A78BC00349154 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFACEE952A7A78BC00349154 /* AppDelegate.swift */; };
 		EFACEE9D2A7A78BC00349154 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EFACEE9B2A7A78BC00349154 /* Main.storyboard */; };
 		EFACEE9F2A7A78BF00349154 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EFACEE9E2A7A78BF00349154 /* Assets.xcassets */; };
@@ -18,6 +19,7 @@
 /* Begin PBXFileReference section */
 		EF37A9CD2A7B0BAE00E6A2E1 /* FeedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
 		EF37A9CF2A7B0F5700E6A2E1 /* FeedImageViewModel+PrototypeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedImageViewModel+PrototypeData.swift"; sourceTree = "<group>"; };
+		EF37A9D12A7B10FF00E6A2E1 /* FeedImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageCell.swift; sourceTree = "<group>"; };
 		EFACEE922A7A78BB00349154 /* Prototype.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Prototype.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EFACEE952A7A78BC00349154 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EFACEE9C2A7A78BC00349154 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -63,6 +65,7 @@
 				EFACEE9E2A7A78BF00349154 /* Assets.xcassets */,
 				EFACEEA02A7A78BF00349154 /* LaunchScreen.storyboard */,
 				EFACEEA32A7A78BF00349154 /* Info.plist */,
+				EF37A9D12A7B10FF00E6A2E1 /* FeedImageCell.swift */,
 			);
 			path = Prototype;
 			sourceTree = "<group>";
@@ -139,6 +142,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EF37A9CE2A7B0BAE00E6A2E1 /* FeedViewController.swift in Sources */,
+				EF37A9D22A7B10FF00E6A2E1 /* FeedImageCell.swift in Sources */,
 				EFACEE962A7A78BC00349154 /* AppDelegate.swift in Sources */,
 				EF37A9D02A7B0F5700E6A2E1 /* FeedImageViewModel+PrototypeData.swift in Sources */,
 			);
