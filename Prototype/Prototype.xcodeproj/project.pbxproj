@@ -7,16 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EF35593F2A7CF71E00C16F39 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EFACEE9B2A7A78BC00349154 /* Main.storyboard */; };
 		EF37A9CE2A7B0BAE00E6A2E1 /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF37A9CD2A7B0BAE00E6A2E1 /* FeedViewController.swift */; };
 		EF37A9D02A7B0F5700E6A2E1 /* FeedImageViewModel+PrototypeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF37A9CF2A7B0F5700E6A2E1 /* FeedImageViewModel+PrototypeData.swift */; };
 		EF37A9D22A7B10FF00E6A2E1 /* FeedImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF37A9D12A7B10FF00E6A2E1 /* FeedImageCell.swift */; };
 		EFACEE962A7A78BC00349154 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFACEE952A7A78BC00349154 /* AppDelegate.swift */; };
-		EFACEE9D2A7A78BC00349154 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EFACEE9B2A7A78BC00349154 /* Main.storyboard */; };
 		EFACEE9F2A7A78BF00349154 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EFACEE9E2A7A78BF00349154 /* Assets.xcassets */; };
 		EFACEEA22A7A78BF00349154 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EFACEEA02A7A78BF00349154 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		EF35593E2A7CF71200C16F39 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
 		EF37A9CD2A7B0BAE00E6A2E1 /* FeedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
 		EF37A9CF2A7B0F5700E6A2E1 /* FeedImageViewModel+PrototypeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedImageViewModel+PrototypeData.swift"; sourceTree = "<group>"; };
 		EF37A9D12A7B10FF00E6A2E1 /* FeedImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageCell.swift; sourceTree = "<group>"; };
@@ -58,14 +59,14 @@
 		EFACEE942A7A78BC00349154 /* Prototype */ = {
 			isa = PBXGroup;
 			children = (
+				EFACEEA32A7A78BF00349154 /* Info.plist */,
 				EFACEE952A7A78BC00349154 /* AppDelegate.swift */,
-				EF37A9CD2A7B0BAE00E6A2E1 /* FeedViewController.swift */,
+				EF37A9D12A7B10FF00E6A2E1 /* FeedImageCell.swift */,
 				EF37A9CF2A7B0F5700E6A2E1 /* FeedImageViewModel+PrototypeData.swift */,
-				EFACEE9B2A7A78BC00349154 /* Main.storyboard */,
+				EF37A9CD2A7B0BAE00E6A2E1 /* FeedViewController.swift */,
 				EFACEE9E2A7A78BF00349154 /* Assets.xcassets */,
 				EFACEEA02A7A78BF00349154 /* LaunchScreen.storyboard */,
-				EFACEEA32A7A78BF00349154 /* Info.plist */,
-				EF37A9D12A7B10FF00E6A2E1 /* FeedImageCell.swift */,
+				EFACEE9B2A7A78BC00349154 /* Main.storyboard */,
 			);
 			path = Prototype;
 			sourceTree = "<group>";
@@ -98,7 +99,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1420;
-				LastUpgradeCheck = 1420;
+				LastUpgradeCheck = 1500;
 				TargetAttributes = {
 					EFACEE912A7A78BB00349154 = {
 						CreatedOnToolsVersion = 14.2;
@@ -128,9 +129,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EF35593F2A7CF71E00C16F39 /* Main.storyboard in Resources */,
 				EFACEEA22A7A78BF00349154 /* LaunchScreen.storyboard in Resources */,
 				EFACEE9F2A7A78BF00349154 /* Assets.xcassets in Resources */,
-				EFACEE9D2A7A78BC00349154 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -155,9 +156,11 @@
 			isa = PBXVariantGroup;
 			children = (
 				EFACEE9C2A7A78BC00349154 /* Base */,
+				EF35593E2A7CF71200C16F39 /* en */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
+			usesTabs = 0;
 		};
 		EFACEEA02A7A78BF00349154 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
@@ -174,6 +177,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -206,6 +210,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -234,6 +239,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -266,6 +272,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
