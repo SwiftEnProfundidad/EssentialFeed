@@ -49,7 +49,7 @@ class CodableFeedStoreTest: XCTestCase, FailableFeedStore {
     // comprobar que no hay efectos secundarios (se leen los mismos datos).
     func test_retrieve_hasNoSideEffectsOnNOnEmptyCache() {
         let sut = makeSUT()
-        
+
         assertThatRetrieveHasNoSideEffectsOnNonEmptyCache(on: sut)
     }
     
@@ -57,9 +57,9 @@ class CodableFeedStoreTest: XCTestCase, FailableFeedStore {
     func test_retrieve_deliversFailureOnRetrievalError() {
         let storeURL = testSpecificStoreURL()
         let sut = makeSUT(storeURL: storeURL)
-        
+
         try! "invalid data".write(to: storeURL, atomically: false, encoding: .utf8)
-        
+
         assertThatRetrieveDeliversFailureOnRetrievalError(on: sut)
     }
     
@@ -67,9 +67,9 @@ class CodableFeedStoreTest: XCTestCase, FailableFeedStore {
     func test_retrieve_hasNoSideEffectsOnFailure() {
         let storeURL = testSpecificStoreURL()
         let sut = makeSUT(storeURL: storeURL)
-        
+
         try! "invalid data".write(to: storeURL, atomically: false, encoding: .utf8)
-        
+
         assertThatRetrieveHasNoSideEffectsOnFailure(on: sut)
     }
     
@@ -136,15 +136,13 @@ class CodableFeedStoreTest: XCTestCase, FailableFeedStore {
     
     // Caso en el que no tenemos permisos para borrar la caché y recibimos un error.
     func test_delete_deliversErrorOnDeletionError() {
-        let noDeletePermissionURL = cachesDirectory()
-        let sut = makeSUT(storeURL: noDeletePermissionURL)
+        let sut = makeSUT(storeURL: noDeletePermissionURL())
         
         assertThatDeleteDeliversErrorOnDeletionError(on: sut)
     }
     
     func test_delete_hasNoSideEffectsOnDeletionError() {
-        let noDeletePermissionURL = cachesDirectory()
-        let sut = makeSUT(storeURL: noDeletePermissionURL)
+        let sut = makeSUT(storeURL: noDeletePermissionURL())
         
         assertThatDeleteHasNoSideEffectsOnDeletionError(on: sut)
     }
@@ -163,8 +161,22 @@ class CodableFeedStoreTest: XCTestCase, FailableFeedStore {
         return sut
     }
     
+    private func noDeletePermissionURL() -> URL {
+        return FileManager.default.urls(for: .cachesDirectory, in: .systemDomainMask).first!
+    }
+    
+    private func createCachesDirectory() {
+        try? FileManager
+            .default
+            .createDirectory(
+                atPath: cachesDirectory().path,
+                withIntermediateDirectories: true,
+                attributes: nil)
+    }
+    
     func setupEmptyStoreState() {
         deleteStoreArtifacts()
+        createCachesDirectory()
     }
     
     func undoStoreSideEffects() {
