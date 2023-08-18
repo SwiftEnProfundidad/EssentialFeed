@@ -24,6 +24,7 @@ final class FeedViewController: UITableViewController {
         
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: #selector(load), for: .valueChanged)
+        refreshControl?.beginRefreshing()
         load()
     }
     
@@ -49,6 +50,7 @@ final class FeedViewControllerTest: XCTestCase {
         XCTAssertEqual(loader.loadCallCount, 1)
     }
     
+    // Caso de uso en el que actualizamos la vista varias veces mediante pull to refresh
     func test_pullToRefresh_loadsFeed() {
         let (sut, loader) = makeSUT()
         sut.loadViewIfNeeded()
@@ -58,6 +60,15 @@ final class FeedViewControllerTest: XCTestCase {
         
         sut.refreshControl?.simulatePullToRefresh()
         XCTAssertEqual(loader.loadCallCount, 3)
+    }
+    
+    // Caso de uso en el que primero cargamos los Feed's y aseguramos de tener un indicador de carga cuando se carga la view
+    func test_viewDidLoad_showsLoadingIndicator() {
+        let (sut, _) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        
+        XCTAssertEqual(sut.refreshControl?.isRefreshing, true)
     }
     
     // MARK: - Helpers
