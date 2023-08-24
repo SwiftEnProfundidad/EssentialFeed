@@ -10,7 +10,7 @@ import EssentialFeed
 // Separamos en dos protocolos, para no violar el principios de segregación de interfaces
 // dado que la función `display(isLoading: Bool)` se lleva a cabo en `refreshControl` y la
 // función `display(feed: [FeedImage])` se llev a cabo en la `tableView`.
-protocol FeedLoadingView: AnyObject {
+protocol FeedLoadingView {
     func display(isLoading: Bool)
 }
 
@@ -28,7 +28,7 @@ final class FeedPresenter {
     }
     
     var feedView: FeedView?
-    weak var loadingView: FeedLoadingView?
+    var loadingView: FeedLoadingView?
     
     func loadFeed() {
         loadingView?.display(isLoading: true)

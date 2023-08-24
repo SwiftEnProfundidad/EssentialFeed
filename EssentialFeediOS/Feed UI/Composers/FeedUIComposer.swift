@@ -15,7 +15,7 @@ public final class FeedUIComposer {
         let presenter = FeedPresenter(feedLoader: feedLoader)
         let refreshController = FeedRefreshViewController(presenter: presenter)
         let feedController = FeedViewController(refreshController: refreshController)
-        presenter.loadingView = refreshController
+        presenter.loadingView = WeakRefVirtualProxy(refreshController)
         presenter.feedView = FeedViewAdapter(controller: feedController, imageLoader: imageLoader)
         return feedController
     }
@@ -34,6 +34,27 @@ public final class FeedUIComposer {
         }
     }
 }
+
+// Este proxy virtual mantendrá una referencia `weak` a la
+// instancia del objeto y pasará los mensajes hacia adelante
+private final class WeakRefVirtualProxy<T: AnyObject> {
+    private weak var object: T?
+    
+    init(_ object: T) {
+        self.object = object
+    }
+}
+
+// Conformamos `WeakRefVirtualProxy` al protocolo `FeedLoadingView`
+// y le decimos que el `object` va a ser de tipo `FeedLoadingView`
+extension WeakRefVirtualProxy: FeedLoadingView where T: FeedLoadingView {
+    func display(isLoading: Bool) {
+        object?.display(isLoading: isLoading)
+    }
+}
+
+// NOTA: con esto hacemos que el ciclo de retención ahora esté resuelto y la
+// gestión de memoria vive en este `Composer`, lejos de los componentes MVP
 
 private final class FeedViewAdapter: FeedView {
     private weak var controller: FeedViewController?
