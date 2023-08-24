@@ -20,22 +20,8 @@ public final class FeedUIComposer {
             feedView: FeedViewAdapter(controller: feedController, imageLoader: imageLoader),
             loadingView: WeakRefVirtualProxy(refreshController)
         )
-
+        
         return feedController
-    }
-    
-    // [FeedImage] transforma este array o -> Adapt -> en un array de [FeedImageCellController] -> (controller?.tableModel)
-    // Este closure es un "Adapter pattern", muy común en los tipos `Composer`
-    // Este patrón nos ayuda a conectar APIs inigualables como en este caso,
-    // dado que `onRefresh` es un array de `FeedImage` y `tableModel` es un
-    // array de `FeedImageCellController`
-    private static func adaptFeedToCellControllers(forwardingTo controller: FeedViewController, loader: FeedImageDataLoader) -> ([FeedImage]) -> Void {
-        return { [weak controller] feed in
-            controller?.tableModel = feed.map { model in
-                // Inyectamos un closure, `imageTransformer`, para transformar `ImageData` en `UIImage`
-                FeedImageCellController(viewModel: FeedImageViewModel(model: model, imageLoader: loader, imageTransformer: UIImage.init))
-            }
-        }
     }
 }
 
@@ -57,6 +43,12 @@ extension WeakRefVirtualProxy: FeedLoadingView where T: FeedLoadingView {
     }
 }
 
+extension WeakRefVirtualProxy: FeedImageView where T: FeedImageView, T.Image == UIImage {
+    func display(_ model: FeedImageViewModel<UIImage>) {
+        object?.display(model)
+    }
+}
+
 // NOTA: con esto hacemos que el ciclo de retención ahora esté resuelto y la
 // gestión de memoria vive en este `Composer`, lejos de los componentes MVP
 
@@ -70,9 +62,20 @@ private final class FeedViewAdapter: FeedView {
     }
     
     func display(_ viewModel: FeedViewModel) {
+        // [FeedImage] transforma este array o -> Adapt -> en un array de [FeedImageCellController] -> (controller?.tableModel)
+        // Este closure es un "Adapter pattern", muy común en los tipos `Composer`
+        // Este patrón nos ayuda a conectar APIs inigualables como en este caso,
+        // dado que `onRefresh` es un array de `FeedImage` y `tableModel` es un
+        // array de `FeedImageCellController`
         controller?.tableModel = viewModel.feed.map { model in
-            // Inyectamos un closure, `imageTransformer`, para transformar `ImageData` en `UIImage`
-            FeedImageCellController(viewModel: FeedImageViewModel(model: model, imageLoader: imageLoader, imageTransformer: UIImage.init))
+            let adapter = FeedImageDataLoaderPresentationAdapter<WeakRefVirtualProxy<FeedImageCellController>, UIImage>(model: model, imageLoader: imageLoader)
+            let view = FeedImageCellController(delegate: adapter)
+            
+            adapter.presenter = FeedImagePresenter(
+                view: WeakRefVirtualProxy(view),
+                imageTransformer: UIImage.init)
+            
+            return view
         }
     }
 }
@@ -97,5 +100,37 @@ private final class FeedLoaderPresentationAdapter: FeedRefreshViewControllerDele
                     self?.presenter?.didFinishLoadingFeed(with: error)
             }
         }
+    }
+}
+
+private final class FeedImageDataLoaderPresentationAdapter<View: FeedImageView, Image>: FeedImageCellControllerDelegate where View.Image == Image {
+    private let model: FeedImage
+    private let imageLoader: FeedImageDataLoader
+    private var task: FeedImageDataLoaderTask?
+    
+    var presenter: FeedImagePresenter<View, Image>?
+    
+    init(model: FeedImage, imageLoader: FeedImageDataLoader) {
+        self.model = model
+        self.imageLoader = imageLoader
+    }
+    
+    func didRequestImage() {
+        presenter?.didStartLoadingImageData(for: model)
+        
+        let model = self.model
+        task = imageLoader.loadImageData(from: model.url) { [weak self] result in
+            switch result {
+                case let .success(data):
+                    self?.presenter?.didFinishLoadingImageData(with: data, for: model)
+                    
+                case let .failure(error):
+                    self?.presenter?.didFinishLoadingImageData(with: error, for: model)
+            }
+        }
+    }
+    
+    func didCancelImageRequest() {
+        task?.cancel()
     }
 }
