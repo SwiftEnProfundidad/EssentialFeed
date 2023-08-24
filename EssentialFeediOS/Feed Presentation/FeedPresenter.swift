@@ -44,7 +44,7 @@ final class FeedPresenter {
             if let feed = try? result.get() {
                 self?.feedView?.display(FeedViewModel(feed: feed))
             }
-            self?.loadingView?.display(FeedLoadingViewModel(isLoading: false))
+            self?.loadingView?.display( FeedLoadingViewModel(isLoading: false))
         }
     }
 }
