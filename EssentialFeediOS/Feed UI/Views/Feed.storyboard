@@ -81,6 +81,9 @@ Location</string>
                                                                 <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <imageReference key="image" image="arrow.clockwise" catalog="system" symbolScale="large"/>
                                                             </state>
+                                                            <connections>
+                                                                <action selector="retryButtonTapped" destination="Hy3-9W-hS4" eventType="touchUpInside" id="naJ-zg-5yo"/>
+                                                            </connections>
                                                         </button>
                                                     </subviews>
                                                     <color key="backgroundColor" red="0.89019607840000003" green="0.89019607840000003" blue="0.89019607840000003" alpha="1" colorSpace="calibratedRGB"/>
@@ -122,6 +125,14 @@ Location</string>
                                         <constraint firstAttribute="bottomMargin" secondItem="4Vr-ZW-BOL" secondAttribute="bottom" priority="999" constant="6" id="bcS-Sf-Izl"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="descriptionLabel" destination="d8w-yK-2li" id="C8E-Xq-8up"/>
+                                    <outlet property="feedImageContainer" destination="wBd-ZX-txQ" id="kiy-9e-gd0"/>
+                                    <outlet property="feedImageRetryButton" destination="mAu-5G-cjf" id="FOu-m1-k9q"/>
+                                    <outlet property="feedImageView" destination="6jJ-p1-LTT" id="CPS-2P-pmu"/>
+                                    <outlet property="locationContainer" destination="mqd-e3-B3G" id="pcq-Tu-hTd"/>
+                                    <outlet property="locationLabel" destination="gez-Om-TWK" id="F1s-1f-MNq"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
