@@ -21,10 +21,11 @@ final class FeedImageCellController: FeedImageView {
     }
     
     func view(in tableView: UITableView) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "FeedImageCell") as! FeedImageCell
-        self.cell = cell
+        cell = tableView.dequeueReusableCell()
         delegate.didRequestImage()
-        return cell
+        // Estamos creando la celda arriba, así que sabemos que tenemos una
+        // referencia a ella, por lo tanto podemos desempaquetar `!` sin problemas
+        return cell!
     }
     
     func preload() {
