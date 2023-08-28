@@ -15,7 +15,19 @@ final public class FeedViewController: UITableViewController, UITableViewDataSou
     var delegate: FeedViewControllerDelegate?
     
     var tableModel = [FeedImageCellController]() {
-        didSet { tableView.reloadData() }
+        didSet {
+            // Comprobamos primero si está en el hilo principal
+            // ya que todas las operaciones no actúan en background
+            // como por ejemplo, si venimos de caché, algo muy rápido
+            if Thread.isMainThread {
+                tableView.reloadData()
+                // De lo contrario, despachamos de forma asíncrona a `MainQueue`
+            } else {
+                DispatchQueue.main.async { [weak self] in
+                    self?.tableView.reloadData()
+                }
+            }
+        }
     }
     
     public override func viewDidLoad() {
@@ -29,6 +41,9 @@ final public class FeedViewController: UITableViewController, UITableViewDataSou
     }
     
     func display(_ viewModel: FeedLoadingViewModel) {
+        guard Thread.isMainThread else {
+            return DispatchQueue.main.async { [weak self] in self?.display(viewModel) }
+        }
         if viewModel.isLoading {
             refreshControl?.beginRefreshing()
         } else {
