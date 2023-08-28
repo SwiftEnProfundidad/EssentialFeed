@@ -201,6 +201,7 @@
 		EFE5ADE92A9D1418009C5C4D /* UIRefreshControl+TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIRefreshControl+TestHelpers.swift"; sourceTree = "<group>"; };
 		EFE5ADEC2A9D18F5009C5C4D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Feed.strings; sourceTree = "<group>"; };
 		EFE5ADEE2A9D1952009C5C4D /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Feed.strings"; sourceTree = "<group>"; };
+		EFE5ADEF2A9D19A9009C5C4D /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/Feed.strings; sourceTree = "<group>"; };
 		EFE65C0E2A823FE000940C97 /* FeedUIIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedUIIntegrationTests.swift; sourceTree = "<group>"; };
 		EFEFF6BE2A0701F0001CE6D0 /* URLSessionHTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionHTTPClient.swift; sourceTree = "<group>"; };
 		EFEFF6C42A0788EA001CE6D0 /* EssentialFeedAPIEndToEndTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EssentialFeedAPIEndToEndTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -719,6 +720,7 @@
 				en,
 				Base,
 				"pt-BR",
+				el,
 			);
 			mainGroup = EFC9105029FDAD040094A9BC;
 			productRefGroup = EFC9105B29FDAD040094A9BC /* Products */;
@@ -926,6 +928,7 @@
 			children = (
 				EFE5ADEC2A9D18F5009C5C4D /* en */,
 				EFE5ADEE2A9D1952009C5C4D /* pt-BR */,
+				EFE5ADEF2A9D19A9009C5C4D /* el */,
 			);
 			name = Feed.strings;
 			sourceTree = "<group>";
