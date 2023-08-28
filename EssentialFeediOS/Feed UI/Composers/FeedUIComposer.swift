@@ -12,7 +12,12 @@ public final class FeedUIComposer {
     private init() {}
     
     public static func feedComposedWith(feedLoader: FeedLoader, imageLoader: FeedImageDataLoader) -> FeedViewController {
-        let presentationAdapter = FeedLoaderPresentationAdapter(feedLoader: feedLoader)
+        // Aquí el `decoratee` está añadiendo comportamiento a la instancia sin cambiar la instancia -> Principio OpenClose
+        // Mediante esta técnica hacemos que el `Presentet` sea agnóstico sobre Threading y la UI también es agnóstica y las
+        // implementaciones de `FeedLoader` no saben que las implementaciones de UIKit requieren trabajo para ser enviadas a `MainQueue
+        // Todavía mantenemos nuestras implementaciones desacopladas sin filtrar ningún detalle sobre los tipos concretos.
+        // La capa `Composer` es responsable de ordenar o componer los objetos.
+        let presentationAdapter = FeedLoaderPresentationAdapter(feedLoader: MainQueueDispatchDecorator(decoratee: feedLoader))
         
         let feedController = FeedViewController.makeWith(
             delegate: presentationAdapter,
@@ -24,6 +29,28 @@ public final class FeedUIComposer {
         )
         
         return feedController
+    }
+}
+
+// Decorator Patterm: se usa para añadir comportamiento a
+// una instancia mientras se mantiene la misma interfaz
+private final class MainQueueDispatchDecorator: FeedLoader {
+    private let decoratee: FeedLoader
+    
+    init(decoratee: FeedLoader) {
+        self.decoratee = decoratee
+    }
+    
+    func load(completion: @escaping (FeedLoader.Result) -> Void) {
+        decoratee.load { result in
+            if Thread.isMainThread {
+                completion(result)
+            } else {
+                DispatchQueue.main.async {
+                    completion(result)
+                }
+            }
+        }
     }
 }
 
