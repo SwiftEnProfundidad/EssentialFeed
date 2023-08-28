@@ -5,6 +5,7 @@
 //  Created by Juan Carlos Merlos Albarracin on 24/8/23.
 //
 
+import Foundation
 import EssentialFeed
 
 // Separamos en dos protocolos, para no violar el principios de segregación de interfaces
@@ -28,7 +29,10 @@ final class FeedPresenter {
     }
     
     static var title: String {
-        return "My Feed"
+        return NSLocalizedString("FEED_VIEW_TITLE",
+                                 tableName: "Feed",
+                                 bundle: Bundle(for: FeedPresenter.self),
+                                 comment: "Title for the feed view")
     }
     
     func didStartLoadingFeed() {
