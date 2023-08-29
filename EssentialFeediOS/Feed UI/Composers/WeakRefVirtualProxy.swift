@@ -18,6 +18,12 @@ final class WeakRefVirtualProxy<T: AnyObject> {
     }
 }
 
+extension WeakRefVirtualProxy: FeedErrorView where T: FeedErrorView {
+    func display(_ viewModel: FeedErrorViewModel) {
+        object?.display(viewModel)
+    }
+}
+
 // Conformamos `WeakRefVirtualProxy` al protocolo `FeedLoadingView`
 // y le decimos que el `object` va a ser de tipo `FeedLoadingView`
 extension WeakRefVirtualProxy: FeedLoadingView where T: FeedLoadingView {

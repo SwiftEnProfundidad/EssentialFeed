@@ -17,7 +17,8 @@ public final class FeedUIComposer {
         // implementaciones de `FeedLoader` no saben que las implementaciones de UIKit requieren trabajo para ser enviadas a `MainQueue
         // Todavía mantenemos nuestras implementaciones desacopladas sin filtrar ningún detalle sobre los tipos concretos.
         // La capa `Composer` es responsable de ordenar o componer los objetos.
-        let presentationAdapter = FeedLoaderPresentationAdapter(feedLoader: MainQueueDispatchDecorator(decoratee: feedLoader))
+        let presentationAdapter = FeedLoaderPresentationAdapter(feedLoader:
+                                                                    MainQueueDispatchDecorator(decoratee: feedLoader))
         
         let feedController = makeFeedViewController(
             delegate: presentationAdapter,
@@ -27,8 +28,8 @@ public final class FeedUIComposer {
             feedView: FeedViewAdapter(
                 controller: feedController,
                 imageLoader: MainQueueDispatchDecorator(decoratee: imageLoader)),
-            loadingView: WeakRefVirtualProxy(feedController)
-        )
+            loadingView: WeakRefVirtualProxy(feedController),
+            errorView: WeakRefVirtualProxy(feedController))
         
         return feedController
     }
