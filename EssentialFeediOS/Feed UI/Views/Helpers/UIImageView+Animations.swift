@@ -5,10 +5,10 @@
 //  Created by Juan Carlos Merlos Albarracin on 26/8/23.
 //
 
-import UIKit
+import UIkit
 
 extension UIImageView {
-    func setImageAnimated(_ newImage: UIImage?) {
+    public func setImageAnimated(_ newImage: UIImage?) {
         image = newImage
         
         guard newImage != nil else { return }
