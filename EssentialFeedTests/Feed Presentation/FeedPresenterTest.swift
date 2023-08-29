@@ -73,19 +73,25 @@ class FeedPresenterTest: XCTestCase {
     private class ViewSpy: FeedLoadingView, FeedErrorView {
         // Conformamos a `Equatable`, ya que si no,
         // no podemos usar el ayudante `XCTAssertEqual`
-        enum Message: Equatable {
+        // Lo cambiamos a `Hashable` dado que lo hemos
+        // cambiado a un `Set` con lo que no podríamos
+        // añadir mensajes a un conjunto o `Set`.
+        enum Message: Hashable {
             case display(errorMessage: String?)
             case display(isLoading: Bool)
         }
         
-        private(set) var messages = [Message]()
+        // Utilizamos un `Set` para que el orden no importe, dado que en
+        // un array sí importa el orden. Por lo que si cambiamos el orden
+        // en el array `messages` al hacerlo un conjunto, no importa el orden.
+        private(set) var messages = Set<Message>()
         
         func display(_ viewModel: FeedErrorViewModel) {
-            messages.append(.display(errorMessage: viewModel.message))
+            messages.insert(.display(errorMessage: viewModel.message))
         }
         
         func display(_ viewModel: FeedLoadingViewModel) {
-            messages.append(.display(isLoading: viewModel.isLoading))
+            messages.insert(.display(isLoading: viewModel.isLoading))
         }
     }
 }
