@@ -5,7 +5,7 @@
 //  Created by Juan Carlos Merlos Albarracin on 26/8/23.
 //
 
-import UIkit
+import UIKit
 
 extension UIImageView {
     public func setImageAnimated(_ newImage: UIImage?) {
