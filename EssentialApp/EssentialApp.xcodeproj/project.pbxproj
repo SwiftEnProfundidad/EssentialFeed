@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EF4DA41A2A9FF72C00736141 /* EssentialFeed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF4DA4182A9FF72C00736141 /* EssentialFeed.framework */; };
+		EF4DA41B2A9FF72C00736141 /* EssentialFeed.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = EF4DA4182A9FF72C00736141 /* EssentialFeed.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		EF4DA41C2A9FF72C00736141 /* EssentialFeediOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF4DA4192A9FF72C00736141 /* EssentialFeediOS.framework */; };
+		EF4DA41D2A9FF72C00736141 /* EssentialFeediOS.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = EF4DA4192A9FF72C00736141 /* EssentialFeediOS.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		EFAC132A2A9FF34A00939145 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFAC13292A9FF34A00939145 /* AppDelegate.swift */; };
 		EFAC132C2A9FF34A00939145 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFAC132B2A9FF34A00939145 /* SceneDelegate.swift */; };
 		EFAC132E2A9FF34A00939145 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFAC132D2A9FF34A00939145 /* ViewController.swift */; };
@@ -35,7 +39,24 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		EF4DA41E2A9FF72C00736141 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				EF4DA41B2A9FF72C00736141 /* EssentialFeed.framework in Embed Frameworks */,
+				EF4DA41D2A9FF72C00736141 /* EssentialFeediOS.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		EF4DA4182A9FF72C00736141 /* EssentialFeed.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = EssentialFeed.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		EF4DA4192A9FF72C00736141 /* EssentialFeediOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = EssentialFeediOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EFAC13262A9FF34A00939145 /* EssentialApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EssentialApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EFAC13292A9FF34A00939145 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EFAC132B2A9FF34A00939145 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -56,6 +77,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EF4DA41A2A9FF72C00736141 /* EssentialFeed.framework in Frameworks */,
+				EF4DA41C2A9FF72C00736141 /* EssentialFeediOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -76,6 +99,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		EF4DA4172A9FF72C00736141 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				EF4DA4182A9FF72C00736141 /* EssentialFeed.framework */,
+				EF4DA4192A9FF72C00736141 /* EssentialFeediOS.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		EFAC131D2A9FF34A00939145 = {
 			isa = PBXGroup;
 			children = (
@@ -83,6 +115,7 @@
 				EFAC133F2A9FF34D00939145 /* EssentialAppTests */,
 				EFAC13492A9FF34D00939145 /* EssentialAppUITests */,
 				EFAC13272A9FF34A00939145 /* Products */,
+				EF4DA4172A9FF72C00736141 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -137,6 +170,7 @@
 				EFAC13222A9FF34A00939145 /* Sources */,
 				EFAC13232A9FF34A00939145 /* Frameworks */,
 				EFAC13242A9FF34A00939145 /* Resources */,
+				EF4DA41E2A9FF72C00736141 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -366,7 +400,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -420,7 +454,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
