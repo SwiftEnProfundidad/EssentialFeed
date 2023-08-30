@@ -8,20 +8,29 @@
 import Foundation
 
 // Somos el cliente y necesitamos una URLSession
-public class URLSessionHTTPClient: HTTPClient {
+public final class URLSessionHTTPClient: HTTPClient {
     private let session: URLSession
     
     // Como no vamos a mockear `URLSession` le damos un valor
     // por defecto. No necesitamos mockear una `session`.
-    public init(session: URLSession = .shared) {
+    // URLSession = .shared ( se hizo anterioremente)
+    public init(session: URLSession) {
         self.session = session
     }
     
     // Error inesperado, no sabemos qué pasó
     private struct UnexpectedValuesRepresentation: Error {}
     
-    public func get(from url: URL, completion: @escaping (HTTPClient.Result) -> Void) {
-        session.dataTask(with: url) { data, response, error in
+    private struct URLSessionTaskWrapper: HTTPClientTask {
+        let wrapped: URLSessionTask
+        
+        func cancel() {
+            wrapped.cancel()
+        }
+    }
+    
+    public func get(from url: URL, completion: @escaping (HTTPClient.Result) -> Void) -> HTTPClientTask {
+        let task = session.dataTask(with: url) { data, response, error in
             completion(Result {
                 if let error = error {
                     throw error
@@ -31,6 +40,8 @@ public class URLSessionHTTPClient: HTTPClient {
                     throw UnexpectedValuesRepresentation()
                 }
             })
-        }.resume()
+        }
+        task.resume()
+        return URLSessionTaskWrapper(wrapped: task)
     }
 }

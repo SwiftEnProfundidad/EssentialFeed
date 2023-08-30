@@ -15,5 +15,6 @@ public protocol FeedImageDataLoaderTask {
 // `FeedImageDataLoader` no estén obligadas a tener estado, lo hacen los clientes.
 public protocol FeedImageDataLoader {
     typealias Result = Swift.Result<Data, Error>
+    
     func loadImageData(from url: URL, completion: @escaping (Result) -> Void) -> FeedImageDataLoaderTask
 }
