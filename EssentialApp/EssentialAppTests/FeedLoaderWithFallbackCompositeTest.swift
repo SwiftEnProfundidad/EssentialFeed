@@ -7,6 +7,7 @@
 
 import XCTest
 import EssentialFeed
+import EssentialApp
 
 // Creamos estos protocolos, abastracciones, que indican la procedencia remota y local del `Feed`
 // Con esto recuperamos las garantías de tiempo de compilación y nos indicará el orden correcto
@@ -49,13 +50,8 @@ class FeedLoaderWithFallbackCompositeTest: XCTestCase {
     func test_load_deliversPrimaryFeedOnPrimaryLoaderSuccess() {
         let primaryFeed = uniqueFeed()
         let fallbackFeed = uniqueFeed()
-        // Con este `Stub` (`LoaderStub`), protegemos esta prueba de futuros cambios.
-        // Estamos testeando `RemoteWithLocalFallbackFeedLoader` de forma aislada.
-        let primaryLoader = LoaderStub(result: .success(primaryFeed))
-        let fallbackLoader = LoaderStub(result: .success(fallbackFeed))
-        
         // Instanciamos nuestro `sut`, que debe comenzar con un`primaryLoader` y un `fallbackLoader`
-        let sut = FeedLoaderWithFallbackComposite(primary: primaryLoader, fallback: fallbackLoader)
+        let sut = makeSUT(primaryResult: .success(primaryFeed), fallbackResult: .success(fallbackFeed))
         
         // Como estamos capturando un valor, necesitamos una expectativa
         let exp = expectation(description: "Wait for load completion")
@@ -80,6 +76,20 @@ class FeedLoaderWithFallbackCompositeTest: XCTestCase {
         wait(for: [exp], timeout: 1)
     }
     
+    // MARK: - Helpers
+    
+    private func makeSUT(primaryResult: FeedLoader.Result, fallbackResult: FeedLoader.Result, file: StaticString = #file, line: UInt = #line) -> FeedLoader {
+        // Con este `Stub` (`LoaderStub`), protegemos esta prueba de futuros cambios.
+        // Estamos testeando `RemoteWithLocalFallbackFeedLoader` de forma aislada.
+        let primaryLoader = LoaderStub(result: primaryResult)
+        let fallbackLoader = LoaderStub(result: fallbackResult)
+        let sut = FeedLoaderWithFallbackComposite(primary: primaryLoader, fallback: fallbackLoader)
+        trackForMemoryLeaks(primaryLoader, file: file, line: line)
+        trackForMemoryLeaks(fallbackLoader, file: file, line: line)
+        trackForMemoryLeaks(sut, file: file, line: line)
+        return sut
+    }
+    
     private func uniqueFeed() -> [FeedImage] {
         return [FeedImage(id: UUID(), description: "any", location: "any", url: URL(string: "http://any-url.com")!)]
     }
@@ -100,4 +110,5 @@ class FeedLoaderWithFallbackCompositeTest: XCTestCase {
 // NOTA: Con un ´Stub` establecemos los valores por adelantado y con
 // un `Spy` capturamos los valores para que podamos usarlos más tarde
 // Los `Stub` son más simples, pero menos precisos sobre los que sucede
-// durante los test, por eso son más flexibles
+// durante los test, por eso son más flexibles. Son buenos, cuando
+// tenemos un caso de uso simple.
