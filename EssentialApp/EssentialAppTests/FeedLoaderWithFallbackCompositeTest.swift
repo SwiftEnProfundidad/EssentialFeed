@@ -24,7 +24,7 @@ import EssentialFeed
 // utilizar estas técnicas también.
 
 // Utilizamos un `Composite`, es más flexible, para componer cualquier `FeedLoader` con otro `FeeLoader` como respaldo
-class FeedLoaderWithFallbackComposite {
+class FeedLoaderWithFallbackComposite: FeedLoader {
     // Aquí no necesitamos exponer los tipos concretos, como `RemoteFeedLoader` o `LocalFeedLoader`
     // Exponemos con abstracciones, que es el `FeedLoader` ya que de exponer con los tipos concretos
     // si estos cambian en un futuro, la prueba se rompería, es decir, `RemoteFeedLoader` podría
@@ -33,20 +33,28 @@ class FeedLoaderWithFallbackComposite {
     // protocolo `FeedLoader` garantizamos que los test no se romperán. Para ello utilizaremos
     // un `Stub` (`LoaderStub`) y no utilizaremos los tipos concretos `RemoteFeedLoader` y `LocalFeedLoader
     // Un loader principal (`primary`) y un loader alternativo (`fallback`)
+    private let primary: FeedLoader
+    
     init(primary: FeedLoader, fallback: FeedLoader) {
-        
+        self.primary = primary
+    }
+    
+    func load(completion: @escaping (FeedLoader.Result) -> Void) {
+        primary.load(completion: completion)
     }
 }
 
 class FeedLoaderWithFallbackCompositeTest: XCTestCase {
     
-    func test_load_deliversRemoteFeedOnRemoteSuccess() {
-        // Con estos `Stub` protegemos esta prueba de futuros cambios.
+    func test_load_deliversPrimaryFeedOnPrimaryLoaderSuccess() {
+        let primaryFeed = uniqueFeed()
+        let fallbackFeed = uniqueFeed()
+        // Con este `Stub` (`LoaderStub`), protegemos esta prueba de futuros cambios.
         // Estamos testeando `RemoteWithLocalFallbackFeedLoader` de forma aislada.
-        let primaryLoader = LoaderStub()
-        let fallbackLoader = LoaderStub()
+        let primaryLoader = LoaderStub(result: .success(primaryFeed))
+        let fallbackLoader = LoaderStub(result: .success(fallbackFeed))
         
-        // Instanciamos nuestro `sut`, que debe comenzar con un`RemoteLoader` y un `LocalLoader`
+        // Instanciamos nuestro `sut`, que debe comenzar con un`primaryLoader` y un `fallbackLoader`
         let sut = FeedLoaderWithFallbackComposite(primary: primaryLoader, fallback: fallbackLoader)
         
         // Como estamos capturando un valor, necesitamos una expectativa
@@ -58,7 +66,7 @@ class FeedLoaderWithFallbackCompositeTest: XCTestCase {
             switch result {
                 case let .success(receivedFeed):
                     // Esperamos cargar un `Feed`, así que comparamos un feed recibido con un `Result`, un `RemoteFeed`
-                    XCTAssertEqual(receivedFeed, remoteFeed)
+                    XCTAssertEqual(receivedFeed, primaryFeed)
                     
                 case .failure:
                     XCTFail("Expected successful load feed result, got \(result) instead")
@@ -72,9 +80,24 @@ class FeedLoaderWithFallbackCompositeTest: XCTestCase {
         wait(for: [exp], timeout: 1)
     }
     
+    private func uniqueFeed() -> [FeedImage] {
+        return [FeedImage(id: UUID(), description: "any", location: "any", url: URL(string: "http://any-url.com")!)]
+    }
+    
     private class LoaderStub: FeedLoader {
+        private let result: FeedLoader.Result
+        
+        init(result: FeedLoader.Result) {
+            self.result = result
+        }
+        
         func load(completion: @escaping (FeedLoader.Result) -> Void) {
-            
+            completion(result)
         }
     }
 }
+
+// NOTA: Con un ´Stub` establecemos los valores por adelantado y con
+// un `Spy` capturamos los valores para que podamos usarlos más tarde
+// Los `Stub` son más simples, pero menos precisos sobre los que sucede
+// durante los test, por eso son más flexibles
