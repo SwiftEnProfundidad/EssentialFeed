@@ -30,7 +30,7 @@ public class FeedLoaderWithFallbackComposite: FeedLoader {
     // incluir en un futuro en sus dependencias un `token` pasándoselo al inicializador, con lo que
     // el tipo concreto cambiaría rompiendo los test. Al hacerlo con abstracciones, como con el
     // protocolo `FeedLoader` garantizamos que los test no se romperán. Para ello utilizaremos
-    // un `Stub` (`LoaderStub`) y no utilizaremos los tipos concretos `RemoteFeedLoader` y `LocalFeedLoader
+    // un `Stub` (`LoaderStub`) y no utilizaremos los tipos concretos `RemoteFeedLoader` y `LocalFeedLoader`
     // Un loader principal (`primary`) y un loader alternativo (`fallback`)
     private let primary: FeedLoader
     private let fallback: FeedLoader

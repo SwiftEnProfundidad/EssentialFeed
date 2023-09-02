@@ -17,6 +17,8 @@
 		EF4DA4292AA0AD1400736141 /* XCTestCase+MemoryLeakTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF4DA4282AA0AD1400736141 /* XCTestCase+MemoryLeakTracking.swift */; };
 		EF4DA42B2AA0AEBF00736141 /* SharedTestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF4DA42A2AA0AEBF00736141 /* SharedTestHelpers.swift */; };
 		EF4DA42D2AA212EA00736141 /* FeedLoaderWithFallbackComposite.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF4DA42C2AA212EA00736141 /* FeedLoaderWithFallbackComposite.swift */; };
+		EF4DA42F2AA214AD00736141 /* FeedImageDataLoaderWithFallbackComposite.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF4DA42E2AA214AD00736141 /* FeedImageDataLoaderWithFallbackComposite.swift */; };
+		EF4DA4312AA33BD200736141 /* FeedLoaderCacheDecoratorTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF4DA4302AA33BD200736141 /* FeedLoaderCacheDecoratorTest.swift */; };
 		EFAC132A2A9FF34A00939145 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFAC13292A9FF34A00939145 /* AppDelegate.swift */; };
 		EFAC132C2A9FF34A00939145 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFAC132B2A9FF34A00939145 /* SceneDelegate.swift */; };
 		EFAC132E2A9FF34A00939145 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFAC132D2A9FF34A00939145 /* ViewController.swift */; };
@@ -66,6 +68,8 @@
 		EF4DA4282AA0AD1400736141 /* XCTestCase+MemoryLeakTracking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+MemoryLeakTracking.swift"; sourceTree = "<group>"; };
 		EF4DA42A2AA0AEBF00736141 /* SharedTestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedTestHelpers.swift; sourceTree = "<group>"; };
 		EF4DA42C2AA212EA00736141 /* FeedLoaderWithFallbackComposite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedLoaderWithFallbackComposite.swift; sourceTree = "<group>"; };
+		EF4DA42E2AA214AD00736141 /* FeedImageDataLoaderWithFallbackComposite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageDataLoaderWithFallbackComposite.swift; sourceTree = "<group>"; };
+		EF4DA4302AA33BD200736141 /* FeedLoaderCacheDecoratorTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedLoaderCacheDecoratorTest.swift; sourceTree = "<group>"; };
 		EFAC13262A9FF34A00939145 /* EssentialApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EssentialApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EFAC13292A9FF34A00939145 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EFAC132B2A9FF34A00939145 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -155,6 +159,7 @@
 				EFAC13342A9FF34C00939145 /* LaunchScreen.storyboard */,
 				EFAC13372A9FF34C00939145 /* Info.plist */,
 				EF4DA42C2AA212EA00736141 /* FeedLoaderWithFallbackComposite.swift */,
+				EF4DA42E2AA214AD00736141 /* FeedImageDataLoaderWithFallbackComposite.swift */,
 			);
 			path = EssentialApp;
 			sourceTree = "<group>";
@@ -164,6 +169,7 @@
 			children = (
 				EF4DA4272AA0ACFF00736141 /* Helpers */,
 				EF4DA41F2AA08D3800736141 /* FeedLoaderWithFallbackCompositeTest.swift */,
+				EF4DA4302AA33BD200736141 /* FeedLoaderCacheDecoratorTest.swift */,
 			);
 			path = EssentialAppTests;
 			sourceTree = "<group>";
@@ -315,6 +321,7 @@
 				EFAC132A2A9FF34A00939145 /* AppDelegate.swift in Sources */,
 				EF4DA42D2AA212EA00736141 /* FeedLoaderWithFallbackComposite.swift in Sources */,
 				EFAC132C2A9FF34A00939145 /* SceneDelegate.swift in Sources */,
+				EF4DA42F2AA214AD00736141 /* FeedImageDataLoaderWithFallbackComposite.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -325,6 +332,7 @@
 				EF4DA4202AA08D3800736141 /* FeedLoaderWithFallbackCompositeTest.swift in Sources */,
 				EF4DA4292AA0AD1400736141 /* XCTestCase+MemoryLeakTracking.swift in Sources */,
 				EF4DA42B2AA0AEBF00736141 /* SharedTestHelpers.swift in Sources */,
+				EF4DA4312AA33BD200736141 /* FeedLoaderCacheDecoratorTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
