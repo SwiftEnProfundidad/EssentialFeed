@@ -27,9 +27,15 @@ public final class FeedLoaderCacheDecorator: FeedLoader {
             // }
             // Se puede hacer con `map` si no nos gustan los `if`
             completion(result.map { feed in
-                self?.cache.save(feed) { _ in }
+                self?.cache.saveIgnoringResult(feed)
                 return feed
             })
         }
+    }
+}
+
+private extension FeedCache {
+    func saveIgnoringResult(_ feed: [FeedImage]) {
+        save(feed) { _ in }
     }
 }
