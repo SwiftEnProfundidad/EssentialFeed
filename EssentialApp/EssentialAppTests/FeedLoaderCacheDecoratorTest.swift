@@ -27,10 +27,14 @@ final class FeedLoaderCacheDecorator: FeedLoader {
         // Para que pase ahora la prueba, necesitamos reenviar el mensaje `completion` al
         // `completion` del decorator para demostrar que mantenemos el mismo comportamiento de carga
         decoratee.load { [weak self] result in
-            if let feed = try? result.get() {
+            // if let feed = try? result.get() {
+            //      self?.cache.save(feed) { _ in }
+            // }
+            // Se puede hacer con `map` si no nos gustan los `if`
+            completion(result.map { feed in
                 self?.cache.save(feed) { _ in }
-            }
-            completion(result)
+                return feed
+            })
         }
     }
 }
