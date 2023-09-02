@@ -4,7 +4,6 @@
 //
 //  Created by Juan Carlos Merlos Albarracin on 30/8/23.
 //
-
 import Foundation
 
 public final class LocalFeedImageDataLoader {
@@ -15,8 +14,8 @@ public final class LocalFeedImageDataLoader {
     }
 }
 
-extension LocalFeedImageDataLoader {
-    public typealias SaveResult = Result<Void, Error>
+extension LocalFeedImageDataLoader: FeedImageDataCache {
+    public typealias SaveResult = FeedImageDataCache.Result
     
     public enum SaveError: Error {
         case failed
