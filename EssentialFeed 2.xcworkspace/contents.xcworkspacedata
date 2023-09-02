@@ -1,0 +1,719 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <Group
+      location = "group:"
+      name = "">
+      <Group
+         location = "group:../../EssentialFeediOSTests"
+         name = "EssentialFeediOSTests">
+         <Group
+            location = "group:Feed UI"
+            name = "Feed UI">
+            <Group
+               location = "group:Helpers"
+               name = "Helpers">
+               <FileRef
+                  location = "group:FeedUIIntegrationTests+LoaderSpy.swift">
+               </FileRef>
+               <FileRef
+                  location = "group:UIButton+TestHelpers.swift">
+               </FileRef>
+               <FileRef
+                  location = "group:FeedUIIntegrationTests+Assertions.swift">
+               </FileRef>
+               <FileRef
+                  location = "group:FeedImageCell+TestHelpers.swift">
+               </FileRef>
+               <FileRef
+                  location = "group:UIImage+TestHelpers.swift">
+               </FileRef>
+               <FileRef
+                  location = "group:UIControl+TestHelpers.swift">
+               </FileRef>
+               <FileRef
+                  location = "group:FeedViewController+TestHelpers.swift">
+               </FileRef>
+               <FileRef
+                  location = "group:FeedViewControllerTests+Localization.swift">
+               </FileRef>
+               <FileRef
+                  location = "group:UIRefreshControl+TestHelpers.swift">
+               </FileRef>
+            </Group>
+            <FileRef
+               location = "group:FeedUIIntegrationTests.swift">
+            </FileRef>
+         </Group>
+      </Group>
+      <Group
+         location = "group:../../EssentialFeedAPIEndToEndTests"
+         name = "EssentialFeedAPIEndToEndTests">
+         <FileRef
+            location = "group:EssentialFeedAPIEndToEndTests.swift">
+         </FileRef>
+      </Group>
+      <Group
+         location = "group:../../EssentialFeediOS"
+         name = "EssentialFeediOS">
+         <Group
+            location = "group:Feed UI"
+            name = "Feed UI">
+            <Group
+               location = "group:Composers"
+               name = "Composers">
+               <FileRef
+                  location = "group:FeedViewAdapter.swift">
+               </FileRef>
+               <FileRef
+                  location = "group:FeedImageDataLoaderPresentationAdapter.swift">
+               </FileRef>
+               <FileRef
+                  location = "group:MainQueueDispatchDecorator.swift">
+               </FileRef>
+               <FileRef
+                  location = "group:WeakRefVirtualProxy.swift">
+               </FileRef>
+               <FileRef
+                  location = "group:FeedUIComposer.swift">
+               </FileRef>
+               <FileRef
+                  location = "group:FeedLoaderPresentationAdapter.swift">
+               </FileRef>
+            </Group>
+            <Group
+               location = "group:Controllers"
+               name = "Controllers">
+               <FileRef
+                  location = "group:FeedImageCellController.swift">
+               </FileRef>
+               <FileRef
+                  location = "group:FeedViewController.swift">
+               </FileRef>
+            </Group>
+            <Group
+               location = "group:Views"
+               name = "Views">
+               <FileRef
+                  location = "group:FeedImageCell.swift">
+               </FileRef>
+               <FileRef
+                  location = "group:Feed.storyboard">
+               </FileRef>
+               <Group
+                  location = "group:Helpers"
+                  name = "Helpers">
+                  <FileRef
+                     location = "group:UIImageView+Animations.swift">
+                  </FileRef>
+                  <FileRef
+                     location = "group:UITableView+Dequeueing.swift">
+                  </FileRef>
+                  <FileRef
+                     location = "group:UIRefreshControl+Helpers.swift">
+                  </FileRef>
+                  <FileRef
+                     location = "group: UIView+Shimmering .swift">
+                  </FileRef>
+               </Group>
+               <FileRef
+                  location = "group:ErrorView.swift">
+               </FileRef>
+               <Group
+                  location = "group:Feed.xcassets"
+                  name = "Feed.xcassets">
+                  <Group
+                     location = "group:pin.imageset"
+                     name = "pin.imageset">
+                     <FileRef
+                        location = "group:pin.png">
+                     </FileRef>
+                     <FileRef
+                        location = "group:pin@3x.png">
+                     </FileRef>
+                     <FileRef
+                        location = "group:pin@2x.png">
+                     </FileRef>
+                     <FileRef
+                        location = "group:Contents.json">
+                     </FileRef>
+                  </Group>
+                  <FileRef
+                     location = "group:Contents.json">
+                  </FileRef>
+               </Group>
+            </Group>
+         </Group>
+         <Group
+            location = "group:Feed Image Loader"
+            name = "Feed Image Loader">
+         </Group>
+         <Group
+            location = "group:Feed Presentation"
+            name = "Feed Presentation">
+            <Group
+               location = "group:el.lproj"
+               name = "el.lproj">
+            </Group>
+            <Group
+               location = "group:en.lproj"
+               name = "en.lproj">
+            </Group>
+            <Group
+               location = "group:pt-BR.lproj"
+               name = "pt-BR.lproj">
+            </Group>
+         </Group>
+      </Group>
+      <Group
+         location = "group:../../EssentialFeedTests"
+         name = "EssentialFeedTests">
+         <Group
+            location = "group:Feed Cache"
+            name = "Feed Cache">
+            <FileRef
+               location = "group:LoadFeedImageDataFromCacheUseCaseTests.swift">
+            </FileRef>
+            <FileRef
+               location = "group:XCTestCase+FeedStoreSpecs.swift">
+            </FileRef>
+            <FileRef
+               location = "group:LoadFeedFromCacheUseCaseTest.swift">
+            </FileRef>
+            <FileRef
+               location = "group:FeedStoreSpecs.swift">
+            </FileRef>
+            <FileRef
+               location = "group:CacheFeedImageDataUseCaseTests.swift">
+            </FileRef>
+            <FileRef
+               location = "group:CoreDataFeedImageDataStoreTests.swift">
+            </FileRef>
+            <FileRef
+               location = "group:ValidateFeedCacheUseCaseTest.swift">
+            </FileRef>
+            <FileRef
+               location = "group:FailableDeleteFeedStoreSpecs.swift">
+            </FileRef>
+            <FileRef
+               location = "group:CodableFeedStoreTest.swift">
+            </FileRef>
+            <FileRef
+               location = "group:CoreDataFeedStoreTests.swift">
+            </FileRef>
+            <FileRef
+               location = "group:FailableRetrieveFeedStoreSpecs.swift">
+            </FileRef>
+            <FileRef
+               location = "group:CacheFeedUseCaseTest.swift">
+            </FileRef>
+            <Group
+               location = "group:Helpers"
+               name = "Helpers">
+               <FileRef
+                  location = "group:FeedStoreSpy.swift">
+               </FileRef>
+               <FileRef
+                  location = "group:FeedImageDataStoreSpy.swift">
+               </FileRef>
+               <FileRef
+                  location = "group:FeedCacheTestHelpers.swift">
+               </FileRef>
+            </Group>
+            <FileRef
+               location = "group:FailableInsertFeedStoreSpecs.swift">
+            </FileRef>
+         </Group>
+         <Group
+            location = "group:Feed Presentation"
+            name = "Feed Presentation">
+            <FileRef
+               location = "group:FeedLocalizationTests.swift">
+            </FileRef>
+            <FileRef
+               location = "group:FeedPresenterTest.swift">
+            </FileRef>
+         </Group>
+         <Group
+            location = "group:Feed API"
+            name = "Feed API">
+            <FileRef
+               location = "group:LoadFeedImageDataFromRemoteUseCaseTests.swift">
+            </FileRef>
+            <FileRef
+               location = "group:LoadFeedFromRemoteUseCasseTests.swift">
+            </FileRef>
+            <FileRef
+               location = "group:URLSessionHTTPClientTest.swift">
+            </FileRef>
+            <Group
+               location = "group:Helpers"
+               name = "Helpers">
+               <FileRef
+                  location = "group:HTTPClientSpy.swift">
+               </FileRef>
+               <FileRef
+                  location = "group:URLProtocolStub.swift">
+               </FileRef>
+            </Group>
+         </Group>
+         <Group
+            location = "group:Helpers"
+            name = "Helpers">
+            <FileRef
+               location = "group:SharedTestHelpers.swift">
+            </FileRef>
+            <FileRef
+               location = "group:XCTestCase+MemoryLeakTracking.swift">
+            </FileRef>
+         </Group>
+      </Group>
+      <FileRef
+         location = "group:../../EssentialFeed.xcodeproj">
+      </FileRef>
+      <Group
+         location = "group:../../Prototype"
+         name = "Prototype">
+         <Group
+            location = "group:Prototype"
+            name = "Prototype">
+            <Group
+               location = "group:en.lproj"
+               name = "en.lproj">
+               <FileRef
+                  location = "group:Main.strings">
+               </FileRef>
+            </Group>
+            <FileRef
+               location = "group:FeedImageCell.swift">
+            </FileRef>
+            <Group
+               location = "group:Assets.xcassets"
+               name = "Assets.xcassets">
+               <Group
+                  location = "group:AppIcon 2.appiconset"
+                  name = "AppIcon 2.appiconset">
+               </Group>
+               <Group
+                  location = "group:image-0.imageset"
+                  name = "image-0.imageset">
+                  <FileRef
+                     location = "group:Contents.json">
+                  </FileRef>
+                  <FileRef
+                     location = "group:image-0.jpg">
+                  </FileRef>
+               </Group>
+               <Group
+                  location = "group:image-1.imageset"
+                  name = "image-1.imageset">
+                  <FileRef
+                     location = "group:Contents.json">
+                  </FileRef>
+                  <FileRef
+                     location = "group:image-1.jpg">
+                  </FileRef>
+               </Group>
+               <Group
+                  location = "group:AppIcon.appiconset"
+                  name = "AppIcon.appiconset">
+                  <FileRef
+                     location = "group:Icon-29.png">
+                  </FileRef>
+                  <FileRef
+                     location = "group:Icon-121.png">
+                  </FileRef>
+                  <FileRef
+                     location = "group:Icon-120.png">
+                  </FileRef>
+                  <FileRef
+                     location = "group:Icon-76.png">
+                  </FileRef>
+                  <FileRef
+                     location = "group:Icon-60.png">
+                  </FileRef>
+                  <FileRef
+                     location = "group:Icon-1024.png">
+                  </FileRef>
+                  <FileRef
+                     location = "group:Icon-152.png">
+                  </FileRef>
+                  <FileRef
+                     location = "group:Icon-59.png">
+                  </FileRef>
+                  <FileRef
+                     location = "group:Icon-180.png">
+                  </FileRef>
+                  <FileRef
+                     location = "group:Icon-58.png">
+                  </FileRef>
+                  <FileRef
+                     location = "group:Icon-42.png">
+                  </FileRef>
+                  <FileRef
+                     location = "group:Icon-81.png">
+                  </FileRef>
+                  <FileRef
+                     location = "group:Icon-80.png">
+                  </FileRef>
+                  <FileRef
+                     location = "group:Icon-41.png">
+                  </FileRef>
+                  <FileRef
+                     location = "group:Icon-167.png">
+                  </FileRef>
+                  <FileRef
+                     location = "group:Icon-40.png">
+                  </FileRef>
+                  <FileRef
+                     location = "group:Icon-87.png">
+                  </FileRef>
+                  <FileRef
+                     location = "group:Contents.json">
+                  </FileRef>
+                  <FileRef
+                     location = "group:Icon-20.png">
+                  </FileRef>
+               </Group>
+               <Group
+                  location = "group:AccentColor.colorset"
+                  name = "AccentColor.colorset">
+                  <FileRef
+                     location = "group:Contents.json">
+                  </FileRef>
+               </Group>
+               <Group
+                  location = "group:pin.imageset"
+                  name = "pin.imageset">
+                  <FileRef
+                     location = "group:pin.png">
+                  </FileRef>
+                  <FileRef
+                     location = "group:pin@3x.png">
+                  </FileRef>
+                  <FileRef
+                     location = "group:pin@2x.png">
+                  </FileRef>
+                  <FileRef
+                     location = "group:Contents.json">
+                  </FileRef>
+               </Group>
+               <Group
+                  location = "group:image-3.imageset"
+                  name = "image-3.imageset">
+                  <FileRef
+                     location = "group:Contents.json">
+                  </FileRef>
+                  <FileRef
+                     location = "group:image-3.jpg">
+                  </FileRef>
+               </Group>
+               <Group
+                  location = "group:image-2.imageset"
+                  name = "image-2.imageset">
+                  <FileRef
+                     location = "group:Contents.json">
+                  </FileRef>
+                  <FileRef
+                     location = "group:image-2.jpg">
+                  </FileRef>
+               </Group>
+               <FileRef
+                  location = "group:Contents.json">
+               </FileRef>
+               <Group
+                  location = "group:image-4.imageset"
+                  name = "image-4.imageset">
+                  <FileRef
+                     location = "group:Contents.json">
+                  </FileRef>
+                  <FileRef
+                     location = "group:image-4.jpg">
+                  </FileRef>
+               </Group>
+               <Group
+                  location = "group:image-5.imageset"
+                  name = "image-5.imageset">
+                  <FileRef
+                     location = "group:Contents.json">
+                  </FileRef>
+                  <FileRef
+                     location = "group:image-5.jpg">
+                  </FileRef>
+               </Group>
+            </Group>
+            <FileRef
+               location = "group:FeedImageViewModel+PrototypeData.swift">
+            </FileRef>
+            <Group
+               location = "group:Base.lproj"
+               name = "Base.lproj">
+               <FileRef
+                  location = "group:LaunchScreen.storyboard">
+               </FileRef>
+               <FileRef
+                  location = "group:Main.storyboard">
+               </FileRef>
+            </Group>
+            <FileRef
+               location = "group:AppDelegate.swift">
+            </FileRef>
+            <FileRef
+               location = "group:FeedViewController.swift">
+            </FileRef>
+            <FileRef
+               location = "group:Info.plist">
+            </FileRef>
+         </Group>
+         <FileRef
+            location = "group:Prototype.xcodeproj">
+         </FileRef>
+      </Group>
+      <FileRef
+         location = "group:../../README.md">
+      </FileRef>
+      <Group
+         location = "group:../../EssentialFeed"
+         name = "EssentialFeed">
+         <Group
+            location = "group:FeedFeature"
+            name = "FeedFeature">
+            <FileRef
+               location = "group:FeedLoader.swift">
+            </FileRef>
+            <FileRef
+               location = "group:FeedImage.swift">
+            </FileRef>
+            <FileRef
+               location = "group:FeedImageDataLoader.swift">
+            </FileRef>
+         </Group>
+         <Group
+            location = "group:Feed Cache"
+            name = "Feed Cache">
+            <FileRef
+               location = "group:LocalFeedLoader.swift">
+            </FileRef>
+            <Group
+               location = "group:Codable"
+               name = "Codable">
+               <FileRef
+                  location = "group:CodableFeedStore.swift">
+               </FileRef>
+            </Group>
+            <FileRef
+               location = "group:FeedStore.swift">
+            </FileRef>
+            <FileRef
+               location = "group:LocalFeedImage.swift">
+            </FileRef>
+            <FileRef
+               location = "group:FeedImageDataStore.swift">
+            </FileRef>
+            <FileRef
+               location = "group:LocalFeedImageDataLoader.swift">
+            </FileRef>
+            <FileRef
+               location = "group:FeedCachePolicy.swift">
+            </FileRef>
+            <Group
+               location = "group:Infrastructure"
+               name = "Infrastructure">
+               <Group
+                  location = "group:CoreData"
+                  name = "CoreData">
+                  <FileRef
+                     location = "group:contents.xcdatamodeld">
+                  </FileRef>
+                  <FileRef
+                     location = "group:CoreDataHelpers.swift">
+                  </FileRef>
+                  <FileRef
+                     location = "group:CoreDataFeedStore+FeedImageDataLoader.swift">
+                  </FileRef>
+                  <FileRef
+                     location = "group:ManagedFeedImage.swift">
+                  </FileRef>
+                  <FileRef
+                     location = "group:ManageCache.swift">
+                  </FileRef>
+                  <FileRef
+                     location = "group:CoreDataFeedStore+FeedStore.swift">
+                  </FileRef>
+                  <FileRef
+                     location = "group:FeedStore.xcdatamodeld">
+                  </FileRef>
+                  <FileRef
+                     location = "group:CoreDataFeedStore.swift">
+                  </FileRef>
+               </Group>
+            </Group>
+         </Group>
+         <Group
+            location = "group:Feed Presentation"
+            name = "Feed Presentation">
+            <Group
+               location = "group:el.lproj"
+               name = "el.lproj">
+               <FileRef
+                  location = "group:Feed.strings">
+               </FileRef>
+            </Group>
+            <Group
+               location = "group:en.lproj"
+               name = "en.lproj">
+               <FileRef
+                  location = "group:Feed.strings">
+               </FileRef>
+            </Group>
+            <FileRef
+               location = "group:FeedPresenter.swift">
+            </FileRef>
+            <FileRef
+               location = "group:FeedImageViewModel.swift">
+            </FileRef>
+            <FileRef
+               location = "group:FeedLoadingViewModel.swift">
+            </FileRef>
+            <Group
+               location = "group:pt-BR.lproj"
+               name = "pt-BR.lproj">
+               <FileRef
+                  location = "group:Feed.strings">
+               </FileRef>
+            </Group>
+            <FileRef
+               location = "group:FeedImagePresenter.swift">
+            </FileRef>
+            <FileRef
+               location = "group:FeedViewModel.swift">
+            </FileRef>
+            <FileRef
+               location = "group:FeedErrorViewModel.swift">
+            </FileRef>
+         </Group>
+         <Group
+            location = "group:Feed API"
+            name = "Feed API">
+            <FileRef
+               location = "group:URLSessionHTTPClient.swift">
+            </FileRef>
+            <FileRef
+               location = "group:FeedItemsMapper.swift">
+            </FileRef>
+            <FileRef
+               location = "group:RemoteFeedItem.swift">
+            </FileRef>
+            <FileRef
+               location = "group:RemoteFeedImageDataLoader.swift">
+            </FileRef>
+            <FileRef
+               location = "group:HTTPClient.swift">
+            </FileRef>
+            <Group
+               location = "group:Helpers"
+               name = "Helpers">
+               <FileRef
+                  location = "group:HTTPURLResponse+StatusCode.swift">
+               </FileRef>
+            </Group>
+            <FileRef
+               location = "group:RemoteFeedLoader.swift">
+            </FileRef>
+         </Group>
+         <FileRef
+            location = "group:EssentialFeed.md">
+         </FileRef>
+         <FileRef
+            location = "group:EssentialFeed.h">
+         </FileRef>
+      </Group>
+      <Group
+         location = "group:../../EssentialFeedCacheIntegrationTests"
+         name = "EssentialFeedCacheIntegrationTests">
+         <FileRef
+            location = "group:EssentialFeedCacheIntegrationTests.swift">
+         </FileRef>
+      </Group>
+      <FileRef
+         location = "group:../../EssentialFeed.xcworkspace">
+      </FileRef>
+      <Group
+         location = "group:.."
+         name = "..">
+         <Group
+            location = "group:EssentialAppUITests"
+            name = "EssentialAppUITests">
+            <FileRef
+               location = "group:EssentialAppUITestsLaunchTests.swift">
+            </FileRef>
+            <FileRef
+               location = "group:EssentialAppUITests.swift">
+            </FileRef>
+         </Group>
+         <FileRef
+            location = "group:EssentialApp.xcodeproj">
+         </FileRef>
+         <Group
+            location = "group:EssentialAppTests"
+            name = "EssentialAppTests">
+            <FileRef
+               location = "group:EssentialAppTests.swift">
+            </FileRef>
+         </Group>
+         <Group
+            location = "group:EssentialApp"
+            name = "EssentialApp">
+            <FileRef
+               location = "group:ViewController.swift">
+            </FileRef>
+            <Group
+               location = "group:Assets.xcassets"
+               name = "Assets.xcassets">
+               <Group
+                  location = "group:AppIcon.appiconset"
+                  name = "AppIcon.appiconset">
+                  <FileRef
+                     location = "group:Contents.json">
+                  </FileRef>
+               </Group>
+               <Group
+                  location = "group:AccentColor.colorset"
+                  name = "AccentColor.colorset">
+                  <FileRef
+                     location = "group:Contents.json">
+                  </FileRef>
+               </Group>
+               <FileRef
+                  location = "group:Contents.json">
+               </FileRef>
+            </Group>
+            <Group
+               location = "group:Base.lproj"
+               name = "Base.lproj">
+               <FileRef
+                  location = "group:LaunchScreen.storyboard">
+               </FileRef>
+               <FileRef
+                  location = "group:Main.storyboard">
+               </FileRef>
+            </Group>
+            <FileRef
+               location = "group:AppDelegate.swift">
+            </FileRef>
+            <FileRef
+               location = "group:Info.plist">
+            </FileRef>
+            <FileRef
+               location = "group:SceneDelegate.swift">
+            </FileRef>
+         </Group>
+      </Group>
+      <FileRef
+         location = "group:../../LocalFeedItem.swift">
+      </FileRef>
+   </Group>
+   <FileRef
+      location = "container:EssentialApp/EssentialApp.xcodeproj">
+   </FileRef>
+</Workspace>
