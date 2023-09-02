@@ -5,9 +5,9 @@
 //  Created by Juan Carlos Merlos Albarracin on 30/8/23.
 //
 
-import XCTest
+//import XCTest
 
-final class EssentialAppUITestsLaunchTests: XCTestCase {
+//final class EssentialAppUITestsLaunchTests: XCTestCase {
 
 //    override class var runsForEachTargetApplicationUIConfiguration: Bool {
 //        true
@@ -29,4 +29,4 @@ final class EssentialAppUITestsLaunchTests: XCTestCase {
 //        attachment.lifetime = .keepAlways
 //        add(attachment)
 //    }
-}
+//}
