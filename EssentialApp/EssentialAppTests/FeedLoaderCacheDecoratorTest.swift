@@ -7,33 +7,7 @@
 
 import XCTest
 import EssentialFeed
-
-// Este decorator todo lo que hace es inyectar la operación de guardado (`save`) en el `decoratee.load`
-// por lo que el `decorator` no necestia saber sobre guardar o almacenar en caché y el caché no necesita
-// saber sobre la carga (`load`), con lo que nuestros `composite` sigue siendo componible, no depende de
-// tipos concretos y el `Decorator` es también componible porque dependemos de abstracciones (`Protocol`)
-final class FeedLoaderCacheDecorator: FeedLoader {
-    private let decoratee: FeedLoader
-    private let cache: FeedCache
-    
-    init(decoratee: FeedLoader, cache: FeedCache) {
-        self.decoratee = decoratee
-        self.cache = cache
-    }
-    
-    func load(completion: @escaping (FeedLoader.Result) -> Void) {
-        decoratee.load { [weak self] result in
-            // if let feed = try? result.get() {
-            //      self?.cache.save(feed) { _ in }
-            // }
-            // Se puede hacer con `map` si no nos gustan los `if`
-            completion(result.map { feed in
-                self?.cache.save(feed) { _ in }
-                return feed
-            })
-        }
-    }
-}
+import EssentialApp
 
 class FeedLoaderCacheDecoratorTest: XCTestCase, FeedLoaderTestCase {
     
