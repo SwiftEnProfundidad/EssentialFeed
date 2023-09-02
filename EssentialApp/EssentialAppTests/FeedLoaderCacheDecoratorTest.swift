@@ -8,12 +8,10 @@
 import XCTest
 import EssentialFeed
 
-protocol FeedCache {
-    typealias SaveResult = Result<Void, Error>
-    
-    func save(_ feed: [FeedImage], completion: @escaping (SaveResult) -> Void)
-}
-
+// Este decorator todo lo que hace es inyectar la operación de guardado (`save`) en el `decoratee.load`
+// por lo que el `decorator` no necestia saber sobre guardar o almacenar en caché y el caché no necesita
+// saber sobre la carga (`load`), con lo que nuestros `composite` sigue siendo componible, no depende de
+// tipos concretos y el `Decorator` es también componible porque dependemos de abstracciones (`Protocol`)
 final class FeedLoaderCacheDecorator: FeedLoader {
     private let decoratee: FeedLoader
     private let cache: FeedCache
@@ -24,8 +22,6 @@ final class FeedLoaderCacheDecorator: FeedLoader {
     }
     
     func load(completion: @escaping (FeedLoader.Result) -> Void) {
-        // Para que pase ahora la prueba, necesitamos reenviar el mensaje `completion` al
-        // `completion` del decorator para demostrar que mantenemos el mismo comportamiento de carga
         decoratee.load { [weak self] result in
             // if let feed = try? result.get() {
             //      self?.cache.save(feed) { _ in }
@@ -87,11 +83,12 @@ class FeedLoaderCacheDecoratorTest: XCTestCase, FeedLoaderTestCase {
     private class CacheSpy: FeedCache {
         private(set) var messages = [Message]()
         
+        // Como siempre, conformamos a `Equatable` para poder llevar a cabo nuestras `XCTAssertEqual`
         enum Message: Equatable {
             case save([FeedImage])
         }
         
-        func save(_ feed: [FeedImage], completion: @escaping (SaveResult) -> Void) {
+        func save(_ feed: [FeedImage], completion: @escaping (FeedCache.Result) -> Void) {
             messages.append(.save(feed))
             completion(.success(()))
         }
