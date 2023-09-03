@@ -11,16 +11,16 @@ final class EssentialAppUIAcceptanceTests: XCTestCase {
     
     // Primero prpbamos los criterios de aceptación.
     // En el lanzamoento, debe mostrar RemoteFeed cuando el cliente tiene conectividad
-    func test_onLaunch_displayRemoteFeedWhenCustomerHasConnectivity() {
+    func test_onLaunch_displaysRemoteFeedWhenCustomerHasConnectivity() {
         let app = XCUIApplication()
-        app.launchArguments = ["-reset"]
+        app.launchArguments = ["-reset", "-connectivity", "online"]
         app.launch()
         
         let feedCells = app.cells.matching(identifier: "feed-image-cell")
         // Si cargamos las 22 imágenes que nos vienen en el json remoto,
         // tienen que aparecer 22 celdas, solo probamos el cell count y
         // no que se carguen correctamente las imágenes en cada celda.
-        XCTAssertEqual(feedCells.cells.count, 22)
+        XCTAssertEqual(feedCells.count, 2)
         // Aquí nos aseguramos de que por lo menos se carga una imagen en la celda
         // que se muestra en pantalla, con lo que verificamos que se cargan
         // las imágenes en las celdas que aúno no están visibles en pantalla.
@@ -30,7 +30,7 @@ final class EssentialAppUIAcceptanceTests: XCTestCase {
     
     func test_onLaunch_displaysCachedRemoteFeedWhenCustomerHasNoConnectivity() {
         let onlineApp = XCUIApplication()
-        onlineApp.launchArguments = ["-reset"]
+        onlineApp.launchArguments = ["-reset", "-connectivity", "online"]
         onlineApp.launch()
         
         let offlineApp = XCUIApplication()
@@ -41,7 +41,7 @@ final class EssentialAppUIAcceptanceTests: XCTestCase {
         
         // Cuando no tenemos conectividad mostramos un `CachedFeed` y un `CachedImage`
         let cachedFeedCells = offlineApp.cells.matching(identifier: "feed-image-cell")
-        XCTAssertEqual(cachedFeedCells.count, 22)
+        XCTAssertEqual(cachedFeedCells.count, 2)
         
         let firstCachedImage = offlineApp.images.matching(identifier: "feed-image-view").firstMatch
         XCTAssertTrue(firstCachedImage.exists)
