@@ -9,33 +9,20 @@ import XCTest
 
 final class EssentialAppUIAcceptanceTests: XCTestCase {
 
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-
-        // In UI tests it is usually best to stop immediately when a failure occurs.
-        continueAfterFailure = false
-
-        // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
-    }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
-    func testExample() throws {
-        // UI tests must launch the application that they test.
+    // Primero prpbamos los criterios de aceptación.
+    // En el lanzamoento, debe mostrar RemoteFeed cuando el cliente tiene conectividad
+    func test_onLaunch_displayRemoteFeedWhenCustomerHasConnectivity() {
         let app = XCUIApplication()
+        
         app.launch()
-
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-
-    func testLaunchPerformance() throws {
-        if #available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 7.0, *) {
-            // This measures how long it takes to launch your application.
-            measure(metrics: [XCTApplicationLaunchMetric()]) {
-                XCUIApplication().launch()
-            }
-        }
+        
+        // Si cargamos las 22 imágenes que nos vienen en el json remoto,
+        // tienen que aparecer 22 celdas, solo probamos el cell count y
+        // no que se carguen correctamente las imágenes en cada celda.
+        XCTAssertEqual(app.cells.count, 22)
+        // Aquí nos aseguramos de que por lo menos se carga una imagen en la celda
+        // que se muestra en pantalla, con lo que verificamos que se cargan
+        // las imágenes en las celdas que aúno no están visibles en pantalla.
+        XCTAssertEqual(app.cells.firstMatch.images.count, 1)
     }
 }
