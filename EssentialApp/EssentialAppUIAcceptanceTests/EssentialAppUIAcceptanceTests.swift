@@ -8,12 +8,11 @@
 import XCTest
 
 final class EssentialAppUIAcceptanceTests: XCTestCase {
-
+    
     // Primero prpbamos los criterios de aceptación.
     // En el lanzamoento, debe mostrar RemoteFeed cuando el cliente tiene conectividad
     func test_onLaunch_displayRemoteFeedWhenCustomerHasConnectivity() {
         let app = XCUIApplication()
-        
         app.launch()
         
         let feedCells = app.cells.matching(identifier: "feed-image-cell")
@@ -27,4 +26,23 @@ final class EssentialAppUIAcceptanceTests: XCTestCase {
         let firstImage = app.images.matching(identifier: "feed-image-view").firstMatch
         XCTAssertTrue(firstImage.exists)
     }
+    
+    func test_onLaunch_displaysCachedRemoteFeedWhenCustomerHasNoConnectivity() {
+        let onlineApp = XCUIApplication()
+        onlineApp.launch()
+        
+        let offlineApp = XCUIApplication()
+        // Como no podemos hacer que la app tenga conectividad o no
+        // pasamos argumentos de conectividad con el valor fuera de línea
+        offlineApp.launchArguments = ["-connectivity", "offline"]
+        offlineApp.launch()
+        
+        // Cuando no tenemos conectividad mostramos un `CachedFeed` y un `CachedImage`
+        let cachedFeedCells = offlineApp.cells.matching(identifier: "feed-image-cell")
+        XCTAssertEqual(cachedFeedCells.count, 22)
+        
+        let firstCachedImage = offlineApp.images.matching(identifier: "feed-image-view").firstMatch
+        XCTAssertTrue(firstCachedImage.exists)
+    }
+    
 }
