@@ -29,6 +29,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             .appendingPathComponent("feed-store.sqlite")
         
         if CommandLine.arguments.contains("-reset") {
+            // Borramos la caché si tenemos el comando `-reset`
             try? FileManager.default.removeItem(at: localStoreURL)
         }
         
