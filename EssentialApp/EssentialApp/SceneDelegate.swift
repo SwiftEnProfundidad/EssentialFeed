@@ -28,10 +28,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             .defaultDirectoryURL()
             .appendingPathComponent("feed-store.sqlite")
         
+#if DEBUG
         if CommandLine.arguments.contains("-reset") {
             // Borramos la caché si tenemos el comando `-reset`
             try? FileManager.default.removeItem(at: localStoreURL)
         }
+#endif
         
         let localStore = try! CoreDataFeedStore(storeURL: localStoreURL)
         let localFeedLoader = LocalFeedLoader(store: localStore, currentDate: Date.init)
@@ -52,16 +54,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     // Con esta función falsificamos una aplicación fuera de línea
     private func makeRemoteClient() -> HTTPClient {
-        switch UserDefaults.standard.string(forKey: "connectivity") {
-            case "offline":
-                return AlwaysFailingHTTPClient()
-                
-            default:
-                return URLSessionHTTPClient(session: URLSession(configuration: .ephemeral))
+#if DEBUG
+        if UserDefaults.standard.string(forKey: "connectivity") == "offline" {
+            return AlwaysFailingHTTPClient()
         }
+#endif
+        return URLSessionHTTPClient(session: URLSession(configuration: .ephemeral))
+        
     }
 }
 
+#if DEBUG
 private class AlwaysFailingHTTPClient: HTTPClient {
     private class Task: HTTPClientTask {
         func cancel() {}
@@ -72,3 +75,4 @@ private class AlwaysFailingHTTPClient: HTTPClient {
         return Task()
     }
 }
+#endif
