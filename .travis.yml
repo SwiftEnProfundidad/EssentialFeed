@@ -1,6 +1,6 @@
 os: osx
 osx_image: xcode15.0 beta 5
-language: swift
+language: swift 5.0
 script:
     - xcodebuild clean build test -project EssentialFeed.xcodeproj -scheme "CI_macOS" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
     - xcodebuild clean build test -workspace EssentialApp.xcworkspace -scheme "CI_iOS" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
