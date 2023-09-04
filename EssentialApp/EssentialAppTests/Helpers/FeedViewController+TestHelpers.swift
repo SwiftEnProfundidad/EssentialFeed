@@ -69,6 +69,11 @@ extension FeedViewController {
     }
     
     func feedImageView(at row: Int) -> UITableViewCell? {
+        // Verificamos si estamos solicitando una celda dentro de la colección de celdas
+        guard numberOfRenderedFeedImageViews() > row else {
+            return nil
+        }
+        
         // Obtener el data source de la table view
         let ds = tableView.dataSource
         // Crear un índice para la fila dada
