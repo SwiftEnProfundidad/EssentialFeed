@@ -7,6 +7,7 @@
 
 import UIKit
 import EssentialFeed
+import EssentialFeediOS
 
 // Este proxy virtual mantendrá una referencia `weak` a la
 // instancia del objeto y pasará los mensajes hacia adelante

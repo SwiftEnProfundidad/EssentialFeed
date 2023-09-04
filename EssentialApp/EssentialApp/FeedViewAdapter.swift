@@ -7,6 +7,7 @@
 
 import UIKit
 import EssentialFeed
+import EssentialFeediOS
 
 final class FeedViewAdapter: FeedView {
     private weak var controller: FeedViewController?
@@ -23,7 +24,7 @@ final class FeedViewAdapter: FeedView {
         // Este patrón nos ayuda a conectar APIs inigualables como en este caso,
         // dado que `onRefresh` es un array de `FeedImage` y `tableModel` es un
         // array de `FeedImageCellController`
-        controller?.tableModel = viewModel.feed.map { model in
+        controller?.display(viewModel.feed.map { model in
             let adapter = FeedImageDataLoaderPresentationAdapter<WeakRefVirtualProxy<FeedImageCellController>, UIImage>(model: model, imageLoader: imageLoader)
             let view = FeedImageCellController(delegate: adapter)
             
@@ -32,6 +33,6 @@ final class FeedViewAdapter: FeedView {
                 imageTransformer: UIImage.init)
             
             return view
-        }
+        })
     }
 }

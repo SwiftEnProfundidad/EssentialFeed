@@ -28,6 +28,12 @@
 		EF6291BC2AA48B3900EDDB22 /* EssentialAppUIAcceptanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF6291BB2AA48B3900EDDB22 /* EssentialAppUIAcceptanceTests.swift */; };
 		EF6291C52AA5042100EDDB22 /* DebuggingSceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF6291C42AA5042100EDDB22 /* DebuggingSceneDelegate.swift */; };
 		EF6291C72AA5C47300EDDB22 /* SceneDelegateTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF6291C62AA5C47300EDDB22 /* SceneDelegateTest.swift */; };
+		EF6291E62AA5CB1400EDDB22 /* FeedImageDataLoaderPresentationAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF6291E22AA5CB1400EDDB22 /* FeedImageDataLoaderPresentationAdapter.swift */; };
+		EF6291E72AA5CB1400EDDB22 /* FeedViewAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF6291E02AA5CB1400EDDB22 /* FeedViewAdapter.swift */; };
+		EF6291E82AA5CB1400EDDB22 /* WeakRefVirtualProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF6291E52AA5CB1400EDDB22 /* WeakRefVirtualProxy.swift */; };
+		EF6291E92AA5CB1400EDDB22 /* FeedLoaderPresentationAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF6291E12AA5CB1400EDDB22 /* FeedLoaderPresentationAdapter.swift */; };
+		EF6291EA2AA5CB1400EDDB22 /* FeedUIComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF6291E42AA5CB1400EDDB22 /* FeedUIComposer.swift */; };
+		EF6291EB2AA5CB1400EDDB22 /* MainQueueDispatchDecorator.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF6291E32AA5CB1400EDDB22 /* MainQueueDispatchDecorator.swift */; };
 		EFAC132A2A9FF34A00939145 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFAC13292A9FF34A00939145 /* AppDelegate.swift */; };
 		EFAC132C2A9FF34A00939145 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFAC132B2A9FF34A00939145 /* SceneDelegate.swift */; };
 		EFAC132E2A9FF34A00939145 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFAC132D2A9FF34A00939145 /* ViewController.swift */; };
@@ -89,6 +95,12 @@
 		EF6291BB2AA48B3900EDDB22 /* EssentialAppUIAcceptanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EssentialAppUIAcceptanceTests.swift; sourceTree = "<group>"; };
 		EF6291C42AA5042100EDDB22 /* DebuggingSceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebuggingSceneDelegate.swift; sourceTree = "<group>"; };
 		EF6291C62AA5C47300EDDB22 /* SceneDelegateTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegateTest.swift; sourceTree = "<group>"; };
+		EF6291E02AA5CB1400EDDB22 /* FeedViewAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewAdapter.swift; sourceTree = "<group>"; };
+		EF6291E12AA5CB1400EDDB22 /* FeedLoaderPresentationAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedLoaderPresentationAdapter.swift; sourceTree = "<group>"; };
+		EF6291E22AA5CB1400EDDB22 /* FeedImageDataLoaderPresentationAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageDataLoaderPresentationAdapter.swift; sourceTree = "<group>"; };
+		EF6291E32AA5CB1400EDDB22 /* MainQueueDispatchDecorator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainQueueDispatchDecorator.swift; sourceTree = "<group>"; };
+		EF6291E42AA5CB1400EDDB22 /* FeedUIComposer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedUIComposer.swift; sourceTree = "<group>"; };
+		EF6291E52AA5CB1400EDDB22 /* WeakRefVirtualProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeakRefVirtualProxy.swift; sourceTree = "<group>"; };
 		EFAC13262A9FF34A00939145 /* EssentialApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EssentialApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EFAC13292A9FF34A00939145 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EFAC132B2A9FF34A00939145 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -183,6 +195,12 @@
 				EFAC13292A9FF34A00939145 /* AppDelegate.swift */,
 				EFAC132B2A9FF34A00939145 /* SceneDelegate.swift */,
 				EF6291C42AA5042100EDDB22 /* DebuggingSceneDelegate.swift */,
+				EF6291E42AA5CB1400EDDB22 /* FeedUIComposer.swift */,
+				EF6291E12AA5CB1400EDDB22 /* FeedLoaderPresentationAdapter.swift */,
+				EF6291E32AA5CB1400EDDB22 /* MainQueueDispatchDecorator.swift */,
+				EF6291E52AA5CB1400EDDB22 /* WeakRefVirtualProxy.swift */,
+				EF6291E22AA5CB1400EDDB22 /* FeedImageDataLoaderPresentationAdapter.swift */,
+				EF6291E02AA5CB1400EDDB22 /* FeedViewAdapter.swift */,
 				EFAC132D2A9FF34A00939145 /* ViewController.swift */,
 				EF4DA42C2AA212EA00736141 /* FeedLoaderWithFallbackComposite.swift */,
 				EF4DA42E2AA214AD00736141 /* FeedImageDataLoaderWithFallbackComposite.swift */,
@@ -351,12 +369,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EF6291E82AA5CB1400EDDB22 /* WeakRefVirtualProxy.swift in Sources */,
 				EFAC132E2A9FF34A00939145 /* ViewController.swift in Sources */,
 				EFAC132A2A9FF34A00939145 /* AppDelegate.swift in Sources */,
 				EF4DA42D2AA212EA00736141 /* FeedLoaderWithFallbackComposite.swift in Sources */,
 				EF6291812AA3D11F00EDDB22 /* FeedLoaderCacheDecorator.swift in Sources */,
+				EF6291E72AA5CB1400EDDB22 /* FeedViewAdapter.swift in Sources */,
+				EF6291E92AA5CB1400EDDB22 /* FeedLoaderPresentationAdapter.swift in Sources */,
+				EF6291EA2AA5CB1400EDDB22 /* FeedUIComposer.swift in Sources */,
+				EF6291EB2AA5CB1400EDDB22 /* MainQueueDispatchDecorator.swift in Sources */,
 				EF6291C52AA5042100EDDB22 /* DebuggingSceneDelegate.swift in Sources */,
 				EFAC132C2A9FF34A00939145 /* SceneDelegate.swift in Sources */,
+				EF6291E62AA5CB1400EDDB22 /* FeedImageDataLoaderPresentationAdapter.swift in Sources */,
 				EF4DA42F2AA214AD00736141 /* FeedImageDataLoaderWithFallbackComposite.swift in Sources */,
 				EF6291832AA3D8A500EDDB22 /* FeedImageDataLoaderCacheDecorator.swift in Sources */,
 			);
