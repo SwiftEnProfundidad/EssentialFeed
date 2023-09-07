@@ -18,7 +18,6 @@ class FeedSnapshotTest: XCTestCase {
         
         assert(snapshot: sut.snapshot(for: .iPhone8(style: .light)), named: "EMPTY_FEED_light")
         assert(snapshot: sut.snapshot(for: .iPhone8(style: .dark)), named: "EMPTY_FEED_dark")
-
     }
     
     func test_feedWithContent() {
