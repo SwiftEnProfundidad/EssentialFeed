@@ -15,6 +15,8 @@ public protocol FeedViewControllerDelegate {
 final public class FeedViewController: UITableViewController, UITableViewDataSourcePrefetching, FeedLoadingView, FeedErrorView {
     @IBOutlet private(set) public var errorView: ErrorView?
     
+    private var loadingControllers = [IndexPath: FeedImageCellController]()
+    
     private var tableModel = [FeedImageCellController]() {
         didSet { tableView.reloadData() }
     }
@@ -46,6 +48,8 @@ final public class FeedViewController: UITableViewController, UITableViewDataSou
     }
     
     public func display(_ cellControllers: [FeedImageCellController]) {
+        // Cada vez que obtenemos un nuevo modelo para mostrar, lo reiniciamos.
+        loadingControllers = [:]
         tableModel = cellControllers
     }
     
@@ -79,12 +83,19 @@ final public class FeedViewController: UITableViewController, UITableViewDataSou
     }
     
     private func cellController(forRowAt indexPath: IndexPath) -> FeedImageCellController {
-        // Obtenemos el model de la tabla para el índice dado
-        return tableModel[indexPath.row]
+        // Obtenemos el model de la tabla para el índice dado, mantenemos una referencia a él.
+        let controller = tableModel[indexPath.row]
+        loadingControllers[indexPath] = controller
+        return controller
     }
     
     private func cancelCellControllerLoad(forRowAt indexPath: IndexPath) {
-        // Detenmos la tarea y libera memoria
-        cellController(forRowAt: indexPath).cancelLoad()
+        // Detenmos la tarea y liberamos memoria
+        loadingControllers[indexPath]?.cancelLoad()
+        loadingControllers[indexPath] = nil
     }
 }
+
+/// NOTA: Se corrigió un posible error al cancelar solicitudes en el método UITableView `didEndDisplayingCell`:
+/// este método se invoca después de llamar a `reloadData`, por lo que cancelaríamos solicitudes en los modelos
+/// incorrectos o fallaríamos en caso de que el modelo tenga menos elementos que el modelo anterior.

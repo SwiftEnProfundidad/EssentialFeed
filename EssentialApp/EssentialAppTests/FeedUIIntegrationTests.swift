@@ -17,7 +17,7 @@ final class FeedUIIntegrationTests: XCTestCase {
         let (sut, _) = makeSUT()
         
         sut.loadViewIfNeeded()
-
+        
         XCTAssertEqual(sut.title, localized("FEED_VIEW_TITLE"))
     }
     
@@ -36,22 +36,36 @@ final class FeedUIIntegrationTests: XCTestCase {
     }
     
     func test_loadingFeedIndicator_isVisibleWhileLoadingFeed() {
-            let (sut, loader) = makeSUT()
-            
-            sut.loadViewIfNeeded()
-//            XCTAssertTrue(sut.isShowingLoadingIndicator, "Expected loading indicator once view is loaded")
-            
-            loader.completeFeedLoading(at: 0)
-            XCTAssertFalse(sut.isShowingLoadingIndicator, "Expected no loading indicator once loading completes successfully")
-            
-            sut.simulateUserInitiatedFeedReload()
-//            XCTAssertTrue(sut.isShowingLoadingIndicator, "Expected loading indicator once user initiates a reload")
-            
-            loader.completeFeedLoadingWithError(at: 1)
-            XCTAssertFalse(sut.isShowingLoadingIndicator, "Expected no loading indicator once user initiated loading completes with error")
-        }
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        // XCTAssertTrue(sut.isShowingLoadingIndicator, "Expected loading indicator once view is loaded")
+        
+        loader.completeFeedLoading(at: 0)
+        XCTAssertFalse(sut.isShowingLoadingIndicator, "Expected no loading indicator once loading completes successfully")
+        
+        sut.simulateUserInitiatedFeedReload()
+        // XCTAssertTrue(sut.isShowingLoadingIndicator, "Expected loading indicator once user initiates a reload")
+        
+        loader.completeFeedLoadingWithError(at: 1)
+        XCTAssertFalse(sut.isShowingLoadingIndicator, "Expected no loading indicator once user initiated loading completes with error")
+    }
     
     // Caso de uso en el que probamos que renderizamos una Cell para un Model dado, con todos los casos
+    func test_loadFeedCompletion_renderSuccessfullyLoadedEmptyFeedAfterNonEmptyFeed() {
+        let image0 = makeImage()
+        let image1 = makeImage()
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        loader.completeFeedLoading(with: [image0, image1], at: 0)
+        assertThat(sut, isRendering: [image0, image1])
+        
+        sut.simulateUserInitiatedFeedReload()
+        loader.completeFeedLoading(with: [], at: 1)
+        assertThat(sut, isRendering: [])
+    }
+    
     func test_loadFeedCompletion_renderSuccessfullyLoadedFeed() {
         let image0 = makeImage(description: "a description", location: "a location")
         let image1 = makeImage(description: nil, location: "another location")
