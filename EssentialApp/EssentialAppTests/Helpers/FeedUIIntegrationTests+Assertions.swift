@@ -14,8 +14,7 @@ extension FeedUIIntegrationTests {
     func assertThat(_ sut: FeedViewController, isRendering feed: [FeedImage], file: StaticString = #file, line: UInt = #line) {
         // Tenemos que volver a llamar al principio a este método, por si se han borrado celdas y que no crashe la app
         // ya que puede ser también, que el servidor nos devuelve una respuesta con menos elementos de los que teníamos
-        sut.tableView.layoutIfNeeded()
-        RunLoop.main.run(until: Date())
+        sut.view.enforceLayoutCycle()
         
         guard sut.numberOfRenderedFeedImageViews() == feed.count else {
             return XCTFail("Expected \(feed.count) images, got \(sut.numberOfRenderedFeedImageViews()) instead.", file: file, line: line)
