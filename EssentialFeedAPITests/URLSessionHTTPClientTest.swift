@@ -7,6 +7,7 @@
 
 import XCTest
 import EssentialFeed
+import EssentialFeedAPI
 
 //// Creamos protocolos basados en mocking para burlarnos de la api de `URLSession`
 ////  y `URLSessionDataTask`. Esta la es la tercera forma para pruebas de network.

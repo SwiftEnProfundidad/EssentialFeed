@@ -38,6 +38,8 @@
 		EFAC13332A9FF34C00939145 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EFAC13322A9FF34C00939145 /* Assets.xcassets */; };
 		EFAC13362A9FF34C00939145 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EFAC13342A9FF34C00939145 /* LaunchScreen.storyboard */; };
 		EFC1AF892AAA521200461BAE /* UIView+TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFC1AF882AAA521200461BAE /* UIView+TestHelpers.swift */; };
+		EFC1AFC82AAA86D800461BAE /* EssentialFeedAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EFC1AFC72AAA86D800461BAE /* EssentialFeedAPI.framework */; };
+		EFC1AFC92AAA86D800461BAE /* EssentialFeedAPI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = EFC1AFC72AAA86D800461BAE /* EssentialFeedAPI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		EFCF146F2AA5DEC000999F4B /* FeedAcceptanceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFCF146E2AA5DEC000999F4B /* FeedAcceptanceTest.swift */; };
 		EFCF14712AA6308300999F4B /* FeedViewController+TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFCF14702AA6308200999F4B /* FeedViewController+TestHelpers.swift */; };
 		EFCF14732AA6312D00999F4B /* UIImage+TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFCF14722AA6312D00999F4B /* UIImage+TestHelpers.swift */; };
@@ -71,6 +73,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				EFC1AFC92AAA86D800461BAE /* EssentialFeedAPI.framework in Embed Frameworks */,
 				EF4DA41B2A9FF72C00736141 /* EssentialFeed.framework in Embed Frameworks */,
 				EF4DA41D2A9FF72C00736141 /* EssentialFeediOS.framework in Embed Frameworks */,
 			);
@@ -84,7 +87,7 @@
 		EF4DA4192A9FF72C00736141 /* EssentialFeediOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = EssentialFeediOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EF4DA41F2AA08D3800736141 /* FeedLoaderWithFallbackCompositeTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedLoaderWithFallbackCompositeTest.swift; sourceTree = "<group>"; };
 		EF4DA4282AA0AD1400736141 /* XCTestCase+MemoryLeakTracking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+MemoryLeakTracking.swift"; sourceTree = "<group>"; };
-		EF4DA42A2AA0AEBF00736141 /* SharedTestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedTestHelpers.swift; sourceTree = "<group>"; };
+		EF4DA42A2AA0AEBF00736141 /* SharedTestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SharedTestHelpers.swift; path = ../../../EssentialFeedAPI/Helpers/SharedTestHelpers.swift; sourceTree = "<group>"; };
 		EF4DA42C2AA212EA00736141 /* FeedLoaderWithFallbackComposite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedLoaderWithFallbackComposite.swift; sourceTree = "<group>"; };
 		EF4DA42E2AA214AD00736141 /* FeedImageDataLoaderWithFallbackComposite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageDataLoaderWithFallbackComposite.swift; sourceTree = "<group>"; };
 		EF4DA4302AA33BD200736141 /* FeedLoaderCacheDecoratorTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedLoaderCacheDecoratorTest.swift; sourceTree = "<group>"; };
@@ -112,6 +115,7 @@
 		EFAC13372A9FF34C00939145 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EFAC133C2A9FF34D00939145 /* EssentialAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EssentialAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EFC1AF882AAA521200461BAE /* UIView+TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+TestHelpers.swift"; sourceTree = "<group>"; };
+		EFC1AFC72AAA86D800461BAE /* EssentialFeedAPI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = EssentialFeedAPI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EFCF146E2AA5DEC000999F4B /* FeedAcceptanceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedAcceptanceTest.swift; sourceTree = "<group>"; };
 		EFCF14702AA6308200999F4B /* FeedViewController+TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedViewController+TestHelpers.swift"; sourceTree = "<group>"; };
 		EFCF14722AA6312D00999F4B /* UIImage+TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+TestHelpers.swift"; sourceTree = "<group>"; };
@@ -133,6 +137,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EFC1AFC82AAA86D800461BAE /* EssentialFeedAPI.framework in Frameworks */,
 				EF4DA41A2A9FF72C00736141 /* EssentialFeed.framework in Frameworks */,
 				EF4DA41C2A9FF72C00736141 /* EssentialFeediOS.framework in Frameworks */,
 			);
@@ -151,6 +156,7 @@
 		EF4DA4172A9FF72C00736141 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				EFC1AFC72AAA86D800461BAE /* EssentialFeedAPI.framework */,
 				EF4DA4182A9FF72C00736141 /* EssentialFeed.framework */,
 				EF4DA4192A9FF72C00736141 /* EssentialFeediOS.framework */,
 			);
@@ -473,6 +479,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MACOSX_DEPLOYMENT_TARGET = 13.5;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -528,6 +535,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MACOSX_DEPLOYMENT_TARGET = 13.5;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -556,6 +564,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 13.5;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = swiftindepth.es.EssentialApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -584,6 +593,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 13.5;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = swiftindepth.es.EssentialApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -604,6 +614,7 @@
 				DEVELOPMENT_TEAM = Z273P8K3M7;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MACOSX_DEPLOYMENT_TARGET = 13.5;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = swiftindepth.es.EssentialAppTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -626,6 +637,7 @@
 				DEVELOPMENT_TEAM = Z273P8K3M7;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MACOSX_DEPLOYMENT_TARGET = 13.5;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = swiftindepth.es.EssentialAppTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
