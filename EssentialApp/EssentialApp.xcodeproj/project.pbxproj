@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EF0F46F02AB219F400577789 /* CombineHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF0F46EF2AB219F400577789 /* CombineHelpers.swift */; };
 		EF4DA41A2A9FF72C00736141 /* EssentialFeed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF4DA4182A9FF72C00736141 /* EssentialFeed.framework */; };
 		EF4DA41B2A9FF72C00736141 /* EssentialFeed.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = EF4DA4182A9FF72C00736141 /* EssentialFeed.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		EF4DA41C2A9FF72C00736141 /* EssentialFeediOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF4DA4192A9FF72C00736141 /* EssentialFeediOS.framework */; };
@@ -73,6 +74,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		EF0F46EF2AB219F400577789 /* CombineHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CombineHelpers.swift; sourceTree = "<group>"; };
 		EF4DA4182A9FF72C00736141 /* EssentialFeed.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = EssentialFeed.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EF4DA4192A9FF72C00736141 /* EssentialFeediOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = EssentialFeediOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EF4DA4282AA0AD1400736141 /* XCTestCase+MemoryLeakTracking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+MemoryLeakTracking.swift"; sourceTree = "<group>"; };
@@ -201,6 +203,7 @@
 				EFAC13322A9FF34C00939145 /* Assets.xcassets */,
 				EFAC13342A9FF34C00939145 /* LaunchScreen.storyboard */,
 				EFAC13372A9FF34C00939145 /* Info.plist */,
+				EF0F46EF2AB219F400577789 /* CombineHelpers.swift */,
 			);
 			path = EssentialApp;
 			sourceTree = "<group>";
@@ -320,6 +323,7 @@
 			files = (
 				EF6291E82AA5CB1400EDDB22 /* WeakRefVirtualProxy.swift in Sources */,
 				EFAC132E2A9FF34A00939145 /* ViewController.swift in Sources */,
+				EF0F46F02AB219F400577789 /* CombineHelpers.swift in Sources */,
 				EFAC132A2A9FF34A00939145 /* AppDelegate.swift in Sources */,
 				EF6291E72AA5CB1400EDDB22 /* FeedViewAdapter.swift in Sources */,
 				EF6291E92AA5CB1400EDDB22 /* FeedLoaderPresentationAdapter.swift in Sources */,
