@@ -6,19 +6,21 @@
 //
 
 import UIKit
+import Combine
 import EssentialFeed
 import EssentialFeediOS
 
 public final class FeedUIComposer {
     private init() {}
     
-    public static func feedComposedWith(feedLoader: FeedLoader, imageLoader: FeedImageDataLoader) -> FeedViewController {
+    public static func feedComposedWith(feedLoader: @escaping () -> FeedLoader.Publisher, imageLoader: @escaping (URL) -> FeedImageDataLoader.Publisher) -> FeedViewController {
         // Aquí el `decoratee` está añadiendo comportamiento a la instancia sin cambiar la instancia -> Principio OpenClose
         // Mediante esta técnica hacemos que el `Presentet` sea agnóstico sobre Threading y la UI también es agnóstica y las
         // implementaciones de `FeedLoader` no saben que las implementaciones de UIKit requieren trabajo para ser enviadas a `MainQueue
         // Todavía mantenemos nuestras implementaciones desacopladas sin filtrar ningún detalle sobre los tipos concretos.
         // La capa `Composer` es responsable de ordenar o componer los objetos.
-        let presentationAdapter = FeedLoaderPresentationAdapter(feedLoader: MainQueueDispatchDecorator(decoratee: feedLoader))
+        let presentationAdapter = FeedLoaderPresentationAdapter(
+            feedLoader: { feedLoader().dispatchOnMainQueue() })
         
         let feedController = makeFeedViewController(
             delegate: presentationAdapter,
@@ -27,7 +29,7 @@ public final class FeedUIComposer {
         presentationAdapter.presenter = FeedPresenter(
             feedView: FeedViewAdapter(
                 controller: feedController,
-                imageLoader: MainQueueDispatchDecorator(decoratee: imageLoader)),
+                imageLoader: { imageLoader($0).dispatchOnMainQueue() }),
             loadingView: WeakRefVirtualProxy(feedController),
             errorView: WeakRefVirtualProxy(feedController))
         
