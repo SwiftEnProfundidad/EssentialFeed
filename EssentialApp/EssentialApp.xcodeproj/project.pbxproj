@@ -192,18 +192,18 @@
 		EFAC13282A9FF34A00939145 /* EssentialApp */ = {
 			isa = PBXGroup;
 			children = (
+				EFAC13372A9FF34C00939145 /* Info.plist */,
 				EFAC13292A9FF34A00939145 /* AppDelegate.swift */,
-				EFAC132B2A9FF34A00939145 /* SceneDelegate.swift */,
-				EF6291E42AA5CB1400EDDB22 /* FeedUIComposer.swift */,
-				EF6291E12AA5CB1400EDDB22 /* FeedLoaderPresentationAdapter.swift */,
-				EF6291E52AA5CB1400EDDB22 /* WeakRefVirtualProxy.swift */,
+				EF0F46EF2AB219F400577789 /* CombineHelpers.swift */,
 				EF6291E22AA5CB1400EDDB22 /* FeedImageDataLoaderPresentationAdapter.swift */,
+				EF6291E12AA5CB1400EDDB22 /* FeedLoaderPresentationAdapter.swift */,
+				EF6291E42AA5CB1400EDDB22 /* FeedUIComposer.swift */,
 				EF6291E02AA5CB1400EDDB22 /* FeedViewAdapter.swift */,
+				EFAC132B2A9FF34A00939145 /* SceneDelegate.swift */,
 				EFAC132D2A9FF34A00939145 /* ViewController.swift */,
+				EF6291E52AA5CB1400EDDB22 /* WeakRefVirtualProxy.swift */,
 				EFAC13322A9FF34C00939145 /* Assets.xcassets */,
 				EFAC13342A9FF34C00939145 /* LaunchScreen.storyboard */,
-				EFAC13372A9FF34C00939145 /* Info.plist */,
-				EF0F46EF2AB219F400577789 /* CombineHelpers.swift */,
 			);
 			path = EssentialApp;
 			sourceTree = "<group>";
